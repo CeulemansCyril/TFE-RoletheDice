@@ -1,0 +1,145 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+@startuml
+
+' ==== CLASSES ====
+class User {
+  +Long id
+  +String username
+  +String email
+  +String password
+  +String displayName
+  +LocalDate dateOfBirth
+  +boolean blocked
+  +boolean isAdmin
+  +boolean online
+  +boolean profilePublic
+  +boolean isDeleted
+}
+
+class Game {
+  +Long id
+  +String name
+  +LocalDateTime creationDate
+}
+
+class MJContentBundle {
+  +Long id
+  +String name
+  +String description
+  +boolean isPublic
+  +boolean ageRestricted
+}
+
+class ChatChannel {
+  +Long id
+  +String name
+}
+
+class Message {
+  +Long id
+  +String content
+  +LocalDateTime timestamp
+}
+
+class Annotation {
+  +Long id
+  +String note
+  +LocalDateTime createdAt
+}
+
+class Rule {
+  +Long id
+  +String title
+  +String content
+}
+
+class Map {
+  +Long id
+  +String name
+  +String description
+}
+
+class Token {
+  +Long id
+  +String name
+  +String description
+}
+
+class Item {
+  +Long id
+  +String name
+  +String description
+}
+
+class Weapon {
+  +Long id
+  +String name
+  +String description
+}
+
+class Armor {
+  +Long id
+  +String name
+  +String description
+}
+
+class Spell {
+  +Long id
+  +String name
+  +String description
+}
+
+class Monster {
+  +Long id
+  +String name
+  +String description
+}
+
+class NPC {
+  +Long id
+  +String name
+  +String description
+}
+
+class LootTable {
+  +Long id
+  +String name
+  +String description
+}
+
+
+' ==== RELATIONS ====
+
+' User
+User "0..*" -- "0..*" User : friends
+User "0..*" -- "0..*" User : blockedUsers
+
+' Game
+Game "1" -- "1" User : owner
+Game "0..*" -- "0..*" User : players
+Game "1" -- "1" MJContentBundle : bundle
+Game "1" -- "0..*" ChatChannel : channels
+Game "1" -- "0..*" Annotation : annotations
+
+' Chat
+ChatChannel "1" -- "0..*" Message : messages
+ChatChannel "1" -- "1" Game : game
+Message "1" -- "1" User : author
+
+' MJContentBundle
+MJContentBundle "0..*" -- "0..*" User : owners
+MJContentBundle "1" -- "0..*" Rule
+MJContentBundle "1" -- "0..*" Map
+MJContentBundle "1" -- "0..*" Monster
+MJContentBundle "1" -- "0..*" NPC
+MJContentBundle "1" -- "0..*" Item
+MJContentBundle "1" -- "0..*" Weapon
+MJContentBundle "1" -- "0..*" Armor
+MJContentBundle "1" -- "0..*" Spell
+MJContentBundle "1" -- "0..*" LootTable
+
+@enduml
