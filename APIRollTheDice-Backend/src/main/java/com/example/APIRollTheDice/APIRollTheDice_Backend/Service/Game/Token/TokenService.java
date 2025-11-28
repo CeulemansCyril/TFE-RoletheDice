@@ -1,4 +1,4 @@
-package com.example.APIRollTheDice.APIRollTheDice_Backend.Service;
+package com.example.APIRollTheDice.APIRollTheDice_Backend.Service.Game.Token;
 
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Exception.NotFoundException;
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Interface.GameInterface.GameBundleInterface;
@@ -7,7 +7,7 @@ import com.example.APIRollTheDice.APIRollTheDice_Backend.Interface.GameInterface
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Interface.GameInterface.TemplateInterface.CustomObjectInterface;
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Interface.GameInterface.TokenInterface.TokenInterface;
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Interface.GameInterface.TokenInterface.TokenPlacedInterface;
-import com.example.APIRollTheDice.APIRollTheDice_Backend.Interface.UserRepository;
+import com.example.APIRollTheDice.APIRollTheDice_Backend.Interface.User.UserRepository;
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Mapper.Game.Token.TokenMapper;
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Mapper.Game.Token.TokenPlacedMapper;
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Model.DTO.GameDTO.TokenDTO.TokenDTO;
@@ -20,16 +20,16 @@ import java.util.List;
 
 @Service
 public class TokenService {
-    private TokenInterface tokenInterface;
-    private TokenMapper tokenMapper;
+    private final TokenInterface tokenInterface;
+    private final TokenMapper tokenMapper;
 
-    private TokenPlacedInterface tokenPlacedInterface;
-    private TokenPlacedMapper tokenPlacedMapper;
+    private final TokenPlacedInterface tokenPlacedInterface;
+    private final TokenPlacedMapper tokenPlacedMapper;
 
-    private CustomObjectInterface customObjectInterface;
-    private UserRepository userRepository;
-    private GameBundleInterface gameInterface;
-    private LayoutInterface layoutInterface;
+    private final CustomObjectInterface customObjectInterface;
+    private final UserRepository userRepository;
+    private final GameBundleInterface gameInterface;
+    private final LayoutInterface layoutInterface;
 
     public TokenService(TokenInterface tokenInterface, TokenMapper tokenMapper, TokenPlacedInterface tokenPlacedInterface, TokenPlacedMapper tokenPlacedMapper, CustomObjectInterface customObjectInterface, UserRepository userRepository, LayoutInterface layoutInterface, GameBundleInterface gameInterface) {
         this.tokenInterface = tokenInterface;
@@ -129,8 +129,8 @@ public class TokenService {
     public TokenPlaced TokenPlacedDTOToEntity(TokenPlacedDTO tokenPlacedDTO){
         TokenPlaced tokenPlaced = tokenPlacedMapper.toEntity(tokenPlacedDTO);
 
-        tokenPlaced.setLayout(layoutInterface.findById(tokenPlacedDTO.getIdLayout()).get());
-        tokenPlaced.setToken(tokenInterface.findById(tokenPlacedDTO.getIdToken()).get());
+        tokenPlaced.setLayout(layoutInterface.findById(tokenPlacedDTO.getIdLayout()).orElseThrow(()-> new NotFoundException("Layout not found")));
+        tokenPlaced.setToken(tokenInterface.findById(tokenPlacedDTO.getIdToken()).orElseThrow(()-> new NotFoundException("Token not found")));
 
         return tokenPlaced;
     }

@@ -19,11 +19,4 @@ public interface TemplateFieldMapper {
     TemplateField toEntity(TemplateFieldDTO dto);
 
 
-    default Long mapTemplateToId(Template template){
-        return template != null ? template.getId() : null;
-    }
-
-    default Long mapOptionListToId(OptionList optionList){
-        return optionList != null ? optionList.getId() : null;
-    }
 }

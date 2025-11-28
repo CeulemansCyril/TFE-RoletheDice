@@ -13,25 +13,14 @@ public class MessageDTO {
     private boolean isRead;
     private boolean isModified;
     private String fileURL;
-    private Conversation conversation;
+    private Long idConversation;
 
-    public static MessageDTO from(Message message) {
-        MessageDTO messageDTO = new MessageDTO();
-        messageDTO.setId(message.getId());
-        messageDTO.setContent(message.getContent());
-        messageDTO.setSender(message.getSender());
-        messageDTO.setSentAt(message.getSentAt());
-        messageDTO.setRead(message.isRead());
-        messageDTO.setModified(message.isModified());
-        messageDTO.setFileURL(message.getFileURL());
-        messageDTO.setConversation(message.getConversation());
-        return messageDTO;
-    }
+
 
     public MessageDTO() {
     }
 
-    public MessageDTO(long id, String content, String sender, LocalDateTime sentAt, boolean isRead, boolean isModified, String fileURL, Conversation conversation) {
+    public MessageDTO(long id, String content, String sender, LocalDateTime sentAt, boolean isRead, boolean isModified, String fileURL, Long idConversation) {
         this.id = id;
         this.content = content;
         this.sender = sender;
@@ -39,8 +28,9 @@ public class MessageDTO {
         this.isRead = isRead;
         this.isModified = isModified;
         this.fileURL = fileURL;
-        this.conversation = conversation;
+        this.idConversation = idConversation;
     }
+
 
     public long getId() {
         return id;
@@ -98,11 +88,11 @@ public class MessageDTO {
         this.fileURL = fileURL;
     }
 
-    public Conversation getConversation() {
-        return conversation;
+    public Long getIdConversation() {
+        return idConversation;
     }
 
-    public void setConversation(Conversation conversation) {
-        this.conversation = conversation;
+    public void setIdConversation(Long idConversation) {
+        this.idConversation = idConversation;
     }
 }

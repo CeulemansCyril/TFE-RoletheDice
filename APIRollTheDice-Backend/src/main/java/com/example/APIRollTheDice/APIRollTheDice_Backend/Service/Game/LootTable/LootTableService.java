@@ -1,4 +1,4 @@
-package com.example.APIRollTheDice.APIRollTheDice_Backend.Service;
+package com.example.APIRollTheDice.APIRollTheDice_Backend.Service.Game.LootTable;
 
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Exception.NotFoundException;
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Interface.GameInterface.GameBundleInterface;
@@ -6,17 +6,16 @@ import com.example.APIRollTheDice.APIRollTheDice_Backend.Interface.GameInterface
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Mapper.Game.LooTable.LootTableMapper;
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Model.DTO.GameDTO.LootTableDTO.LootElementDTO;
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Model.DTO.GameDTO.LootTableDTO.LootTableDTO;
-import com.example.APIRollTheDice.APIRollTheDice_Backend.Model.Obj.Game.GameBundle;
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Model.Obj.Game.LootTable.LootElement;
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Model.Obj.Game.LootTable.LootTable;
 import org.springframework.stereotype.Service;
 
 @Service
 public class LootTableService {
-    private LootTableMapper lootTableMapper;
-    private LootTableInterface lootTableInterface;
+    private final LootTableMapper lootTableMapper;
+    private final LootTableInterface lootTableInterface;
 
-    private GameBundleInterface gameBundleInterface;
+    private final GameBundleInterface gameBundleInterface;
 
     public LootTableService(LootTableMapper lootTableMapper, LootTableInterface lootTableInterface,GameBundleInterface gameBundleInterface) {
         this.lootTableMapper = lootTableMapper;
@@ -46,23 +45,20 @@ public class LootTableService {
 
 
     public LootElementDTO LootElmentToDTO(LootElement lootElement){
-        LootElementDTO dto = lootTableMapper.toElementDTO(lootElement);
-        return  dto;
+        return  lootTableMapper.toElementDTO(lootElement);
     }
 
     public LootElement LootElementDTOToEntity(LootElementDTO lootElementDTO){
-        LootElement lootElement = lootTableMapper.toElementEntity(lootElementDTO);
-        return lootElement;
+        return lootTableMapper.toElementEntity(lootElementDTO);
     }
 
     public LootTableDTO LootTableToDTO(LootTable lootTable){
-        LootTableDTO lootTableDTO = lootTableMapper.toDTO(lootTable);
-        return lootTableDTO;
+        return  lootTableMapper.toDTO(lootTable);
     }
 
     public LootTable LootTableDTOToEntity(LootTableDTO lootTableDTO){
         LootTable lootTable = lootTableMapper.toEntity(lootTableDTO);
-        lootTable.setGameBundle(gameBundleInterface.findById(lootTableDTO.getIdGameBundle()).get());
+        lootTable.setGameBundle(gameBundleInterface.findById(lootTableDTO.getIdGameBundle()).orElseThrow(() -> new NotFoundException("GameBundle not found")));
         return lootTable;
     }
 }

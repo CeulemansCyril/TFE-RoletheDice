@@ -2,6 +2,9 @@ package com.example.APIRollTheDice.APIRollTheDice_Backend.Service;
 
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Exception.NotFoundException;
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Interface.FriendRequestInterface;
+import com.example.APIRollTheDice.APIRollTheDice_Backend.Interface.User.UserRepository;
+import com.example.APIRollTheDice.APIRollTheDice_Backend.Mapper.FriendRequestMapper;
+import com.example.APIRollTheDice.APIRollTheDice_Backend.Model.DTO.FriendRequestDTO;
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Model.Obj.FriendRequest;
 import org.springframework.stereotype.Service;
 
@@ -9,10 +12,16 @@ import java.util.List;
 
 @Service
 public class FriendRequestService {
-    private static FriendRequestInterface friendRequestInterface;
+    private final FriendRequestInterface friendRequestInterface;
+    private final FriendRequestMapper friendRequestMapper;
 
-    public FriendRequestService(FriendRequestInterface friendRequestInterface) {
-        FriendRequestService.friendRequestInterface = friendRequestInterface;
+    private final UserRepository userRepository;
+
+    public FriendRequestService(FriendRequestInterface friendRequestInterface, FriendRequestMapper friendRequestMapper, UserRepository userRepository) {
+        this.userRepository = userRepository;
+        this.friendRequestInterface = friendRequestInterface;
+        this.friendRequestMapper = friendRequestMapper;
+
     }
 
     public FriendRequest createFriendRequest(FriendRequest friendRequest) {
@@ -42,6 +51,17 @@ public class FriendRequestService {
     }
     public boolean existsBySenderIdAndReceiverId(Long senderId, Long receiverId) {
         return friendRequestInterface.existsBySenderIdAndReceiverId(senderId, receiverId);
+    }
+
+    public FriendRequest FriendRequestDTOToEntity(FriendRequestDTO dto) {
+        FriendRequest friendRequest = friendRequestMapper.toEntity(dto);
+        friendRequest.setSender(userRepository.findById(dto.getIdSender()).orElseThrow(() -> new NotFoundException("Sender not found")));
+        friendRequest.setReceiver(userRepository.findById(dto.getIdReceiver()).orElseThrow(() -> new NotFoundException("Receiver not found")));
+        return friendRequest;
+    }
+
+    public FriendRequestDTO FriendRequestEntityToDTO(FriendRequest friendRequest) {
+        return friendRequestMapper.toDTO(friendRequest);
     }
 
 }

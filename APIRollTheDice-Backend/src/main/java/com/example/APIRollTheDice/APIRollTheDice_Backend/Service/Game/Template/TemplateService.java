@@ -1,4 +1,4 @@
-package com.example.APIRollTheDice.APIRollTheDice_Backend.Service;
+package com.example.APIRollTheDice.APIRollTheDice_Backend.Service.Game.Template;
 
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Exception.NotFoundException;
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Interface.GameInterface.GameBundleInterface;
@@ -14,7 +14,6 @@ import com.example.APIRollTheDice.APIRollTheDice_Backend.Model.DTO.GameDTO.Templ
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Model.DTO.GameDTO.TemplateDTO.OptionListDTO;
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Model.DTO.GameDTO.TemplateDTO.TemplateDTO;
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Model.DTO.GameDTO.TemplateDTO.TemplateFieldDTO;
-import com.example.APIRollTheDice.APIRollTheDice_Backend.Model.Obj.Game.GameBundle;
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Model.Obj.Game.Template.CustomObject;
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Model.Obj.Game.Template.OptionList;
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Model.Obj.Game.Template.Template;
@@ -25,19 +24,19 @@ import java.util.List;
 
 @Service
 public class TemplateService {
-    private TemplateFieldInterface templateFieldInterface;
-    private TemplateFieldMapper templateFieldMapper;
+    private final TemplateFieldInterface templateFieldInterface;
+    private final TemplateFieldMapper templateFieldMapper;
 
-    private TemplateInterface templateInterface;
-    private TemplateMapper templateMapper;
+    private final TemplateInterface templateInterface;
+    private final TemplateMapper templateMapper;
 
-    private OptionListMapper optionListMapper;
-    private OptionListInterface optionListInterface;
+    private final OptionListMapper optionListMapper;
+    private final OptionListInterface optionListInterface;
 
-    private CustomObjectInterface customObjectInterface;
-    private CustomObjectMapper customObjectMapper;
+    private final CustomObjectInterface customObjectInterface;
+    private final CustomObjectMapper customObjectMapper;
 
-    private GameBundleInterface gameBundleInterface;
+    private final GameBundleInterface gameBundleInterface;
 
     public TemplateService(TemplateFieldInterface templateFieldInterface, TemplateFieldMapper templateFieldMapper, TemplateInterface templateInterface, TemplateMapper templateMapper, OptionListMapper optionListMapper, OptionListInterface optionListInterface, CustomObjectInterface customObjectInterface, CustomObjectMapper customObjectMapper, GameBundleInterface gameBundleInterface) {
         this.templateFieldInterface = templateFieldInterface;
@@ -123,7 +122,7 @@ public class TemplateService {
     public Template TemplateDTOToEntity(TemplateDTO templateDTO){
         Template template = templateMapper.toEntity(templateDTO);
         template.setTemplateFieldList(templateFieldInterface.findAllByTemplates_Id(templateDTO.getId()));
-        template.setGameBundle(gameBundleInterface.findById(templateDTO.getIdGameBundle()).get());
+        template.setGameBundle(gameBundleInterface.findById(templateDTO.getIdGameBundle()).orElseThrow(()-> new NotFoundException("GameBundle not found")));
 
         return template;
     }
@@ -158,7 +157,7 @@ public class TemplateService {
     public OptionList OptionDTOToEntity(OptionListDTO optionListDTO){
         OptionList optionList = optionListMapper.toEntity(optionListDTO);
 
-        optionList.setGameBundle(gameBundleInterface.findById(optionListDTO.getIdGameBundle()).get());
+        optionList.setGameBundle(gameBundleInterface.findById(optionListDTO.getIdGameBundle()).orElseThrow(()-> new NotFoundException("GameBundle not found")));
 
         return optionList;
     }
@@ -203,8 +202,8 @@ public class TemplateService {
 
     public CustomObject CustomObjectDTOToEntity(CustomObjectDTO customObjectDTO){
         CustomObject customObject = customObjectMapper.toEntity(customObjectDTO);
-        customObject.setGameBundles(gameBundleInterface.findById(customObjectDTO.getIdGameBundles()).get());
-        customObject.setTemplate(templateInterface.findById(customObjectDTO.getIdTemplate()).get());
+        customObject.setGameBundles(gameBundleInterface.findById(customObjectDTO.getIdGameBundles()).orElseThrow(()-> new NotFoundException("GameBundle not found")));
+        customObject.setTemplate(templateInterface.findById(customObjectDTO.getIdTemplate()).orElseThrow(()-> new NotFoundException("Template not found")));
 
         return customObject ; 
     }

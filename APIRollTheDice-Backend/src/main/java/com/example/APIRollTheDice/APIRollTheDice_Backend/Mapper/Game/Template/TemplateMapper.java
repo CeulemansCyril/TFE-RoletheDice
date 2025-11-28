@@ -6,24 +6,23 @@ import com.example.APIRollTheDice.APIRollTheDice_Backend.Model.Obj.Game.Template
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Model.Obj.Game.Template.TemplateField;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
+
+import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface TemplateMapper {
 
     @Mapping(source = "gameBundle.id", target = "idGameBundles")
-    @Mapping(source = "templateFieldList", target = "idTemplateFieldList")
+    @Mapping(source = "templateFieldList", target = "idTemplateFieldList", qualifiedByName = "templateFieldsToIds")
     TemplateDTO toDTO(Template template);
 
     @Mapping(target = "gameBundle", ignore = true)
     @Mapping(target = "templateFieldList", ignore = true)
     Template toEntity(TemplateDTO templateDTO);
 
-    default Long mapGameBundleToId(GameBundle gameBundle){
-        return gameBundle != null ? gameBundle.getId() : null;
-    }
-
-    // MapStruct appliquera cette méthode automatiquement
-    default Long mapTemplateFieldToId(TemplateField field){
-        return field != null ? field.getId() : null ;
+    @Named("templateFieldsToIds")
+    default List<Long> mapTemplateFieldsToIds(List<TemplateField> list) {
+        return list == null ? null : list.stream().map(TemplateField::getId).toList();
     }
 }

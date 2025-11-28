@@ -1,4 +1,4 @@
-package com.example.APIRollTheDice.APIRollTheDice_Backend.Interface;
+package com.example.APIRollTheDice.APIRollTheDice_Backend.Interface.User;
 
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Model.Obj.User.User;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -31,15 +31,6 @@ public class FriendRequest {
     private LocalTime sentTime;
 
 
-    public static FriendRequest from(FriendRequestDTO friendRequestDTO) {
-        FriendRequest friendRequest = new FriendRequest();
-        friendRequest.setId(friendRequestDTO.getId());
-        friendRequest.setSender(friendRequestDTO.getSender());
-        friendRequest.setReceiver(friendRequestDTO.getReceiver());
-        friendRequest.setStatus(friendRequestDTO.getStatus());
-        friendRequest.setSentTime(friendRequestDTO.getSentTime());
-        return friendRequest;
-    }
 
 
     public FriendRequest() {

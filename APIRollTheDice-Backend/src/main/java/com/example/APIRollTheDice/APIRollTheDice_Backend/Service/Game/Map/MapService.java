@@ -1,4 +1,4 @@
-package com.example.APIRollTheDice.APIRollTheDice_Backend.Service;
+package com.example.APIRollTheDice.APIRollTheDice_Backend.Service.Game.Map;
 
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Exception.NotFoundException;
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Interface.GameInterface.GameBundleInterface;
@@ -17,12 +17,12 @@ import java.util.List;
 
 @Service
 public class MapService {
-    private MapMapper mapMapper;
-    private LayoutMapper layoutMapper;
-    private MapInterface mapInterface;
-    private LayoutInterface layoutInterface;
-    private GameBundleInterface gameBundleInterface;
-    private TokenPlacedInterface tokenPlacedInterface;
+    private final MapMapper mapMapper;
+    private final LayoutMapper layoutMapper;
+    private final  MapInterface mapInterface;
+    private final LayoutInterface layoutInterface;
+    private final GameBundleInterface gameBundleInterface;
+    private final TokenPlacedInterface tokenPlacedInterface;
 
 
     public MapService(MapMapper mapMapper, MapInterface mapInterface, LayoutMapper layoutMapper, LayoutInterface layoutInterface,
@@ -64,14 +64,13 @@ public class MapService {
 
 
     public LayoutDTO layoutEntityToDTO(Layout layout){
-        LayoutDTO layoutDTO = layoutMapper.toDTO(layout);
-        return layoutDTO;
+        return layoutMapper.toDTO(layout);
     }
 
     public Layout layoutDTOToEntity(LayoutDTO layoutDTO){
         Layout layout = layoutMapper.toEntity(layoutDTO);
 
-        layout.setMap(mapInterface.findById(layoutDTO.getIdMap()).get());
+        layout.setMap(mapInterface.findById(layoutDTO.getIdMap()).orElseThrow(()-> new NotFoundException("Map not found")));
         layout.setTokens(tokenPlacedInterface.findAllById(layoutDTO.getIdTokenPlaced()));
 
 
@@ -114,8 +113,8 @@ public class MapService {
 
 
     public MapDTO mapEntityToDTO(Map map){
-        MapDTO dto = mapMapper.toDTO(map);
-        return dto;
+
+        return   mapMapper.toDTO(map);
     }
 
     public Map mapDTOToEntity(MapDTO mapDTO){

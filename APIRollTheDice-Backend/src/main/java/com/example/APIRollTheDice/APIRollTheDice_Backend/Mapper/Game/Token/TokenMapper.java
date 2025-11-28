@@ -11,26 +11,16 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface TokenMapper {
 
-    @Mapping(source = "owner",       target = "idOwner")
-    @Mapping(source = "fiche",       target = "idFiche")
-    @Mapping(source = "gameBundle",  target = "idGameBundle")
+    @Mapping(source = "owner",target = "idOwner")
+    @Mapping(source = "fiche",target = "idFiche")
+    @Mapping(source = "gameBundle",target = "idGameBundle")
     TokenDTO toDTO(Token token);
 
-    @Mapping(target = "owner",       ignore = true)
-    @Mapping(target = "fiche",       ignore = true)
-    @Mapping(target = "gameBundle",  ignore = true)
+    @Mapping(target = "owner",ignore = true)
+    @Mapping(target = "fiche",ignore = true)
+    @Mapping(target = "gameBundle",ignore = true)
     Token toEntity(TokenDTO dto);
 
-    default Long map(User user){
-        return user != null ? user.getId() : null;
-    }
 
-    default Long map(CustomObject obj){
-        return obj != null ? obj.getId() : null;
-    }
-
-    default Long map(GameBundle gb){
-        return gb != null ? gb.getId() : null;
-    }
 }
 

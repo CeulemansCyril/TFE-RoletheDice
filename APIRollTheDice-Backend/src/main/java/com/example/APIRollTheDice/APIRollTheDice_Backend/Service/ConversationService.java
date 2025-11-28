@@ -2,6 +2,10 @@ package com.example.APIRollTheDice.APIRollTheDice_Backend.Service;
 
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Exception.NotFoundException;
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Interface.ConversationInterface;
+import com.example.APIRollTheDice.APIRollTheDice_Backend.Interface.MessageInterface;
+import com.example.APIRollTheDice.APIRollTheDice_Backend.Interface.User.UserRepository;
+import com.example.APIRollTheDice.APIRollTheDice_Backend.Mapper.ConversationMapper;
+import com.example.APIRollTheDice.APIRollTheDice_Backend.Model.DTO.ConversationDTO;
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Model.Obj.Conversation;
 import org.springframework.stereotype.Service;
 
@@ -10,9 +14,16 @@ import java.util.List;
 @Service
 public class ConversationService {
     private final ConversationInterface conversationInterface;
+    private final ConversationMapper conversationMapper;
 
-    public ConversationService(ConversationInterface conversationInterface) {
+    private final MessageInterface messageInterface;
+    private final UserRepository userRepository;
+
+    public ConversationService(ConversationInterface conversationInterface, ConversationMapper conversationMapper, MessageInterface messageInterface, UserRepository userRepository) {
+        this.conversationMapper = conversationMapper;
         this.conversationInterface = conversationInterface;
+        this.messageInterface = messageInterface;
+        this.userRepository = userRepository;
     }
 
     public void CreatConversation(Conversation conversation) {
@@ -52,6 +63,24 @@ public class ConversationService {
 
     public boolean conversationExists(Long id) {
         return conversationInterface.existsById(id);
+    }
+
+    public ConversationDTO ConversationToDTO(Conversation conversation){
+        return conversationMapper.toDTO(conversation);
+    }
+
+    public Conversation ConversationDTOToEntity(ConversationDTO conversationDTO){
+        Conversation conversation = conversationMapper.toEntity(conversationDTO);
+
+        if(conversationDTO.getIdParticipants() !=null) {
+            conversation.setParticipants(userRepository.findAllById(conversationDTO.getIdParticipants()));
+        }
+
+        if(conversationDTO.getIdMessages() != null){
+            conversation.setMessages(messageInterface.findAllByConversationId(conversationDTO.getId()));
+        }
+
+        return conversation;
     }
 
 }

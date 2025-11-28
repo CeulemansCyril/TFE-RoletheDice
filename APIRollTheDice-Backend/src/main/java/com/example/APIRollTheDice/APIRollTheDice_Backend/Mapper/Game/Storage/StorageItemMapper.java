@@ -19,12 +19,6 @@ public interface StorageItemMapper {
     @Mapping(target = "storage", ignore = true)
     StorageItem toEntity(StorageItemDTO dto);
 
-    default Long mapCustomObjectToId(CustomObject customObject) {
-        return customObject != null ? customObject.getId() : null;
-    }
 
-    default Long mapStorageToId(Storage storage) {
-        return storage != null ? storage.getId() : null;
-    }
 }
 

@@ -1,4 +1,4 @@
-package com.example.APIRollTheDice.APIRollTheDice_Backend.Service;
+package com.example.APIRollTheDice.APIRollTheDice_Backend.Service.Game.Money;
 
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Exception.NotFoundException;
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Interface.GameInterface.MoneyInterface.CurrencyInterface;
@@ -11,8 +11,8 @@ import java.util.List;
 
 @Service
 public class CurrencyService {
-    private CurrencyInterface currencyInterface;
-    private CurrencyMapper currencyMapper;
+    private final CurrencyInterface currencyInterface;
+    private final CurrencyMapper currencyMapper;
 
 
     public CurrencyService(CurrencyInterface currencyInterface, CurrencyMapper currencyMapper) {

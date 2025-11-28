@@ -6,7 +6,7 @@ import com.example.APIRollTheDice.APIRollTheDice_Backend.Exception.NotFoundExcep
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Model.Obj.FriendRequest;
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Model.Obj.User.User;
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Service.FriendRequestService;
-import com.example.APIRollTheDice.APIRollTheDice_Backend.Service.UserService;
+import com.example.APIRollTheDice.APIRollTheDice_Backend.Service.User.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;

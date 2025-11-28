@@ -10,27 +10,18 @@ import java.util.List;
 
 public class ConversationDTO {
     private Long id;
-    private List<User> participants;
+    private List<Long> idParticipants;
     private LocalDateTime createdAt;
-    private List<Message> messages;
+    private List<Long> IdMessages;
 
     public ConversationDTO() {
     }
 
-    public ConversationDTO(Long id, List<User> participants, LocalDateTime createdAt, List<Message> messages) {
+    public ConversationDTO(Long id, List<Long> idParticipants, LocalDateTime createdAt, List<Long> idMessages) {
         this.id = id;
-        this.participants = participants;
+        this.idParticipants = idParticipants;
         this.createdAt = createdAt;
-        this.messages = messages;
-    }
-
-    public static ConversationDTO from(Conversation conversation) {
-         ConversationDTO conversationDTO = new ConversationDTO();
-         conversationDTO.setId(conversation.getId());
-         conversationDTO.setParticipants(conversation.getParticipants());
-         conversationDTO.setCreatedAt(conversation.getCreatedAt());
-            conversationDTO.setMessages(conversation.getMessages());
-         return conversationDTO;
+        IdMessages = idMessages;
     }
 
     public Long getId() {
@@ -41,12 +32,12 @@ public class ConversationDTO {
         this.id = id;
     }
 
-    public List<User> getParticipants() {
-        return participants;
+    public List<Long> getIdParticipants() {
+        return idParticipants;
     }
 
-    public void setParticipants(List<User> participants) {
-        this.participants = participants;
+    public void setIdParticipants(List<Long> idParticipants) {
+        this.idParticipants = idParticipants;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -57,11 +48,11 @@ public class ConversationDTO {
         this.createdAt = createdAt;
     }
 
-    public List<Message> getMessages() {
-        return messages;
+    public List<Long> getIdMessages() {
+        return IdMessages;
     }
 
-    public void setMessages(List<Message> messages) {
-        this.messages = messages;
+    public void setIdMessages(List<Long> idMessages) {
+        IdMessages = idMessages;
     }
 }

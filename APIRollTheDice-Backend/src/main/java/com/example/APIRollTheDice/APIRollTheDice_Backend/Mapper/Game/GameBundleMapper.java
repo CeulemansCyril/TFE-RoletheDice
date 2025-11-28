@@ -19,23 +19,23 @@ import java.util.List;
 public interface GameBundleMapper {
 
 
-    @Mapping(source = "creator.id",     target = "idCreator")
-    @Mapping(source = "games",          target = "idGames",       qualifiedByName ="gameToIds")
-    @Mapping(source = "tokens",         target = "idTokens",      qualifiedByName = "tokenToIds")
-    @Mapping(source = "books",          target = "idBooks",       qualifiedByName = "bookToIds")
-    @Mapping(source = "currencies",     target = "idCurrencies",  qualifiedByName = "currenciesToIds")
-    @Mapping(source = "lootTables",     target = "idLootTables",  qualifiedByName = "lootTablesToIds")
-    @Mapping(source = "maps",           target = "idMaps",        qualifiedByName = "mapToIds")
+    @Mapping(source = "creator.id",target = "idCreator")
+    @Mapping(source = "games",target = "idGames",qualifiedByName ="gameToIds")
+    @Mapping(source = "tokens",target = "idTokens",qualifiedByName = "tokenToIds")
+    @Mapping(source = "books",target = "idBooks", qualifiedByName = "bookToIds")
+    @Mapping(source = "currencies",target = "idCurrencies",qualifiedByName = "currenciesToIds")
+    @Mapping(source = "lootTables",target = "idLootTables",qualifiedByName = "lootTablesToIds")
+    @Mapping(source = "maps",target = "idMaps", qualifiedByName = "mapToIds")
     GameBundleDTO toDTO(GameBundle gameBundle);
 
 
-    @Mapping(target = "creator",    ignore = true)
-    @Mapping(target = "games",      ignore = true)
-    @Mapping(target = "tokens",     ignore = true)
-    @Mapping(target = "books",      ignore = true)
-    @Mapping(target = "currencies", ignore = true)
-    @Mapping(target = "lootTables", ignore = true)
-    @Mapping(target = "maps",       ignore = true)
+    @Mapping(target = "creator",ignore = true)
+    @Mapping(target = "games",ignore = true)
+    @Mapping(target = "tokens",ignore = true)
+    @Mapping(target = "books",ignore = true)
+    @Mapping(target = "currencies",ignore = true)
+    @Mapping(target = "lootTables",ignore = true)
+    @Mapping(target = "maps",ignore = true)
     GameBundle toEntity(GameBundleDTO gameBundleDTO);
 
 

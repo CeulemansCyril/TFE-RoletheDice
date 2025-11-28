@@ -1,8 +1,14 @@
-package com.example.APIRollTheDice.APIRollTheDice_Backend.Service;
+package com.example.APIRollTheDice.APIRollTheDice_Backend.Service.User;
 
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Enum.RoleUser;
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Exception.NotFoundException;
-import com.example.APIRollTheDice.APIRollTheDice_Backend.Interface.UserRepository;
+import com.example.APIRollTheDice.APIRollTheDice_Backend.Interface.ConversationInterface;
+import com.example.APIRollTheDice.APIRollTheDice_Backend.Interface.GameInterface.GameInterface;
+import com.example.APIRollTheDice.APIRollTheDice_Backend.Interface.GameInterface.PlayerInterface;
+import com.example.APIRollTheDice.APIRollTheDice_Backend.Interface.User.UserCreationContentInterface;
+import com.example.APIRollTheDice.APIRollTheDice_Backend.Interface.User.UserRepository;
+import com.example.APIRollTheDice.APIRollTheDice_Backend.Mapper.User.UserMapper;
+import com.example.APIRollTheDice.APIRollTheDice_Backend.Model.DTO.UserDTo.UserDTO;
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Model.Obj.User.User;
 import org.springframework.stereotype.Service;
 
@@ -11,9 +17,26 @@ import java.util.List;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
-    public UserService(UserRepository userRepository) {
+    private final PlayerInterface playerRepository;
+    private final GameInterface gameRepository;
+    private final ConversationInterface conversationRepository;
+    private final UserCreationContentInterface userCreationContentRepository;
+
+    public UserService(UserRepository userRepository, UserMapper userMapper,
+                       PlayerInterface playerRepository,
+                       GameInterface gameRepository,
+                       ConversationInterface conversationRepository,
+                          UserCreationContentInterface userCreationContentRepository
+    )
+    {
+        this.playerRepository = playerRepository;
+        this.gameRepository = gameRepository;
+        this.conversationRepository = conversationRepository;
+        this.userMapper = userMapper;
         this.userRepository = userRepository;
+        this.userCreationContentRepository = userCreationContentRepository;
     }
 
 
@@ -63,8 +86,8 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User updateUser(Long id, User userDetails) {
-        User user = userRepository.findById(id).orElse(null);
+    public User updateUser( User userDetails) {
+        User user = userRepository.findById(userDetails.getId()).orElse(null);
         if (user != null) {
             user.setUsername(userDetails.getUsername());
             user.setEmail(userDetails.getEmail());
@@ -77,6 +100,9 @@ public class UserService {
             user.setProfilePublic(userDetails.isProfilePublic());
             user.setFriends(userDetails.getFriends());
             user.setBlockedUsers(userDetails.getBlockedUsers());
+            user.setDeleted(userDetails.isDeleted());
+            user.setUserCreationContent(userDetails.getUserCreationContent());
+
             return userRepository.save(user);
         }
         return null;
@@ -169,6 +195,37 @@ public class UserService {
 
     public List<User> searchAvailableUsers(Long userId, String seach) {
         return userRepository.searchAvailableUsers(userId, seach);
+    }
+
+
+    public UserDTO UserToDTO(User user) {
+       return userMapper.toDTO(user);
+    }
+
+    public User DTOToUser(UserDTO userDTO) {
+        User user = userMapper.toEntity(userDTO);
+        if (userDTO.getIdPlayers() != null) {
+            user.setPlayers(playerRepository.findAllById(userDTO.getIdPlayers()));
+        }
+        if (userDTO.getIdGamesAsAdmin() != null) {
+            user.setGamesAsAdmin(gameRepository.findAllById(userDTO.getIdGamesAsAdmin()));
+        }
+        if (userDTO.getIdGamesAsCreator() != null) {
+            user.setGamesAsCreator(gameRepository.findAllById(userDTO.getIdGamesAsCreator()));
+        }
+        if (userDTO.getIdConversations() != null) {
+            user.setUserConversations(conversationRepository.findAllById(userDTO.getIdConversations()));
+        }
+        if (userDTO.getIdFriends() != null) {
+            user.setFriends(userRepository.findAllById(userDTO.getIdFriends()));
+        }
+        if (userDTO.getIdBlockedUsers() != null) {
+            user.setBlockedUsers(userRepository.findAllById(userDTO.getIdBlockedUsers()));
+        }
+        if (userDTO.getIdUserCreationContent() != null) {
+            user.setUserCreationContent(userCreationContentRepository.findById(userDTO.getIdUserCreationContent()).orElse(null));
+        }
+        return user;
     }
 
 }

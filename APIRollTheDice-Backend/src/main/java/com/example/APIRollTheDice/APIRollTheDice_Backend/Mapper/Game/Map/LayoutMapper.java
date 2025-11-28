@@ -7,25 +7,24 @@ import com.example.APIRollTheDice.APIRollTheDice_Backend.Model.Obj.Game.Token.To
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Model.Obj.Game.Token.TokenPlaced;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
+
+import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface LayoutMapper {
 
     @Mapping(source = "map.id", target = "idMap")
-    @Mapping(source = "tokens", target = "idTokenPlaced")
+    @Mapping(source = "tokens", target = "idTokenPlaced", qualifiedByName = "mapTokenPlacedToIds")
     LayoutDTO toDTO(Layout layout);
 
     @Mapping(target = "map", ignore = true)
     @Mapping(target = "tokens", ignore = true)
     Layout toEntity(LayoutDTO layoutDTO);
 
-    // mapping pour la list<TokenPlaced> → list<Long>
-    default Long mapTokenPlaced(TokenPlaced token) {
-        return token != null ? token.getId() : null;
+    @Named("mapTokenPlacedToIds")
+    default List<Long> mapTokenPlacedToIds(List<TokenPlaced> tokens) {
+        return tokens==null ? null : tokens.stream().map(TokenPlaced::getId).toList();
     }
 
-    // map id du layout.map
-    default Long mapMapToId(Map map) {
-        return map != null ? map.getId() : null;
-    }
 }

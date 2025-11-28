@@ -1,4 +1,4 @@
-package com.example.APIRollTheDice.APIRollTheDice_Backend.Service;
+package com.example.APIRollTheDice.APIRollTheDice_Backend.Service.Game.Book;
 
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Exception.NotFoundException;
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Interface.GameInterface.BooksInterface.BookInterface;
@@ -17,12 +17,12 @@ import java.util.List;
 
 @Service
 public class BookService {
-    private PageMapper pageMapper;
-    private PagesInterface pagesInterface;
-    private BookMapper bookMapper;
-    private BookInterface bookInterface;
-    private GameInterface gameInterface;
-    private GameBundleInterface gameBundleInterface;
+    private final PageMapper pageMapper;
+    private final PagesInterface pagesInterface;
+    private final BookMapper bookMapper;
+    private final BookInterface bookInterface;
+    private final GameInterface gameInterface;
+    private final GameBundleInterface gameBundleInterface;
 
     public BookService(PageMapper pageMapper, PagesInterface pagesInterface, BookMapper bookMapper, BookInterface bookInterface, GameInterface gameInterface, GameBundleInterface gameBundleInterface) {
         this.pageMapper = pageMapper;
@@ -60,13 +60,16 @@ public class BookService {
     }
 
     public PagesDTO PagesInterfaceToDTO(Pages pages){
-        PagesDTO dto = pageMapper.toDTO(pages);
-        return dto;
+        return pageMapper.toDTO(pages);
     }
 
     public Pages PagesDTOToEntity(PagesDTO pagesDTO){
         Pages pages = pageMapper.toEntity(pagesDTO);
-        pages.setBook(bookInterface.findById(pagesDTO.getIdBook()).get());
+
+        if(pagesDTO.getIdBook() != null){
+            pages.setBook(bookInterface.findById(pagesDTO.getIdBook()).orElseThrow(()-> new NotFoundException("Book not found")));
+        }
+
         return pages;
     }
 
@@ -108,33 +111,26 @@ public class BookService {
     }
 
     public Book GetBookById(Long id){
-        return bookInterface.findById(id).get();
+        return bookInterface.findById(id).orElseThrow(() -> new NotFoundException("Book not found"));
     }
 
 
     public BookDTO BookInterfaceToDTO(Book book){
-        BookDTO bookDTO = bookMapper.toDTO(book);
-        return bookDTO;
+        return bookMapper.toDTO(book);
     }
 
 
     public Book BookDTOToEntity(BookDTO bookDTO){
         Book book = bookMapper.toEntity(bookDTO);
         if (bookDTO.getIdGame() != null) {
-            book.setGame(gameInterface.findById(bookDTO.getIdGame()).get());
-        } else {
-            book.setGame(null);
+            book.setGame(gameInterface.findById(bookDTO.getIdGame()).orElseThrow(() -> new NotFoundException("Game not found")));
         }
         if (bookDTO.getIdGameBundle() != null) {
-            book.setGameBundle(gameBundleInterface.findById(bookDTO.getIdGameBundle()).get());
-        } else {
-            book.setGameBundle(null);
+            book.setGameBundle(gameBundleInterface.findById(bookDTO.getIdGameBundle()).orElseThrow(() -> new NotFoundException("Game Bundle not found")));
         }
 
         if (bookDTO.getIdPages() != null) {
             book.setPages(pagesInterface.findAllByBook_Id(bookDTO.getId()));
-        } else {
-            book.setPages(null);
         }
 
         return book;

@@ -2,9 +2,9 @@ package com.example.APIRollTheDice.APIRollTheDice_Backend.Model.Obj.User;
 
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Enum.RoleUser;
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Exception.UserFriendException;
-import com.example.APIRollTheDice.APIRollTheDice_Backend.Model.DTO.UserDTO;
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Model.Obj.Conversation;
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Model.Obj.Game.Game;
+import com.example.APIRollTheDice.APIRollTheDice_Backend.Model.Obj.Game.Player;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -13,7 +13,6 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -52,17 +51,16 @@ public class User {
     @Column(nullable = false)
     private boolean profilePublic = true;
 
-    @JsonIgnore
-    @ManyToMany(mappedBy = "players")
-    private Set<Game> gamesAsPlayer;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Player> players = new ArrayList<>();
 
     @JsonIgnore
     @ManyToMany(mappedBy = "playAdmins")
-    private Set<Game> gamesAsAdmin;
+    private List<Game> gamesAsAdmin;
 
     @JsonIgnore
     @ManyToMany(mappedBy = "creator")
-    private Set<Game> gamesAsCreator;
+    private List<Game> gamesAsCreator;
 
 
     @ManyToMany
@@ -95,30 +93,15 @@ public class User {
     @Column(nullable = false)
     private boolean isDeleted = false;
 
-    public static User from(UserDTO userDTO){
-        User user = new User();
-        user.setId(userDTO.getId());
-        user.setUsername(userDTO.getUsername());
-        user.setEmail(userDTO.getEmail());
-        user.setPassword(userDTO.getPassword());
-        user.setDisplayName(userDTO.getDisplayName());
-        user.setDateOfBirth(userDTO.getDateOfBirth());
-        user.setBlocked(userDTO.isBlocked());
-        user.setRoleUser(userDTO.getRoleUser());
-        user.setOnline(userDTO.isOnline());
-        user.setProfilePublic(userDTO.isProfilePublic());
-        user.setFriends(userDTO.getFriends());
-        user.setBlockedUsers(userDTO.getBlockedUsers());
-        user.setDeleted(userDTO.isDelete());
-        user.setUserConversations(userDTO.getUserConversations());
-        return user;
-    }
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private UserCreationContent userCreationContent;
+
 
     public User() {
     }
 
     public User(Long id, String username, String email, String password, String displayName, LocalDate dateOfBirth, RoleUser roleUser, boolean blocked, boolean isOnline, boolean profilePublic, List<User> friends, List<User> blockedUsers,
-           List<Conversation> userConversations
+           List<Conversation> userConversations, List<Player> players, boolean isDeleted, UserCreationContent userCreationContent
             ) {
         this.id = id;
         this.username = username;
@@ -133,6 +116,9 @@ public class User {
         this.friends = friends;
         this.blockedUsers = blockedUsers;
         this.userConversations = userConversations;
+        this.players=players;
+        this.isDeleted = isDeleted;
+        this.userCreationContent = userCreationContent;
     }
 
     public Long getId() {
@@ -241,6 +227,39 @@ public class User {
 
     public List<Conversation> getUserConversations() {
         return userConversations;
+    }
+
+
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(List<Player> players) {
+        this.players = players;
+    }
+
+    public List<Game> getGamesAsAdmin() {
+        return gamesAsAdmin;
+    }
+
+    public void setGamesAsAdmin(List<Game> gamesAsAdmin) {
+        this.gamesAsAdmin = gamesAsAdmin;
+    }
+
+    public List<Game> getGamesAsCreator() {
+        return gamesAsCreator;
+    }
+
+    public void setGamesAsCreator(List<Game> gamesAsCreator) {
+        this.gamesAsCreator = gamesAsCreator;
+    }
+
+    public UserCreationContent getUserCreationContent() {
+        return userCreationContent;
+    }
+
+    public void setUserCreationContent(UserCreationContent userCreationContent) {
+        this.userCreationContent = userCreationContent;
     }
 
     public void setUserConversations(List<Conversation> userConversations) {

@@ -1,4 +1,4 @@
-package com.example.APIRollTheDice.APIRollTheDice_Backend.Service;
+package com.example.APIRollTheDice.APIRollTheDice_Backend.Service.Game.Storage;
 
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Exception.NotFoundException;
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Interface.GameInterface.GameInterface;
@@ -110,8 +110,8 @@ public class StorageService {
     public StorageItem StorageItemDTOToEntity(StorageItemDTO storageItemDTO){
         StorageItem storageItem = storageItemMapper.toEntity(storageItemDTO);
 
-        storageItem.setStorage(storageInterface.findById(storageItemDTO.getIdStorage()).get());
-        storageItem.setCustomObject(customObjectInterface.findById(storageItemDTO.getIdCustomObject()).get());
+        storageItem.setStorage(storageInterface.findById(storageItemDTO.getIdStorage()).orElseThrow(() -> new NotFoundException("Storage not found")));
+        storageItem.setCustomObject(customObjectInterface.findById(storageItemDTO.getIdCustomObject()).orElseThrow(() -> new NotFoundException("CustomObject not found")));
 
         return storageItem;
     }

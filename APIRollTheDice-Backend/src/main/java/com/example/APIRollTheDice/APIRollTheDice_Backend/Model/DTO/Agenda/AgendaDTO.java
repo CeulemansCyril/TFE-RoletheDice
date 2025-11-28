@@ -4,20 +4,20 @@ import java.util.List;
 
 public class AgendaDTO {
     private Long id;
-    private List<Long> idparticipants;
+    private List<Long> idParticipants;
     private Long idOwner;
-    private List<Long> idagendaEvents;
+    private List<Long> idAgendaEvents;
     private String title;
 
 
     public AgendaDTO() {
     }
 
-    public AgendaDTO(Long id, List<Long> idparticipants, Long idOwner, List<Long> idagendaEvents, String title) {
+    public AgendaDTO(Long id, List<Long> idParticipants, Long idOwner, List<Long> idAgendaEvents, String title) {
         this.id = id;
-        this.idparticipants = idparticipants;
+        this.idParticipants = idParticipants;
         this.idOwner = idOwner;
-        this.idagendaEvents = idagendaEvents;
+        this.idAgendaEvents = idAgendaEvents;
         this.title = title;
     }
 
@@ -37,20 +37,20 @@ public class AgendaDTO {
         this.idOwner = idOwner;
     }
 
-    public List<Long> getIdparticipants() {
-        return idparticipants;
+    public List<Long> getIdParticipants() {
+        return idParticipants;
     }
 
-    public void setIdparticipants(List<Long> idparticipants) {
-        this.idparticipants = idparticipants;
+    public void setIdParticipants(List<Long> idParticipants) {
+        this.idParticipants = idParticipants;
     }
 
-    public List<Long> getIdagendaEvents() {
-        return idagendaEvents;
+    public List<Long> getIdAgendaEvents() {
+        return idAgendaEvents;
     }
 
-    public void setIdagendaEvents(List<Long> idagendaEvents) {
-        this.idagendaEvents = idagendaEvents;
+    public void setIdAgendaEvents(List<Long> idAgendaEvents) {
+        this.idAgendaEvents = idAgendaEvents;
     }
 
     public String getTitle() {

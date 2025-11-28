@@ -29,21 +29,9 @@ public class Conversation {
     public Conversation() {
     }
 
-    public Conversation(Long id, List<User> participants, LocalDateTime createdAt, List<Message> messages) {
-        this.id = id;
-        this.participants = participants;
-        this.createdAt = createdAt;
-        this.messages = messages;
-    }
 
-    public static Conversation from(ConversationDTO conversationDTO) {
-        Conversation conversation = new Conversation();
-        conversation.setId(conversationDTO.getId());
-        conversation.setParticipants(conversationDTO.getParticipants());
-        conversation.setCreatedAt(conversationDTO.getCreatedAt());
-        conversation.setMessages(conversationDTO.getMessages());
-        return conversation;
-    }
+
+
 
     public Long getId() {
         return id;

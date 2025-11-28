@@ -30,19 +30,7 @@ public class Message {
 
     private String fileURL;
 
-    private static Message from(MessageDTO message) {
-        Message messages = new Message();
-        messages.setId(messages.getId());
-        messages.setContent(messages.getContent());
-        messages.setSender(messages.getSender());
-        messages.setSentAt(messages.getSentAt());
-        messages.setRead(messages.isRead());
-        messages.setModified(messages.isModified());
-        messages.setFileURL(messages.getFileURL());
-        messages.setConversation(messages.getConversation());
-        return messages;
 
-    }
 
     public Message() {
 

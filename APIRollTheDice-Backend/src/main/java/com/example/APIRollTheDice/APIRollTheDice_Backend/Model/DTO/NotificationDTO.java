@@ -15,16 +15,7 @@ public class NotificationDTO {
     private LocalDateTime timestamp;
 
 
-    public static NotificationDTO from(Notification notification) {
-        NotificationDTO notificationDTO = new NotificationDTO();
-        notificationDTO.setId(notification.getId());
-        notificationDTO.setMessage(notification.getMessage());
-        notificationDTO.setType(notification.getType());
-        notificationDTO.setRead(notification.isRead());
-        notificationDTO.setReceiverId(notification.getReceiverId());
-        notificationDTO.setTimestamp(notification.getTimestamp());
-        return notificationDTO;
-    }
+
 
     public NotificationDTO() {
     }

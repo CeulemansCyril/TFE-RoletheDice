@@ -3,6 +3,7 @@ package com.example.APIRollTheDice.APIRollTheDice_Backend.Service;
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Exception.AlreadyExistsException;
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Exception.NotFoundException;
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Interface.NotificationInterface;
+import com.example.APIRollTheDice.APIRollTheDice_Backend.Mapper.NotificationMapper;
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Model.DTO.NotificationDTO;
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Model.Obj.Notification;
 import com.example.APIRollTheDice.APIRollTheDice_Backend.SseEmitterService.SseNotification;
@@ -13,9 +14,11 @@ import java.util.List;
 @Service
 public class NotificationService {
     private final NotificationInterface notificationRepository;
+    private final NotificationMapper notificationMapper;
     private final SseNotification sseNotification;
 
-    public NotificationService(NotificationInterface notificationRepository, SseNotification sseNotification) {
+    public NotificationService(NotificationInterface notificationRepository, SseNotification sseNotification, NotificationMapper notificationMapper) {
+        this.notificationMapper = notificationMapper;
         this.sseNotification = sseNotification;
         this.notificationRepository = notificationRepository;
     }
@@ -26,7 +29,7 @@ public class NotificationService {
             throw new AlreadyExistsException("Notification with this ID already exists");
         }else {
            Notification notificationSave= notificationRepository.save(notification);
-           sseNotification.sendNotification(notificationSave.getReceiverId(), NotificationDTO.from(notificationSave));
+           sseNotification.sendNotification(notificationSave.getReceiverId(), NotificationToDTO(notificationSave));
         }
 
     }
@@ -64,12 +67,12 @@ public class NotificationService {
 
     }
 
-    public void NotifycationRead(Long id) {
+    public void NotificationRead(Long id) {
         Notification notification = notificationRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Notification not found"));
         notification.setRead(true);
         notificationRepository.save(notification);
-        sseNotification.sendNotification(notification.getReceiverId(), NotificationDTO.from(notification));
+        sseNotification.sendNotification(notification.getReceiverId(), NotificationToDTO(notification));
     }
 
 
@@ -100,5 +103,12 @@ public class NotificationService {
         return notificationRepository.existsById(id);
     }
 
+    public NotificationDTO NotificationToDTO(Notification notification) {
+        return notificationMapper.toDTO(notification);
+    }
+
+    public Notification NotificationDTOToEntity(NotificationDTO dto) {
+        return notificationMapper.toEntity(dto);
+    }
 
 }

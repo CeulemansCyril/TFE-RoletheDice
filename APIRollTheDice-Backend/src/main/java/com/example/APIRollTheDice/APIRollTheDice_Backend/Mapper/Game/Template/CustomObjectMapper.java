@@ -17,11 +17,5 @@ public interface CustomObjectMapper {
     @Mapping(target = "gameBundles", ignore = true)
     CustomObject toEntity(CustomObjectDTO customObjectDTO);
 
-    default Long mapTemplateToId(Template template){
-        return template != null ? template.getId(): null;
-    }
 
-    default Long mapGameBundleToId(GameBundle gameBundle){
-        return gameBundle != null ? gameBundle.getId() : null;
-    }
 }

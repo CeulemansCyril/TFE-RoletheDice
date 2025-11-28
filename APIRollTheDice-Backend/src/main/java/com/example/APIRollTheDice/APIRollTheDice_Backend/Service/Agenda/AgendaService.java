@@ -1,9 +1,9 @@
-package com.example.APIRollTheDice.APIRollTheDice_Backend.Service;
+package com.example.APIRollTheDice.APIRollTheDice_Backend.Service.Agenda;
 
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Exception.NotFoundException;
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Interface.AgendaInterface.AgendaEventInterface;
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Interface.AgendaInterface.AgendaInterface;
-import com.example.APIRollTheDice.APIRollTheDice_Backend.Interface.UserRepository;
+import com.example.APIRollTheDice.APIRollTheDice_Backend.Interface.User.UserRepository;
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Mapper.Agenda.AgendaEventMapper;
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Mapper.Agenda.AgendaMapper;
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Model.DTO.Agenda.AgendaDTO;
@@ -77,9 +77,9 @@ public class AgendaService {
 
     public  Agenda DTOToEntity(AgendaDTO agendaDTO){
         Agenda agenda = agendaMapper.toEntity(agendaDTO);
-        agenda.setAgendaEvents(agendaEventInterface.findAllById(agendaDTO.getIdagendaEvents()));
+        agenda.setAgendaEvents(agendaEventInterface.findAllById(agendaDTO.getIdAgendaEvents()));
         agenda.setOwner(userRepository.findById(agendaDTO.getIdOwner()).get());
-        agenda.setParticipants(userRepository.findAllById(agendaDTO.getIdparticipants()));
+        agenda.setParticipants(userRepository.findAllById(agendaDTO.getIdParticipants()));
 
         return agenda;
     }
@@ -144,13 +144,12 @@ public class AgendaService {
 
 
     public AgendaEventDTO AgendaEventToDTO(AgendaEvent agendaEvent){
-        AgendaEventDTO agendaEventDTO = agendaEventMapper.toDTO(agendaEvent);
-        return  agendaEventDTO;
+        return   agendaEventMapper.toDTO(agendaEvent);
     }
 
     public AgendaEvent DTOToEntity(AgendaEventDTO agendaEventDTO){
-        AgendaEvent agendaEvent = agendaEventMapper.toEntity(agendaEventDTO);
-        return agendaEvent;
+
+        return agendaEventMapper.toEntity(agendaEventDTO);
     }
 
 

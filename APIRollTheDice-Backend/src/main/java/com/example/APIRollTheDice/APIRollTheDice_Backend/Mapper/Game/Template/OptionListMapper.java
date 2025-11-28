@@ -15,7 +15,5 @@ public interface OptionListMapper {
     @Mapping(target = "gameBundle", ignore = true)
     OptionList toEntity(OptionListDTO optionListDTO);
 
-    default Long mapGameBundleToId(GameBundle gameBundle) {
-        return gameBundle != null ? gameBundle.getId() : null;
-    }
+
 }

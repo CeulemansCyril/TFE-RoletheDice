@@ -10,30 +10,21 @@ import java.time.LocalTime;
 public class FriendRequestDTO {
 
     private Long id;
-    private User sender;
-    private User receiver;
+    private Long idSender;
+    private Long idReceiver;
     private RequestStatus status;
     private LocalTime sentTime;
 
 
     public FriendRequestDTO() {
     }
-    public FriendRequestDTO(Long id, User sender, User receiver, RequestStatus status, LocalTime sentTime) {
-        this.id = id;
-        this.sender = sender;
-        this.receiver = receiver;
-        this.status = status;
-        this.sentTime = sentTime;
-    }
 
-    public static FriendRequestDTO from(FriendRequest friendRequest) {
-          FriendRequestDTO dto = new FriendRequestDTO();
-          dto.setId(friendRequest.getId());
-          dto.setSender(friendRequest.getSender());
-          dto.setReceiver(friendRequest.getReceiver());
-          dto.setStatus(friendRequest.getStatus());
-          dto.setSentTime(friendRequest.getSentTime());
-          return dto;
+    public FriendRequestDTO(Long id, Long idSender, RequestStatus status, Long idReceiver, LocalTime sentTime) {
+        this.id = id;
+        this.idSender = idSender;
+        this.status = status;
+        this.idReceiver = idReceiver;
+        this.sentTime = sentTime;
     }
 
     public Long getId() {
@@ -44,20 +35,20 @@ public class FriendRequestDTO {
         this.id = id;
     }
 
-    public User getSender() {
-        return sender;
+    public Long getIdSender() {
+        return idSender;
     }
 
-    public void setSender(User sender) {
-        this.sender = sender;
+    public void setIdSender(Long idSender) {
+        this.idSender = idSender;
     }
 
-    public User getReceiver() {
-        return receiver;
+    public Long getIdReceiver() {
+        return idReceiver;
     }
 
-    public void setReceiver(User receiver) {
-        this.receiver = receiver;
+    public void setIdReceiver(Long idReceiver) {
+        this.idReceiver = idReceiver;
     }
 
     public RequestStatus getStatus() {

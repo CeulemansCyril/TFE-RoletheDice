@@ -1,4 +1,4 @@
-package com.example.APIRollTheDice.APIRollTheDice_Backend.Service;
+package com.example.APIRollTheDice.APIRollTheDice_Backend.Service.Game;
 
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Exception.NotFoundException;
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Interface.ChatInterface.ChatChanelInterface;
@@ -7,7 +7,7 @@ import com.example.APIRollTheDice.APIRollTheDice_Backend.Interface.GameInterface
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Interface.GameInterface.GameInterface;
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Interface.GameInterface.MapInterface.MapInterface;
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Interface.GameInterface.PlayerInterface;
-import com.example.APIRollTheDice.APIRollTheDice_Backend.Interface.UserRepository;
+import com.example.APIRollTheDice.APIRollTheDice_Backend.Interface.User.UserRepository;
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Mapper.Game.GameMapper;
 
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Model.DTO.GameDTO.GameDTO;
@@ -16,15 +16,15 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class GameService {
-    private GameMapper gameMapper;
-    private GameInterface gameInterface;
+    private final GameMapper gameMapper;
+    private final GameInterface gameInterface;
 
-    private GameBundleInterface gameBundleInterface;
-    private BookInterface bookInterface;
-    private PlayerInterface playerInterface;
-    private UserRepository  userRepository;
-    private ChatChanelInterface chatChanelInterface;
-    private MapInterface mapInterface;
+    private final GameBundleInterface gameBundleInterface;
+    private final BookInterface bookInterface;
+    private final PlayerInterface playerInterface;
+    private final UserRepository  userRepository;
+    private final ChatChanelInterface chatChanelInterface;
+    private final MapInterface mapInterface;
 
     public GameService(GameMapper gameMapper, GameInterface gameInterface, GameBundleInterface gameBundleInterface, BookInterface bookInterface, PlayerInterface playerInterface, UserRepository userRepository, MapInterface mapInterface, ChatChanelInterface chatChanelInterface) {
         this.gameMapper = gameMapper;
@@ -72,11 +72,11 @@ public class GameService {
         Game game = gameMapper.toEntity(gameDTO);
 
         game.setPlayers(playerInterface.findAllById(gameDTO.getIdPlayers()));
-        game.setGameBundle(gameBundleInterface.findById(gameDTO.getIdGameBundle()).get());
+        game.setGameBundle(gameBundleInterface.findById(gameDTO.getIdGameBundle()).orElseThrow(()-> new NotFoundException("GameBundle not found")));
         game.setBooks(bookInterface.findAllByGame_Id(gameDTO.getId()));
-        game.setCreator(userRepository.findById(gameDTO.getIdCreator()).get());
+        game.setCreator(userRepository.findById(gameDTO.getIdCreator()).orElseThrow(()-> new NotFoundException("Creator Game not found")));
         game.setChatChanels(chatChanelInterface.findAllByGame_Id(gameDTO.getId()));
-        game.setActiveMap(mapInterface.findById(gameDTO.getIdActiveMap()).get());
+        game.setActiveMap(mapInterface.findById(gameDTO.getIdActiveMap()).orElseThrow(()-> new NotFoundException("Map not found")));
 
 
         return game;

@@ -4,11 +4,12 @@ package com.example.APIRollTheDice.APIRollTheDice_Backend.Model.Obj.Game;
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Model.Obj.Game.Books.Book;
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Model.Obj.Game.LootTable.LootTable;
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Model.Obj.Game.Map.Map;
+import com.example.APIRollTheDice.APIRollTheDice_Backend.Model.Obj.Game.Money.Currency;
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Model.Obj.Game.Token.Token;
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Model.Obj.User.User;
 import jakarta.persistence.*;
 
-import java.util.Currency;
+
 import java.util.List;
 
 @Entity

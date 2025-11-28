@@ -7,11 +7,14 @@ import com.example.APIRollTheDice.APIRollTheDice_Backend.Model.Obj.Game.Game;
 import com.example.APIRollTheDice.APIRollTheDice_Backend.Model.Obj.Game.GameBundle;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
+
+import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface BookMapper {
 
-    @Mapping(target = "idPages", expression = "java(book.getPages() != null ? book.getPages().stream().map(Pages::getId).toList() : null)")
+    @Mapping(source = "pages", target = "idPages", qualifiedByName = "mapPagesToId")
     @Mapping(source = "gameBundle.id", target = "idGameBundle")
     @Mapping(source = "game.id", target = "idGame")
     BookDTO toDTO(Book book);
@@ -20,4 +23,10 @@ public interface BookMapper {
     @Mapping(target = "gameBundle", ignore = true)
     @Mapping(target = "game", ignore = true)
     Book toEntity(BookDTO bookDTO);
+
+    @Named("mapPagesToId")
+    default List<Long> mapPagesToId(List<Pages> pages) {
+        return pages==null ? null : pages.stream().map(Pages::getId).toList();
+    }
+
 }

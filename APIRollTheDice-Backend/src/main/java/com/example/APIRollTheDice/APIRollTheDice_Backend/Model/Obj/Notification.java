@@ -25,16 +25,6 @@ public class Notification {
     @Column(nullable = false)
     private LocalDateTime timestamp;
 
-    public static Notification from(NotificationDTO notificationDTO) {
-        Notification notification = new Notification();
-        notification.setId(notificationDTO.getId());
-        notification.setMessage(notificationDTO.getMessage());
-        notification.setType(notificationDTO.getType());
-        notification.setRead(notificationDTO.isRead());
-        notification.setReceiverId(notificationDTO.getReceiverId());
-        notification.setTimestamp(notificationDTO.getTimestamp());
-        return notification;
-    }
 
     public Notification() {
     }
