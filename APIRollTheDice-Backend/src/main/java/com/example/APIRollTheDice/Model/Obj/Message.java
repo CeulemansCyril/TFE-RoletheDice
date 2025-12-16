@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 public class Message {
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     @Column(nullable = false)
     private String content;
     @Column(nullable = false)

@@ -4,6 +4,7 @@ import com.example.APIRollTheDice.Exception.NotFoundException;
 import com.example.APIRollTheDice.Interface.GameInterface.GameBundleInterface;
 
 import com.example.APIRollTheDice.Interface.GameInterface.MapInterface.LayoutInterface;
+import com.example.APIRollTheDice.Interface.GameInterface.PlayerInterface;
 import com.example.APIRollTheDice.Interface.GameInterface.TemplateInterface.CustomObjectInterface;
 import com.example.APIRollTheDice.Interface.GameInterface.TokenInterface.TokenInterface;
 import com.example.APIRollTheDice.Interface.GameInterface.TokenInterface.TokenPlacedInterface;
@@ -27,17 +28,18 @@ public class TokenService {
     private final TokenPlacedMapper tokenPlacedMapper;
 
     private final CustomObjectInterface customObjectInterface;
-    private final UserRepository userRepository;
+    private final PlayerInterface playerInterface;
     private final GameBundleInterface gameInterface;
     private final LayoutInterface layoutInterface;
 
-    public TokenService(TokenInterface tokenInterface, TokenMapper tokenMapper, TokenPlacedInterface tokenPlacedInterface, TokenPlacedMapper tokenPlacedMapper, CustomObjectInterface customObjectInterface, UserRepository userRepository, LayoutInterface layoutInterface, GameBundleInterface gameInterface) {
+    public TokenService(TokenInterface tokenInterface, TokenMapper tokenMapper, TokenPlacedInterface tokenPlacedInterface,
+                        TokenPlacedMapper tokenPlacedMapper, CustomObjectInterface customObjectInterface,PlayerInterface playerInterface, LayoutInterface layoutInterface, GameBundleInterface gameInterface) {
         this.tokenInterface = tokenInterface;
         this.tokenMapper = tokenMapper;
         this.tokenPlacedInterface = tokenPlacedInterface;
         this.tokenPlacedMapper = tokenPlacedMapper;
         this.customObjectInterface = customObjectInterface;
-        this.userRepository = userRepository;
+        this.playerInterface = playerInterface;
         this.layoutInterface = layoutInterface;
         this.gameInterface = gameInterface;
     }
@@ -80,7 +82,7 @@ public class TokenService {
     public Token TokenDTOToEntity(TokenDTO tokenDTO){
         Token token = tokenMapper.toEntity(tokenDTO);
 
-        token.setOwner(userRepository.findById(tokenDTO.getIdOwner()).get());
+        token.setOwner(playerInterface.findById(tokenDTO.getIdOwner()).get());
         token.setFiche(customObjectInterface.findById(tokenDTO.getIdFiche()).get());
         token.setGameBundle(gameInterface.findById(tokenDTO.getIdGameBundle()).get());
 

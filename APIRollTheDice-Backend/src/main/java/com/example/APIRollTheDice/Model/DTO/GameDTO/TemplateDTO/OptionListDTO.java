@@ -3,7 +3,7 @@ package com.example.APIRollTheDice.Model.DTO.GameDTO.TemplateDTO;
 import java.util.List;
 
 public class OptionListDTO {
-    private long id;
+    private Long id;
     private String name;
     private List<String> options;
     private Long idTemplateField;

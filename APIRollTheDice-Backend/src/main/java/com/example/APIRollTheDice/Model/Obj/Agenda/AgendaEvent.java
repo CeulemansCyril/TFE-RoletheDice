@@ -1,5 +1,6 @@
 package com.example.APIRollTheDice.Model.Obj.Agenda;
 
+import com.example.APIRollTheDice.Model.Obj.User.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
@@ -24,6 +25,11 @@ public class AgendaEvent {
     private LocalDateTime endDate;
 
     @ManyToOne
+    @JoinColumn(name = "user_id",nullable = false)
+    @JsonBackReference
+    private User creator;
+
+    @ManyToOne
     @JoinColumn(name = "agenda_id", nullable = false)
     @JsonBackReference
     private Agenda agenda;
@@ -31,13 +37,14 @@ public class AgendaEvent {
     public AgendaEvent() {
     }
 
-    public AgendaEvent(Long id, String title, String description, LocalDateTime startDate, LocalDateTime endDate,Agenda agenda) {
+    public AgendaEvent(Long id, String title, String description, LocalDateTime startDate, LocalDateTime endDate,Agenda agenda,User creator) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.startDate = startDate;
         this.endDate = endDate;
         this.agenda = agenda;
+        this.creator =creator;
 
     }
 
@@ -81,5 +88,19 @@ public class AgendaEvent {
         this.startDate = startDate;
     }
 
+    public User getCreator() {
+        return creator;
+    }
 
+    public void setCreator(User creator) {
+        this.creator = creator;
+    }
+
+    public Agenda getAgenda() {
+        return agenda;
+    }
+
+    public void setAgenda(Agenda agenda) {
+        this.agenda = agenda;
+    }
 }

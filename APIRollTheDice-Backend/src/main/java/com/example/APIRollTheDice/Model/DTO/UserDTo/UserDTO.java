@@ -3,6 +3,7 @@ package com.example.APIRollTheDice.Model.DTO.UserDTo;
 import com.example.APIRollTheDice.Enum.RoleUser;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserDTO {
@@ -16,24 +17,28 @@ public class UserDTO {
     private RoleUser roleUser;
     private boolean isOnline = false;
     private boolean profilePublic = true;
-    private List<Long> idPlayers;
-    private List<Long> idGamesAsAdmin;
-    private List<Long> idGamesAsCreator;
-    private List<Long> idConversations;
-    private List<Long> idFriends;
-    private List<Long> idBlockedUsers;
+    private List<Long> idPlayers = new ArrayList<>();
+    private List<Long> idGamesAsAdmin = new ArrayList<>();
+    private List<Long> idGamesAsCreator = new ArrayList<>();
+    private List<Long> idConversations = new ArrayList<>();
+    private List<Long> idFriends = new ArrayList<>();
+    private List<Long> idBlockedUsers = new ArrayList<>();
     private boolean isDeleted = false;
     private Long idUserCreationContent;
+    private List<Long> idAgendaEvent = new ArrayList<>();
 
-    public UserDTO(Long id, String username, String email, String password, String displayName, LocalDate dateOfBirth, boolean blocked, RoleUser roleUser, boolean isOnline, boolean profilePublic, List<Long> idPlayers, List<Long> idGamesAsAdmin, List<Long> idGamesAsCreator, List<Long> idConversations, List<Long> idFriends, List<Long> idBlockedUsers, boolean isDeleted, Long idUserCreationContent) {
+    public UserDTO() {
+    }
+
+    public UserDTO(Long id, String username, String password, String email, String displayName, LocalDate dateOfBirth, RoleUser roleUser, boolean blocked, boolean isOnline, boolean profilePublic, List<Long> idPlayers, List<Long> idGamesAsAdmin, List<Long> idGamesAsCreator, List<Long> idConversations, List<Long> idFriends, List<Long> idBlockedUsers, boolean isDeleted, Long idUserCreationContent, List<Long> idAgendaEvent) {
         this.id = id;
         this.username = username;
-        this.email = email;
         this.password = password;
+        this.email = email;
         this.displayName = displayName;
         this.dateOfBirth = dateOfBirth;
-        this.blocked = blocked;
         this.roleUser = roleUser;
+        this.blocked = blocked;
         this.isOnline = isOnline;
         this.profilePublic = profilePublic;
         this.idPlayers = idPlayers;
@@ -44,10 +49,9 @@ public class UserDTO {
         this.idBlockedUsers = idBlockedUsers;
         this.isDeleted = isDeleted;
         this.idUserCreationContent = idUserCreationContent;
+        this.idAgendaEvent = idAgendaEvent;
     }
 
-    public UserDTO() {
-    }
 
     public Long getId() {
         return id;
@@ -89,14 +93,6 @@ public class UserDTO {
         this.displayName = displayName;
     }
 
-    public boolean isBlocked() {
-        return blocked;
-    }
-
-    public void setBlocked(boolean blocked) {
-        this.blocked = blocked;
-    }
-
     public LocalDate getDateOfBirth() {
         return dateOfBirth;
     }
@@ -113,12 +109,12 @@ public class UserDTO {
         this.roleUser = roleUser;
     }
 
-    public boolean isProfilePublic() {
-        return profilePublic;
+    public boolean isBlocked() {
+        return blocked;
     }
 
-    public void setProfilePublic(boolean profilePublic) {
-        this.profilePublic = profilePublic;
+    public void setBlocked(boolean blocked) {
+        this.blocked = blocked;
     }
 
     public boolean isOnline() {
@@ -127,6 +123,14 @@ public class UserDTO {
 
     public void setOnline(boolean online) {
         isOnline = online;
+    }
+
+    public boolean isProfilePublic() {
+        return profilePublic;
+    }
+
+    public void setProfilePublic(boolean profilePublic) {
+        this.profilePublic = profilePublic;
     }
 
     public List<Long> getIdGamesAsAdmin() {
@@ -191,5 +195,13 @@ public class UserDTO {
 
     public void setIdUserCreationContent(Long idUserCreationContent) {
         this.idUserCreationContent = idUserCreationContent;
+    }
+
+    public List<Long> getIdAgendaEvent() {
+        return idAgendaEvent;
+    }
+
+    public void setIdAgendaEvent(List<Long> idAgendaEvent) {
+        this.idAgendaEvent = idAgendaEvent;
     }
 }

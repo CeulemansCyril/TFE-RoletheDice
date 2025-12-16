@@ -1,0 +1,91 @@
+# =========================
+# Unity generated folders
+# =========================
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+[Mm]emoryCaptures/
+
+# =========================
+# Visual Studio / Rider
+# =========================
+.vs/
+.vscode/
+.idea/
+*.csproj
+*.sln
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+
+# =========================
+# Unity cache
+# =========================
+/Library/PackageCache/
+
+# =========================
+# OS generated files
+# =========================
+.DS_Store
+.DS_Store?
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# =========================
+# Crash & logs
+# =========================
+*.log
+*.stacktrace
+
+# =========================
+# Builds & exports
+# =========================
+*.apk
+*.aab
+*.exe
+*.app
+*.unitypackage
+*.xcodeproj
+*.xcworkspace
+
+# =========================
+# Addressables
+# =========================
+/Assets/AddressableAssetsData/*/*.bin*
+
+# =========================
+# Shader cache
+# =========================
+*.shadercache
+
+# =========================
+# IL2CPP / Burst
+# =========================
+/Library/Bee/
+/Library/Il2cppBuildCache/
+/Library/BurstCache/
+
+# =========================
+# Unity Collaborate
+# =========================
+/Assets/Collaborate*
+
+# =========================
+# Git LFS (si non utilisé)
+# =========================
+*.psd
+*.tga
+*.fbx
+*.blend
+*.wav
+*.mp4

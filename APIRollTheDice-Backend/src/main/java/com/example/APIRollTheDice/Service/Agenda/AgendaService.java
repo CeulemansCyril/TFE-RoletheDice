@@ -116,7 +116,9 @@ public class AgendaService {
         return agendaEventInterface.save(existing);
     }
 
-
+    public List<AgendaEvent> findAllAgendaEventById(List<Long> ids){
+        return agendaEventInterface.findAllById(ids);
+    }
 
 
 
@@ -140,7 +142,9 @@ public class AgendaService {
     }
 
     public AgendaEvent AgendaEventDTOToEntity(AgendaEventDTO agendaEventDTO){
-        return agendaEventMapper.toEntity(agendaEventDTO);
+        AgendaEvent agendaEvent = agendaEventMapper.toEntity(agendaEventDTO);
+        agendaEvent.setCreator(userRepository.findById(agendaEventDTO.getId()).orElseThrow(()-> new NotFoundException("User not found")));
+        return agendaEvent;
     }
 
 

@@ -15,8 +15,8 @@ public class TemplateField {
     private String type;
     private boolean required;
 
-    private Double minValue;
-    private Double maxValue;
+    private double minValue;
+    private double maxValue;
 
     private double positionX;
     private double positionY;

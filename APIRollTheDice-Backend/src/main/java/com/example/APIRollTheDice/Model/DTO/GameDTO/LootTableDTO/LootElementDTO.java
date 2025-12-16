@@ -1,6 +1,7 @@
 package com.example.APIRollTheDice.Model.DTO.GameDTO.LootTableDTO;
 
 import com.example.APIRollTheDice.Enum.LootType;
+import com.example.APIRollTheDice.Model.Obj.Game.Money.Value;
 
 public class LootElementDTO {
     private LootType type;
@@ -12,10 +13,12 @@ public class LootElementDTO {
     private Long idDropObject;
     private Long idDropMoney;
 
+    private Value value;
+
     public LootElementDTO() {
     }
 
-    public LootElementDTO(LootType type, int minAmount, int maxAmount, int weight, double dropChance, Long idDropObject, Long idDropMoney) {
+    public LootElementDTO(LootType type, int minAmount, int maxAmount, int weight, double dropChance, Long idDropObject, Long idDropMoney, Value value) {
         this.type = type;
         this.minAmount = minAmount;
         this.maxAmount = maxAmount;
@@ -23,6 +26,7 @@ public class LootElementDTO {
         this.dropChance = dropChance;
         this.idDropObject = idDropObject;
         this.idDropMoney = idDropMoney;
+        this.value =value;
     }
 
     public LootType getType() {
@@ -79,5 +83,13 @@ public class LootElementDTO {
 
     public void setIdDropObject(Long idDropObject) {
         this.idDropObject = idDropObject;
+    }
+
+    public Value getValue() {
+        return value;
+    }
+
+    public void setValue(Value value) {
+        this.value = value;
     }
 }

@@ -10,15 +10,18 @@ public class AgendaEventDTO {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
 
+    private Long idCreator;
+
 
     public AgendaEventDTO() {
     }
-    public AgendaEventDTO(Long id, String title, String description, LocalDateTime startDate, LocalDateTime endDate) {
+    public AgendaEventDTO(Long id, String title, String description, LocalDateTime startDate, LocalDateTime endDate,Long idCreator) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.idCreator=idCreator;
 
     }
 
@@ -62,4 +65,11 @@ public class AgendaEventDTO {
         this.endDate = endDate;
     }
 
+    public Long getIdCreator() {
+        return idCreator;
+    }
+
+    public void setIdCreator(Long idCreator) {
+        this.idCreator = idCreator;
+    }
 }

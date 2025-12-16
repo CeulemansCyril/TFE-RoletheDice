@@ -1,6 +1,7 @@
 package com.example.APIRollTheDice.Mapper.User;
 
 import com.example.APIRollTheDice.Model.DTO.UserDTo.UserDTO;
+import com.example.APIRollTheDice.Model.Obj.Agenda.AgendaEvent;
 import com.example.APIRollTheDice.Model.Obj.Conversation;
 import com.example.APIRollTheDice.Model.Obj.Game.Game;
 import com.example.APIRollTheDice.Model.Obj.Game.Player;
@@ -20,6 +21,7 @@ public interface UserMapper {
     @Mapping(source = "friends", target = "idFriends", qualifiedByName = "friendsToIds")
     @Mapping(source = "blockedUsers", target = "idBlockedUsers", qualifiedByName = "blockedUsersToIds")
     @Mapping(source = "userCreationContent.id", target = "idUserCreationContent")
+    @Mapping(source = "agendaEvents", target = "idAgendaEvent", qualifiedByName = "eventToIds")
     UserDTO toDTO(User user);
 
 
@@ -30,6 +32,7 @@ public interface UserMapper {
     @Mapping(target = "friends", ignore = true)
     @Mapping(target = "blockedUsers", ignore = true)
     @Mapping(target = "userCreationContent", ignore = true)
+    @Mapping(target = "agendaEvents", ignore = true)
     User toEntity(UserDTO dto);
 
 
@@ -61,5 +64,10 @@ public interface UserMapper {
     @Named("blockedUsersToIds")
     default List<Long> mapBlockedUsersToIds(List<User> list) {
         return list == null ? null : list.stream().map(User::getId).toList();
+    }
+
+    @Named("eventToIds")
+    default  List<Long> mapAgendaEventToIds(List<AgendaEvent> list){
+        return list == null ? null : list.stream().map(AgendaEvent::getId).toList();
     }
 }

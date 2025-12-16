@@ -2,6 +2,7 @@ package com.example.APIRollTheDice.Model.Obj.Game.Token;
 
 import com.example.APIRollTheDice.Enum.TokenType;
 import com.example.APIRollTheDice.Model.Obj.Game.GameBundle;
+import com.example.APIRollTheDice.Model.Obj.Game.Player;
 import com.example.APIRollTheDice.Model.Obj.Game.Template.CustomObject;
 import com.example.APIRollTheDice.Model.Obj.User.User;
 import jakarta.persistence.*;
@@ -21,8 +22,8 @@ public class Token {
     private boolean canMove;
 
     @ManyToOne
-    @JoinColumn(name = "users_id", nullable = false)
-    private User owner;
+    @JoinColumn(name = "players_id", nullable = false)
+    private Player owner;
 
     @ManyToOne
     @JoinColumn(name = "custom_objects_id", nullable = false)
@@ -35,7 +36,7 @@ public class Token {
     public Token() {
     }
 
-    public Token(long id, String name, String imageURL, TokenType type, boolean canMove, User owner, CustomObject fiche, GameBundle gameBundle) {
+    public Token(long id, String name, String imageURL, TokenType type, boolean canMove, Player owner, CustomObject fiche, GameBundle gameBundle) {
         this.id = id;
         this.name = name;
         this.imageURL = imageURL;
@@ -90,11 +91,11 @@ public class Token {
         this.canMove = canMove;
     }
 
-    public User getOwner() {
+    public Player getOwner() {
         return owner;
     }
 
-    public void setOwner(User owner) {
+    public void setOwner(Player owner) {
         this.owner = owner;
     }
 

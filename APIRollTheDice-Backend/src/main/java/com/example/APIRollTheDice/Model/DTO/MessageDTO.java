@@ -3,7 +3,7 @@ package com.example.APIRollTheDice.Model.DTO;
 import java.time.LocalDateTime;
 
 public class MessageDTO {
-    private long id;
+    private Long id;
     private String content;
     private String sender;
     private LocalDateTime sentAt;

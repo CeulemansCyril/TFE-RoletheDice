@@ -3,7 +3,7 @@ package com.example.APIRollTheDice.Model.DTO.GameDTO.TokenDTO;
 import com.example.APIRollTheDice.Enum.TokenType;
 
 public class TokenDTO {
-    private long id;
+    private Long id;
     private String name;
     private String imageURL;
     private TokenType type;

@@ -2,6 +2,7 @@ package com.example.APIRollTheDice.Model.Obj.User;
 
 import com.example.APIRollTheDice.Enum.RoleUser;
 import com.example.APIRollTheDice.Exception.UserFriendException;
+import com.example.APIRollTheDice.Model.Obj.Agenda.AgendaEvent;
 import com.example.APIRollTheDice.Model.Obj.Conversation;
 import com.example.APIRollTheDice.Model.Obj.Game.Game;
 import com.example.APIRollTheDice.Model.Obj.Game.Player;
@@ -62,6 +63,10 @@ public class User {
     @ManyToMany(mappedBy = "creator")
     private List<Game> gamesAsCreator = new ArrayList<>();
 
+    @OneToMany(mappedBy = "creator")
+    @JsonManagedReference
+    private List<AgendaEvent> agendaEvents = new ArrayList<>();
+
 
     @ManyToMany
     @JoinTable(
@@ -101,7 +106,7 @@ public class User {
     }
 
     public User(Long id, String username, String email, String password, String displayName, LocalDate dateOfBirth, RoleUser roleUser, boolean blocked, boolean isOnline, boolean profilePublic, List<User> friends, List<User> blockedUsers,
-           List<Conversation> userConversations, List<Player> players, boolean isDeleted, UserCreationContent userCreationContent
+           List<Conversation> userConversations, List<Player> players, boolean isDeleted, UserCreationContent userCreationContent, List<AgendaEvent> agendaEvents
             ) {
         this.id = id;
         this.username = username;
@@ -119,6 +124,7 @@ public class User {
         this.players=players;
         this.isDeleted = isDeleted;
         this.userCreationContent = userCreationContent;
+        this.agendaEvents = agendaEvents;
     }
 
     public Long getId() {
@@ -229,6 +235,13 @@ public class User {
         return userConversations;
     }
 
+    public List<AgendaEvent> getAgendaEvents() {
+        return agendaEvents;
+    }
+
+    public void setAgendaEvents(List<AgendaEvent> agendaEvents) {
+        this.agendaEvents = agendaEvents;
+    }
 
     public List<Player> getPlayers() {
         return players;

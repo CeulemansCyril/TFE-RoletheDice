@@ -9,7 +9,9 @@ import com.example.APIRollTheDice.Interface.User.UserCreationContentInterface;
 import com.example.APIRollTheDice.Interface.User.UserRepository;
 import com.example.APIRollTheDice.Mapper.User.UserMapper;
 import com.example.APIRollTheDice.Model.DTO.UserDTo.UserDTO;
+import com.example.APIRollTheDice.Model.Obj.Agenda.AgendaEvent;
 import com.example.APIRollTheDice.Model.Obj.User.User;
+import com.example.APIRollTheDice.Service.Agenda.AgendaService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,12 +25,14 @@ public class UserService {
     private final GameInterface gameRepository;
     private final ConversationInterface conversationRepository;
     private final UserCreationContentInterface userCreationContentRepository;
+    private final AgendaService agendaService;
 
     public UserService(UserRepository userRepository, UserMapper userMapper,
                        PlayerInterface playerRepository,
                        GameInterface gameRepository,
                        ConversationInterface conversationRepository,
-                          UserCreationContentInterface userCreationContentRepository
+                       UserCreationContentInterface userCreationContentRepository,
+                       AgendaService agendaService
     )
     {
         this.playerRepository = playerRepository;
@@ -37,6 +41,7 @@ public class UserService {
         this.userMapper = userMapper;
         this.userRepository = userRepository;
         this.userCreationContentRepository = userCreationContentRepository;
+        this.agendaService = agendaService;
     }
 
 
@@ -225,6 +230,11 @@ public class UserService {
         if (userDTO.getIdUserCreationContent() != null) {
             user.setUserCreationContent(userCreationContentRepository.findById(userDTO.getIdUserCreationContent()).orElse(null));
         }
+
+        if(userDTO.getIdAgendaEvent() != null){
+            user.setAgendaEvents(agendaService.findAllAgendaEventById(userDTO.getIdAgendaEvent()));
+        }
+
         return user;
     }
 
