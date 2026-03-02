@@ -1,6 +1,6 @@
 using System;
 
-namespace RollTheDice.API.DTO
+namespace Assets._Project.API.Model.DTO
 {
     public class MessageDTO
     {

@@ -21,16 +21,18 @@ public class UserDTO {
     private List<Long> idGamesAsAdmin = new ArrayList<>();
     private List<Long> idGamesAsCreator = new ArrayList<>();
     private List<Long> idConversations = new ArrayList<>();
-    private List<Long> idFriends = new ArrayList<>();
-    private List<Long> idBlockedUsers = new ArrayList<>();
+
+    private List<UserIdentifantData> idFriends = new ArrayList<>();
+    private List<UserIdentifantData> idBlockedUsers = new ArrayList<>();
+
     private boolean isDeleted = false;
-    private Long idUserCreationContent;
+    private List<Long> idUserCreationContent;
     private List<Long> idAgendaEvent = new ArrayList<>();
 
     public UserDTO() {
     }
 
-    public UserDTO(Long id, String username, String password, String email, String displayName, LocalDate dateOfBirth, RoleUser roleUser, boolean blocked, boolean isOnline, boolean profilePublic, List<Long> idPlayers, List<Long> idGamesAsAdmin, List<Long> idGamesAsCreator, List<Long> idConversations, List<Long> idFriends, List<Long> idBlockedUsers, boolean isDeleted, Long idUserCreationContent, List<Long> idAgendaEvent) {
+    public UserDTO(Long id, String username, String password, String email, String displayName, LocalDate dateOfBirth, RoleUser roleUser, boolean blocked, boolean isOnline, boolean profilePublic, List<Long> idPlayers, List<Long> idGamesAsAdmin, List<Long> idGamesAsCreator, List<Long> idConversations, List<UserIdentifantData> idFriends, List<UserIdentifantData> idBlockedUsers, boolean isDeleted, List<Long> idUserCreationContent, List<Long> idAgendaEvent) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -165,19 +167,19 @@ public class UserDTO {
         this.idConversations = idConversations;
     }
 
-    public List<Long> getIdFriends() {
+    public List<UserIdentifantData> getIdFriends() {
         return idFriends;
     }
 
-    public void setIdFriends(List<Long> idFriends) {
+    public void setIdFriends(List<UserIdentifantData> idFriends) {
         this.idFriends = idFriends;
     }
 
-    public List<Long> getIdBlockedUsers() {
+    public List<UserIdentifantData> getIdBlockedUsers() {
         return idBlockedUsers;
     }
 
-    public void setIdBlockedUsers(List<Long> idBlockedUsers) {
+    public void setIdBlockedUsers(List<UserIdentifantData> idBlockedUsers) {
         this.idBlockedUsers = idBlockedUsers;
     }
 
@@ -189,11 +191,11 @@ public class UserDTO {
         isDeleted = deleted;
     }
 
-    public Long getIdUserCreationContent() {
+    public List<Long> getIdUserCreationContent() {
         return idUserCreationContent;
     }
 
-    public void setIdUserCreationContent(Long idUserCreationContent) {
+    public void setIdUserCreationContent(List<Long> idUserCreationContent) {
         this.idUserCreationContent = idUserCreationContent;
     }
 

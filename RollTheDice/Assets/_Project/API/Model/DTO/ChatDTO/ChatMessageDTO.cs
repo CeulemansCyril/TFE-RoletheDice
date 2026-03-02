@@ -1,11 +1,12 @@
+using Assets._Project.API.Model.Object.User;
 using System;
 
-namespace RollTheDice.API.Models.ChatDTO
+namespace Assets._Project.API.Model.DTO.ChatDTO
 {
     public class ChatMessageDTO
     {
         public long Id { get; set; }
-        public long IdSender { get; set; }
+        public UserIdentifantData IdSender { get; set; }
 
         public string MessageContent { get; set; }
 
@@ -15,7 +16,7 @@ namespace RollTheDice.API.Models.ChatDTO
         public long IdChatChanel { get; set; }
 
         public ChatMessageDTO(){}
-        public ChatMessageDTO(long id, long idSender, long idChatChanel, DateTime dateTime, bool isModified)
+        public ChatMessageDTO(long id, UserIdentifantData idSender, long idChatChanel, DateTime dateTime, bool isModified)
         {
             Id = id;
             IdSender = idSender;

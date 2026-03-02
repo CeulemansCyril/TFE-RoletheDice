@@ -1,11 +1,13 @@
 package com.example.APIRollTheDice.Mapper.User;
 
 import com.example.APIRollTheDice.Model.DTO.UserDTo.UserDTO;
+import com.example.APIRollTheDice.Model.DTO.UserDTo.UserIdentifantData;
 import com.example.APIRollTheDice.Model.Obj.Agenda.AgendaEvent;
 import com.example.APIRollTheDice.Model.Obj.Conversation;
 import com.example.APIRollTheDice.Model.Obj.Game.Game;
 import com.example.APIRollTheDice.Model.Obj.Game.Player;
 import com.example.APIRollTheDice.Model.Obj.User.User;
+import com.example.APIRollTheDice.Model.Obj.User.UserCreationContent;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -20,7 +22,7 @@ public interface UserMapper {
     @Mapping(source = "userConversations", target = "idConversations", qualifiedByName = "conversationsToIds")
     @Mapping(source = "friends", target = "idFriends", qualifiedByName = "friendsToIds")
     @Mapping(source = "blockedUsers", target = "idBlockedUsers", qualifiedByName = "blockedUsersToIds")
-    @Mapping(source = "userCreationContent.id", target = "idUserCreationContent")
+    @Mapping(source = "userCreationContent", target = "idUserCreationContent",qualifiedByName = "userCreationContentToIds")
     @Mapping(source = "agendaEvents", target = "idAgendaEvent", qualifiedByName = "eventToIds")
     UserDTO toDTO(User user);
 
@@ -57,17 +59,22 @@ public interface UserMapper {
     }
 
     @Named("friendsToIds")
-    default List<Long> mapFriendsToIds(List<User> list) {
-        return list == null ? null : list.stream().map(User::getId).toList();
+    default List<UserIdentifantData> mapFriendsToIds(List<User> list) {
+        return list == null ? null : list.stream().map(user -> new UserIdentifantData(user.getId(), user.getUsername())).toList();
     }
 
     @Named("blockedUsersToIds")
-    default List<Long> mapBlockedUsersToIds(List<User> list) {
-        return list == null ? null : list.stream().map(User::getId).toList();
+    default List<UserIdentifantData> mapBlockedUsersToIds(List<User> list) {
+        return list == null ? null : list.stream().map(user -> new UserIdentifantData(user.getId(), user.getUsername())).toList();
     }
 
     @Named("eventToIds")
     default  List<Long> mapAgendaEventToIds(List<AgendaEvent> list){
         return list == null ? null : list.stream().map(AgendaEvent::getId).toList();
+    }
+
+    @Named("userCreationContentToIds")
+    default  List<Long> mapUserCreationContentToIds(List<UserCreationContent> list){
+        return list == null ? null : list.stream().map(UserCreationContent::getId).toList();
     }
 }

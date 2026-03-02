@@ -1,7 +1,6 @@
-
 using System.Collections.Generic;
 
-namespace RollTheDice.API.Models.Chat
+namespace Assets._Project.API.Model.Object.Chat
 {
     public class ChatChanel
     {

@@ -1,6 +1,6 @@
-using RollTheDice.API.Enums;
+using Assets._Project.API.Enums;
 
-namespace RollTheDice.API.DTO.Login
+namespace Assets._Project.API.Model.DTO.Login
 {
     public class JwtReponse
     {

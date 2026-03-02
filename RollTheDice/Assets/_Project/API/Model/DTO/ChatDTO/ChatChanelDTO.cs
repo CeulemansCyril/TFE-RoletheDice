@@ -1,16 +1,16 @@
 using System.Collections.Generic;
 
-namespace RollTheDice.API.Models.ChatDTO
+namespace Assets._Project.API.Model.DTO.ChatDTO
 {
     public class ChatChanelDTO
     {
-        private long Id { get; set; }
+        public long Id { get; set; }
 
-        private string Name { get; set; }
+        public string Name { get; set; }
 
-        private List<long> IdMessages { get; set; }
+        public List<long> IdMessages { get; set; }
 
-        private long IdGame { get; set; }
+        public long IdGame { get; set; }
 
         public ChatChanelDTO(){}
         public ChatChanelDTO(long id,string name, List<long> idMessage,long idGame)

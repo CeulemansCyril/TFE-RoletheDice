@@ -1,7 +1,7 @@
 using System;
-using RollTheDice.API.Enums;
+using Assets._Project.API.Enums;
 
-namespace RollTheDice.API.Models
+namespace Assets._Project.API.Model.Object
 {
     public class Notification
     {

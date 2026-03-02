@@ -1,7 +1,7 @@
 using System;
-using RollTheDice.API.Enums;
+using Assets._Project.API.Enums;
 
-namespace RollTheDice.API.DTO
+namespace Assets._Project.API.Model.DTO
 {
     public class NotificationDTO
     {

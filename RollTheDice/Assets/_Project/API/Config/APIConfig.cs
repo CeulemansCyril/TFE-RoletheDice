@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 
-namespace RollTheDice.API.Config
+namespace Assets._Project.API.Config
 {
     public static class APIConfig
     {
-        public const string BASE_URL = "https://localhost:8080/api";
+        public const string BASE_URL = "http://localhost:8080/";
 
         public static int Timeout = 10;
 

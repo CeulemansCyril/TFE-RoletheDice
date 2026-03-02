@@ -515,8 +515,8 @@
 "Assets/_Project/API/Model/DTO/Login/RegisterRequest.cs"
 "Assets/_Project/API/Model/DTO/MessageDTO.cs"
 "Assets/_Project/API/Model/DTO/NotificationDTO.cs"
-"Assets/_Project/API/Model/DTO/ReponseDTO/LayoutResponseDTO.cs"
-"Assets/_Project/API/Model/DTO/ReponseDTO/TemplateFieldResponseDTO.cs"
+"Assets/_Project/API/Model/DTO/ReponseDTO/LayoutResponse.cs"
+"Assets/_Project/API/Model/DTO/ReponseDTO/TemplateFieldResponse.cs"
 "Assets/_Project/API/Model/DTO/UserDTO/UserDTO.cs"
 "Assets/_Project/API/Model/Object/Agenda/Agenda.cs"
 "Assets/_Project/API/Model/Object/Agenda/AgendaEvent.cs"
@@ -547,8 +547,12 @@
 "Assets/_Project/API/Model/Object/Notification.cs"
 "Assets/_Project/API/Model/Object/User/User.cs"
 "Assets/_Project/API/Model/Object/User/UserIdentifiantData.cs"
-"Assets/_Project/API/Service/Agenda/AgendaEventService.cs"
 "Assets/_Project/API/Service/Agenda/AgendaService.cs"
+"Assets/_Project/API/Service/Chat/ChatService.cs"
+"Assets/_Project/API/Service/Game/Book/BookService.cs"
+"Assets/_Project/API/Service/Game/LootTable/LootTableService.cs"
+"Assets/_Project/API/Service/Game/Map/MapService.cs"
+"Assets/_Project/API/Service/Game/Money/CurrencyService.cs"
 -langversion:9.0
 /deterministic
 /optimize+

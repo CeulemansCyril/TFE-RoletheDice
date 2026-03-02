@@ -1,6 +1,6 @@
 using System;
 
-namespace RollTheDice.API.Models
+namespace Assets._Project.API.Model.Object
 {
     public class Message
     {

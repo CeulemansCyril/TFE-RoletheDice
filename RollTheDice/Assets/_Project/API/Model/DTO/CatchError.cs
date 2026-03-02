@@ -1,17 +1,17 @@
 using System;
 
-namespace RollTheDice.API.DTO
+namespace Assets._Project.API.Model.DTO
 {
     public class CatchError
     {
-        public DateTime Time { get; set; }
+        public string Time { get; set; }
         public int Status { get; set; }
         public string Error { get; set; }
         public string Message { get; set; }
         public string Path { get; set; }
 
         public CatchError(){}
-        public CatchError(DateTime time, int status, string error, string message, string path)
+        public CatchError(string time, int status, string error, string message, string path)
         {
             Time = time;
             Status = status;

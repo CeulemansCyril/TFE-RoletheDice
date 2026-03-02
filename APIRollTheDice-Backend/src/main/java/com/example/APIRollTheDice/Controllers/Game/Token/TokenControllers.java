@@ -86,5 +86,20 @@ public class TokenControllers {
         return ResponseEntity.ok("Token deleted successfully.");
     }
 
+    @GetMapping("/GetTokenPlacedById/{id}")
+    public ResponseEntity<TokenPlacedDTO> GetTokenPlacedById(Long id)
+    {
+        TokenPlaced tokenPlaced = tokenService.GetTokenPlacedById(id);
+        return ResponseEntity.ok(tokenService.TokenPlacedToDTO(tokenPlaced));
+    }
+
+    @GetMapping("/GetAllTokenPlacedByLayoutId/{id}")
+    public ResponseEntity<List<TokenPlacedDTO>> GetAllTokenPlacedByLayoutId(Long id)
+    {
+        List<TokenPlaced> tokenPlaced = tokenService.GetAllTokenPlacedByLayoutId(id);
+        List<TokenPlacedDTO> tokenPlacedDTOS = tokenPlaced.stream().map(tokenService::TokenPlacedToDTO).toList();
+        return ResponseEntity.ok( tokenPlacedDTOS);
+    }
+
 
 }

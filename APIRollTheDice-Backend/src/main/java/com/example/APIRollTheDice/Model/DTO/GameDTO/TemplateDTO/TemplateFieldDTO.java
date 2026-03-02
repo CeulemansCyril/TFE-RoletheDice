@@ -15,13 +15,16 @@ public class TemplateFieldDTO {
     private double positionX;
     private double positionY;
 
+    private double width;
+    private double height;
+
     private Long idOptionList;
     private List<Long> idTemplates;
 
     public TemplateFieldDTO() {
     }
 
-    public TemplateFieldDTO(long id, String label, boolean required, String type, Double maxValue, double positionX, Double minValue, Long idOptionList, double positionY, List<Long> idTemplates) {
+    public TemplateFieldDTO(long id, String label, boolean required, String type, Double maxValue, double positionX, Double minValue, Long idOptionList, double positionY, List<Long> idTemplates, double width, double height) {
         this.id = id;
         this.label = label;
         this.required = required;
@@ -32,6 +35,8 @@ public class TemplateFieldDTO {
         this.idOptionList = idOptionList;
         this.positionY = positionY;
         this.idTemplates = idTemplates;
+        this.width = width;
+        this.height = height;
     }
 
     public long getId() {
@@ -112,5 +117,21 @@ public class TemplateFieldDTO {
 
     public void setIdTemplates(List<Long> idTemplates) {
         this.idTemplates = idTemplates;
+    }
+
+    public double getWidth() {
+        return width;
+    }
+
+    public void setWidth(double width) {
+        this.width = width;
+    }
+
+    public double getHeight() {
+        return height;
+    }
+
+    public void setHeight(double height) {
+        this.height = height;
     }
 }

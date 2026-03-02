@@ -1,15 +1,16 @@
 using System;
-using RollTheDice.API.Enums;
+using Assets._Project.API.Enums;
+ 
 
-namespace RollTheDice.API.DTO
+namespace Assets._Project.API.Model.DTO
 {
     public class FriendRequestDTO
     {
-         private long Id { get; set; }
-        private long IdSender { get; set; }
-        private long IdReceiver { get; set; }
-        private RequestStatus Status { get; set; }
-        private DateTime SentTime { get; set; }
+         public long Id { get; set; }
+        public long IdSender { get; set; }
+        public long IdReceiver { get; set; }
+        public RequestStatus Status { get; set; }
+        public DateTime SentTime { get; set; }
 
         public FriendRequestDTO(){}
         public FriendRequestDTO(long id, long idSender, long idReceiver, RequestStatus status, DateTime sentTime)

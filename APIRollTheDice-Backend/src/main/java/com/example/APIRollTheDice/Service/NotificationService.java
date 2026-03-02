@@ -6,33 +6,33 @@ import com.example.APIRollTheDice.Interface.NotificationInterface;
 import com.example.APIRollTheDice.Mapper.NotificationMapper;
 import com.example.APIRollTheDice.Model.DTO.NotificationDTO;
 import com.example.APIRollTheDice.Model.Obj.Notification;
-import com.example.APIRollTheDice.SseEmitterService.SseNotification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class NotificationService {
+
     private final NotificationInterface notificationRepository;
     private final NotificationMapper notificationMapper;
-    private final SseNotification sseNotification;
 
-    public NotificationService(NotificationInterface notificationRepository, SseNotification sseNotification, NotificationMapper notificationMapper) {
-        this.notificationMapper = notificationMapper;
-        this.sseNotification = sseNotification;
+    public NotificationService(
+            NotificationInterface notificationRepository,
+            NotificationMapper notificationMapper
+    ) {
         this.notificationRepository = notificationRepository;
+        this.notificationMapper = notificationMapper;
     }
 
 
-    public void createNotification(Notification notification) {
-        if (notificationRepository.existsById(notification.getId())) {
+    public Notification createNotification(Notification notification) {
+        if (notification.getId() != null &&
+                notificationRepository.existsById(notification.getId())) {
             throw new AlreadyExistsException("Notification with this ID already exists");
-        }else {
-           Notification notificationSave= notificationRepository.save(notification);
-           sseNotification.sendNotification(notificationSave.getReceiverId(), NotificationToDTO(notificationSave));
         }
-
+        return notificationRepository.save(notification);
     }
+
 
     public Notification getNotificationById(Long id) {
         return notificationRepository.findById(id)
@@ -40,75 +40,66 @@ public class NotificationService {
     }
 
     public List<Notification> getAllNotificationsByReceiverId(Long receiverId) {
-       List<Notification> notifications = notificationRepository.findAllByReceiverId(receiverId);
-        if (notifications.isEmpty()) {
-            throw new NotFoundException("No notifications found for receiver");
-        }
-        return notifications;
+        return notificationRepository.findAllByReceiverId(receiverId);
     }
+
 
     public List<Notification> getAllNotificationsByReceiverIdNotRead(Long receiverId) {
-        List<Notification> notifications = notificationRepository.findAllByReceiverIdAndReadFalse(receiverId);
-        if (notifications.isEmpty()) {
-            throw new NotFoundException("No unread notifications found for receiver");
-        }
-        return notifications;
+        return notificationRepository.findAllByReceiverIdAndReadFalse(receiverId);
     }
 
-    public void SetAllNotificationReadForOneUser(Long idUser) {
-        List<Notification> notifications = notificationRepository.findAllByReceiverId(idUser);
+
+    public void setAllNotificationReadForOneUser(Long userId) {
+        List<Notification> notifications =
+                notificationRepository.findAllByReceiverId(userId);
+
         if (notifications.isEmpty()) {
             throw new NotFoundException("No notifications found for receiver");
         }
-        for (Notification notification : notifications) {
-            notification.setRead(true);
-            notificationRepository.save(notification);
-        }
 
+        notifications.forEach(notification -> notification.setRead(true));
+        notificationRepository.saveAll(notifications);
     }
 
-    public void NotificationRead(Long id) {
-        Notification notification = notificationRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Notification not found"));
+
+    public Notification markNotificationAsRead(Long id) {
+        Notification notification = getNotificationById(id);
         notification.setRead(true);
-        notificationRepository.save(notification);
-        sseNotification.sendNotification(notification.getReceiverId(), NotificationToDTO(notification));
+        return notificationRepository.save(notification);
     }
 
 
     public void deleteNotificationById(Long id) {
-        if (notificationRepository.existsById(id)) {
-            notificationRepository.deleteById(id);
-        } else {
-            throw new NotFoundException("Notification not found  ");
+        if (!notificationRepository.existsById(id)) {
+            throw new NotFoundException("Notification not found");
         }
+        notificationRepository.deleteById(id);
     }
+
 
     public void deleteAllNotificationsByReceiverId(Long receiverId) {
-        if (notificationRepository.existsByReceiverId(receiverId)) {
-            notificationRepository.deleteAllByReceiverId(receiverId);
-        } else {
-            throw new NotFoundException("No notifications found for receiver   " );
+        if (!notificationRepository.existsByReceiverId(receiverId)) {
+            throw new NotFoundException("No notifications found for receiver");
         }
+        notificationRepository.deleteAllByReceiverId(receiverId);
     }
+
 
     public int countNotificationsByReceiverId(Long receiverId) {
-        if (notificationRepository.existsByReceiverId(receiverId)) {
-            return notificationRepository.countByReceiverId(receiverId);
-        } else {
-            throw new NotFoundException("No notifications found for receiver   " );
-        }
-    }
-    public boolean notificationExistsById(Long id) {
-        return notificationRepository.existsById(id);
+        return notificationRepository.countByReceiverId(receiverId);
     }
 
-    public NotificationDTO NotificationToDTO(Notification notification) {
+
+    public NotificationDTO notificationToDTO(Notification notification) {
         return notificationMapper.toDTO(notification);
     }
 
-    public Notification NotificationDTOToEntity(NotificationDTO dto) {
+    public Notification notificationDTOToEntity(NotificationDTO dto) {
         return notificationMapper.toEntity(dto);
+    }
+
+    public int countUnreadNotifications(Long receiverId) {
+        return notificationRepository.countByReceiverIdAndReadFalse(receiverId);
     }
 
 }

@@ -1,61 +1,85 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
-using RollTheDice.API.Config;
-using System.Net.Http;
-
+using Assets._Project.API.Config;
+using Assets._Project.API.Model.DTO;
+using Newtonsoft.Json;
 using System.Collections;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
-using Newtonsoft.Json;
-using System.Text;
 
 
 
-namespace RollTheDice.API.Interface
+namespace Assets._Project.API.Interface
 {
-    public abstract class IApiService<T>
+    public abstract class ApiService
     {
-        protected readonly HttpClient _httpClient;
+
         protected readonly string baseUrl;
 
-        protected IApiService(string endpoint)
+        protected ApiService(string endpoint)
         {
-            baseUrl = APIConfig.BASE_URL + "/" + endpoint;
+            baseUrl = APIConfig.BASE_URL + "api/" + endpoint;
         }
 
-        protected IEnumerator GetAll(
-            string endpoint,
-            System.Action<T[]> onSuccess,
-            System.Action<string> onError)
+
+        protected UnityWebRequest CreateRequest(
+            string url,
+            string method,
+            string jsonBody = null,
+            bool isSse = false)
         {
-            using (UnityWebRequest request = UnityWebRequest.Get(baseUrl+endpoint))
+            UnityWebRequest request = new UnityWebRequest(url, method);
+
+            if (jsonBody != null)
+            {
+                request.uploadHandler =
+                    new UploadHandlerRaw(Encoding.UTF8.GetBytes(jsonBody));
+            }
+
+            request.downloadHandler = new DownloadHandlerBuffer();
+            request.timeout = isSse ? 0 : APIConfig.Timeout;
+
+            foreach (var header in APIConfig.DefaultHeaders)
+            {
+                request.SetRequestHeader(header.Key, header.Value);
+            }
+
+            return request;
+        }
+
+        protected IEnumerator GetAll<T>(
+          string endpoint,
+          System.Action<T[]> onSuccess,
+          System.Action<CatchError> onError)
+        {
+            using (var request =
+                CreateRequest(baseUrl + endpoint, "GET"))
             {
                 yield return request.SendWebRequest();
 
                 if (request.result != UnityWebRequest.Result.Success)
-                {
-                    onError?.Invoke(request.error);
-                }
+                    onError?.Invoke(ParseError(request));
                 else
-                {
-                    T[] data = JsonConvert.DeserializeObject<T[]>(request.downloadHandler.text);
-                    onSuccess?.Invoke(data);
-                }
+                    onSuccess?.Invoke(
+                        JsonConvert.DeserializeObject<T[]>(request.downloadHandler.text)
+                    );
             }
         }
 
-        protected IEnumerator GetById(
+
+        protected IEnumerator GetById<T>(
             string endpoint,
             System.Action<T> onSuccess,
-            System.Action<string> onError)
+            System.Action<CatchError> onError)
         {
-            using (UnityWebRequest request = UnityWebRequest.Get($"{baseUrl}/{endpoint}"))
+            using (var request =
+                CreateRequest(baseUrl + endpoint, "GET"))
             {
                 yield return request.SendWebRequest();
 
                 if (request.result != UnityWebRequest.Result.Success)
-                    onError?.Invoke(request.error);
+                    onError?.Invoke(ParseError(request));
                 else
                     onSuccess?.Invoke(
                         JsonConvert.DeserializeObject<T>(request.downloadHandler.text)
@@ -63,15 +87,15 @@ namespace RollTheDice.API.Interface
             }
         }
 
-        protected IEnumerator Create(
+        protected IEnumerator Create<T>(
             string endpoint,
             T item,
             System.Action<T> onSuccess,
-            System.Action<string> onError)
+            System.Action<CatchError> onError)
         {
             string json = JsonConvert.SerializeObject(item);
 
-            UnityWebRequest request = new UnityWebRequest(baseUrl+endpoint, "POST");
+            UnityWebRequest request = new UnityWebRequest(baseUrl + endpoint, "POST");
             request.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(json));
             request.downloadHandler = new DownloadHandlerBuffer();
             request.SetRequestHeader("Content-Type", "application/json");
@@ -79,47 +103,143 @@ namespace RollTheDice.API.Interface
             yield return request.SendWebRequest();
 
             if (request.result != UnityWebRequest.Result.Success)
-                onError?.Invoke(request.error);
+                onError?.Invoke(ParseError(request));
             else
                 onSuccess?.Invoke(
                     JsonConvert.DeserializeObject<T>(request.downloadHandler.text)
                 );
         }
 
-        protected IEnumerator Update(
-            string endpoint,
-            T item,
-            System.Action<string> onSuccess,
-            System.Action<string> onError)
+        protected IEnumerator Create<T>(
+    string endpoint,
+    System.Action<T> onSuccess,
+    System.Action<CatchError> onError)
+        {
+            using (var request =
+                CreateRequest(baseUrl + endpoint, "POST"))
+            {
+                yield return request.SendWebRequest();
+
+                if (request.result != UnityWebRequest.Result.Success)
+                {
+                    onError?.Invoke(ParseError(request));
+                }
+                else
+                {
+                    if (!string.IsNullOrEmpty(request.downloadHandler.text))
+                    {
+                        onSuccess?.Invoke(
+                            JsonConvert.DeserializeObject<T>(request.downloadHandler.text)
+                        );
+                    }
+                    else
+                    {
+                        onSuccess?.Invoke(default);
+                    }
+                }
+            }
+        }
+
+
+        protected IEnumerator CreateMany<T>(
+         string endpoint,
+         T[] items,
+         System.Action<T[]> onSuccess,
+         System.Action<CatchError> onError)
+        {
+            string json = JsonConvert.SerializeObject(items);
+
+            using (var request =
+                CreateRequest(baseUrl + endpoint, "POST", json))
+            {
+                yield return request.SendWebRequest();
+
+                if (request.result != UnityWebRequest.Result.Success)
+                {
+                    onError?.Invoke(ParseError(request));
+                }
+                else
+                {
+                    if (!string.IsNullOrEmpty(request.downloadHandler.text))
+                    {
+                        onSuccess?.Invoke(
+                            JsonConvert.DeserializeObject<T[]>(request.downloadHandler.text)
+                        );
+                    }
+                    else
+                    {
+                        onSuccess?.Invoke(null);
+                    }
+                }
+            }
+        }
+
+
+
+
+
+        protected IEnumerator Update<T>(
+        string endpoint,
+        T item,
+        System.Action<string> onSuccess,
+        System.Action<CatchError> onError)
         {
             string json = JsonConvert.SerializeObject(item);
 
-            UnityWebRequest request = UnityWebRequest.Put($"{baseUrl}/{endpoint}", json);
-            request.SetRequestHeader("Content-Type", "application/json");
+            using (var request =
+                CreateRequest(baseUrl + endpoint, "PUT", json))
+            {
+                yield return request.SendWebRequest();
 
-            yield return request.SendWebRequest();
-
-            if (request.result != UnityWebRequest.Result.Success)
-                onError?.Invoke(request.error);
-            else
-                onSuccess?.Invoke("Updated");
+                if (request.result != UnityWebRequest.Result.Success)
+                    onError?.Invoke(ParseError(request));
+                else
+                    onSuccess?.Invoke("Updated");
+            }
         }
+
+
+
 
         protected IEnumerator Delete(
-            string endpoint,
-            System.Action<string> onSuccess,
-            System.Action<string> onError)
+                string endpoint,
+                System.Action<string> onSuccess,
+                System.Action<CatchError> onError)
         {
-            UnityWebRequest request = UnityWebRequest.Delete($"{baseUrl}/{endpoint}");
+            using (var request =
+                CreateRequest(baseUrl + endpoint, "DELETE"))
+            {
+                yield return request.SendWebRequest();
 
-            yield return request.SendWebRequest();
-
-            if (request.result != UnityWebRequest.Result.Success)
-                onError?.Invoke(request.error);
-            else
-                onSuccess?.Invoke("Deleted");
+                if (request.result != UnityWebRequest.Result.Success)
+                    onError?.Invoke(ParseError(request));
+                else
+                    onSuccess?.Invoke("Deleted");
+            }
         }
 
+        protected CatchError ParseError(UnityWebRequest request)
+        {
+            try
+            {
+                return JsonConvert.DeserializeObject<CatchError>(
+                    request.downloadHandler.text
+                );
+            }
+            catch
+            {
+                return new CatchError
+                {
+                    Status = (int)request.responseCode,
+                    Error = "Client Error",
+                    Message = request.error,
+                   Path = request.url,
+               
+                };
+            }
+        }
 
     }
+
+
 }

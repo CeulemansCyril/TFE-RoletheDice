@@ -8,7 +8,8 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface ChatMessageMapper {
 
-    @Mapping(source = "sender.id", target = "idSender")
+    @Mapping(source = "sender.id", target = "sender.idUser")
+    @Mapping(source = "sender.username", target = "sender.username")
     @Mapping(source = "chatChanel.id", target = "idChatChanel")
     ChatMessageDTO toDTO(ChatMessage chatMessage);
 

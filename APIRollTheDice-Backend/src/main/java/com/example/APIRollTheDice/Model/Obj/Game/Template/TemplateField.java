@@ -21,6 +21,9 @@ public class TemplateField {
     private double positionX;
     private double positionY;
 
+    private double width;
+    private double height;
+
     @ManyToOne
     @JoinColumn(name = "option_lists_id")
     private OptionList optionList;
@@ -31,7 +34,7 @@ public class TemplateField {
     public TemplateField() {
     }
 
-    public TemplateField(long id, String label, String type, boolean required, Double minValue, Double maxValue, double positionX, double positionY, OptionList optionList, List<Template> template) {
+    public TemplateField(long id, String label, String type, boolean required, Double minValue, Double maxValue, double positionX, double positionY, OptionList optionList, List<Template> template, double width, double height) {
         this.id = id;
         this.label = label;
         this.type = type;
@@ -122,5 +125,21 @@ public class TemplateField {
 
     public void setTemplate(List<Template> template) {
         this.templates = template;
+    }
+
+    public double getHeight() {
+        return height;
+    }
+
+    public void setHeight(double height) {
+        this.height = height;
+    }
+
+    public double getWidth() {
+        return width;
+    }
+
+    public void setWidth(double width) {
+        this.width = width;
     }
 }

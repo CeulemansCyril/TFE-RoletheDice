@@ -1,9 +1,7 @@
 using System;
+using Assets._Project.API.Model.Object.User;
 
-
-using  RollTheDice.API.Models.Users;
-
- namespace RollTheDice.API.Models.Agenda
+namespace Assets._Project.API.Model.Object.Agenda
 {
 public class AgendaEvent
 {

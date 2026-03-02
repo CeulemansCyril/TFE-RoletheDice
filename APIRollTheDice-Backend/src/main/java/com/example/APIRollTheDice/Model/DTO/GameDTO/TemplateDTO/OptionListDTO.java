@@ -7,15 +7,17 @@ public class OptionListDTO {
     private String name;
     private List<String> options;
     private Long idTemplateField;
+    private Long idGameBundle;
 
     public OptionListDTO() {
     }
 
-    public OptionListDTO(long id, String name, List<String> options, Long idTemplateField) {
+    public OptionListDTO(long id, String name, List<String> options, Long idTemplateField, Long idGameBundle) {
         this.id = id;
         this.name = name;
         this.options = options;
         this.idTemplateField = idTemplateField;
+        this.idGameBundle = idGameBundle;
     }
 
     public long getId() {
@@ -49,4 +51,14 @@ public class OptionListDTO {
     public void setIdTemplateField(Long idTemplateField) {
         this.idTemplateField = idTemplateField;
     }
+
+    public Long getIdGameBundle() {
+        return idGameBundle;
+    }
+
+    public void setIdGameBundle(Long idGameBundle) {
+        this.idGameBundle = idGameBundle;
+    }
+
+
 }

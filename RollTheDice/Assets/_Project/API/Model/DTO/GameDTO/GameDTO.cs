@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-namespace RollTheDice.API.DTO.GameDTO
+namespace Assets._Project.API.Model.DTO.GameDTO
 {
     public class GameDTO{
         public long Id { get; set; }

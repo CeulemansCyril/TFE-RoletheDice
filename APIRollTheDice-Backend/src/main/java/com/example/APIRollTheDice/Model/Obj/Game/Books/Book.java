@@ -22,7 +22,7 @@ public class Book {
     private BookTypes type;
 
     @OneToMany(mappedBy = "books", fetch = FetchType.LAZY)
-    private List<Pages> pages;
+    private List<Chapter> chapters;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "game_bundles_id")
@@ -35,11 +35,11 @@ public class Book {
     public Book() {
     }
 
-    public Book(Long id, String title, BookTypes type, List<Pages> pages, Game game, GameBundle gameBundle) {
+    public Book(Long id, String title, BookTypes type, List<Chapter> chapters, Game game, GameBundle gameBundle) {
         this.id = id;
         this.title = title;
         this.type = type;
-        this.pages = pages;
+        this.chapters = chapters;
         this.game = game;
         this.gameBundle = gameBundle;
     }
@@ -60,12 +60,12 @@ public class Book {
         this.id = id;
     }
 
-    public List<Pages> getPages() {
-        return pages;
+    public List<Chapter> getChapters() {
+        return chapters;
     }
 
-    public void setPages(List<Pages> pages) {
-        this.pages = pages;
+    public void setChapters(List<Chapter> chapters) {
+        this.chapters = chapters;
     }
 
     public BookTypes getType() {

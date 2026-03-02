@@ -1,4 +1,4 @@
-namespace RollTheDice.API.Enums
+namespace Assets._Project.API.Enums
 {
     using System.ComponentModel;
 

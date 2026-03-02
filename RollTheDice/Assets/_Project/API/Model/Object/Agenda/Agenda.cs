@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
-using RollTheDice.API.Models.Users;
+using Assets._Project.API.Model.Object.User;
 
-
-namespace RollTheDice.API.Models.Agenda
+namespace Assets._Project.API.Model.Object.Agenda
 {
 public class Agendas
 {
@@ -11,14 +10,14 @@ public class Agendas
     public string Title { get; set; }
     public string Description { get; set; }
 
-    public List<User> Participants { get; set; } = new List<User>();
+    public List<Users> Participants { get; set; } = new List<Users>();
 
-    public User Owners { get; set; } = new User();
+    public Users Owners { get; set; } = new Users();
 
     public List<AgendaEvent> Events { get; set; } = new List<AgendaEvent>();
 
     public Agendas(){}
-    public Agendas(int id, string title, string description, List<User> participants, List<AgendaEvent> events, User owners)
+    public Agendas(int id, string title, string description, List<Users> participants, List<AgendaEvent> events, Users owners)
     {
         Id = id;
         Title = title;

@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-namespace RollTheDice.API.DTO
+namespace Assets._Project.API.Model.DTO
 {
     public class ConversationDTO{
         public long Id { get; set; }

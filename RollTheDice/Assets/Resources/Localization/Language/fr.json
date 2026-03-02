@@ -1,0 +1,207 @@
+{
+  "items": [
+    {
+      "_comment": "Login"
+    },
+    {
+      "key": "login.title",
+      "value": "Connexion"
+    },
+    {
+      "key": "login.Username",
+      "value": "Nom d'utilisateur"
+    },
+    {
+      "key": "login.password",
+      "value": "Mot de passe"
+    },
+    {
+      "key": "login.button",
+      "value": "Se connecter"
+    },
+    {
+      "key": "register.title",
+      "value": "Création de compte"
+    },
+    {
+      "key": "register.button",
+      "value": "Création "
+    },
+    {
+      "key": "register.password",
+      "value": "Confirmer le mot de passe"
+    },
+    {
+      "key": "register.email",
+      "value": "Email"
+    },
+    {
+      "_comment": "Erreur Login"
+    },
+    {
+      "key": "login.usernameEmpty",
+      "value": "Le nom d'utilisateur est vide"
+    },
+    {
+      "key": "login.passwordEmpty",
+      "value": "Le mot de passe est vide"
+    },
+    {
+      "key": "login.confirmePasswordEmpty",
+      "value": "Veillier confirmer le mot de passe"
+    },
+    {
+      "key": "login.emailEmpty",
+      "value": "L'email est vide"
+    },
+    {
+      "key": "login.emailEmpty",
+      "value": "L'email est vide"
+    },
+    {
+      "key": "login.passwordIsDefferent",
+      "value": "Mot de passe différent"
+    },
+    {
+      "_comment": "Template Maker"
+    },
+    {
+      "key": "ToolBox.Title",
+      "value": "Boites à outils"
+    },
+    {
+      "key": "InspectorPanel.Title",
+      "value": "Configurateur"
+    },
+    {
+      "key": "InspectorPanel.Accordion.Header.data",
+      "value": "Donées"
+    },
+    {
+      "key": "InspectorPanel.Accordion.Header.size",
+      "value": "Taille"
+    },
+    {
+      "key": "InspectorPanel.RowLabel.Title",
+      "value": "Titre"
+    },
+    {
+      "key": "InspectorPanel.RowType.Title",
+      "value": "Type de champs"
+    },
+    {
+      "key": "InspectorPanel.RowRequired.Title",
+      "value": "Obligatoire"
+    },
+    {
+      "key": "InspectorPanel.MinRow.Title",
+      "value": "Valeur minimal"
+    },
+    {
+      "key": "InspectorPanel.MaxRow.Title",
+      "value": "Valeur maximal"
+    },
+    {
+      "key": "InspectorPanel.OptionRow.Title",
+      "value": "Liste D'options"
+    },
+    {
+      "key": "InspectorPanel.OptionRow.Button",
+      "value": "Choisir liste d'options"
+    },
+    {
+      "key": "FieldConfig.Option.Select",
+      "value": "Sélectionner"
+    },
+    {
+      "key": "FieldConfig.Option.Number",
+      "value": "Nombre"
+    },
+    {
+      "key": "FieldConfig.Option.Text",
+      "value": "Texte"
+    },
+    {
+      "key": "FieldConfig.Option.Bool",
+      "value": "Booléens"
+    },
+    {
+      "key": "FieldConfig.Option.List",
+      "value": "Liste"
+    },
+    {
+      "key": "InspectorPanel.PosXRow.Title",
+      "value": "Position X"
+    },
+    {
+      "key": "InspectorPanel.PosYRow.Title",
+      "value": "Position Y"
+    },
+    {
+      "key": "InspectorPanel.Width.Title",
+      "value": "Longueur"
+    },
+    {
+      "key": "InspectorPanel.Height.Title",
+      "value": "Hauteur"
+    },
+     {
+      "_comment": "Option List"
+    },
+     {
+      "key": "OptionList.Title",
+      "value": "Gestion des listes"
+    } ,
+    {
+      "key": "OptionList.List.Title",
+      "value": "Listes"
+    },
+    {
+      "key": "OptionList.List.AddButton",
+      "value": "+ Ajouter"
+    },
+    {
+      "key": "OptionList.Element.Title",
+      "value": "Éléments"
+    },
+    {
+      "key": "OptionList.Footer.Delete",
+      "value": "Suprimer liste"
+    },
+    {
+      "key": "OptionList.Footer.Rename",
+      "value": "Renommer liste"
+    },
+    {
+      "key": "OptionList.Footer.Valide",
+      "value": "Valider"
+    },
+    {
+      "key": "MainMenuCreate.LeftPanel.TemplateMaker",
+      "value": "Menu Template"
+    },
+     {
+      "key": "TemplateMakerManager.EmptyMessage",
+      "value": "Aucun Template disponible"
+    },
+    {
+      "_comment": "PopUp"
+    },
+     {
+      "key": "PopUpSave.title",
+      "value": "Fichier non sauvegarder"
+    },
+    {
+      "key": "PopUpSave.Message",
+      "value": "Vous n'avez pas sauvegarder le fichier. Voulez-vous continuer ?"
+    },
+    {
+      "key": "PopUpDel.title",
+      "value": "Confimation de supresionr"
+    },
+    {
+      "key": "PopUpDel.Message",
+      "value": "voulez-vous suprimer : "
+    }
+  ]
+}

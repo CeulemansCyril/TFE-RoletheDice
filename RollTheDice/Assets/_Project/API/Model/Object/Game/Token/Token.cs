@@ -1,9 +1,8 @@
-using RollTheDice.API.Enums;
-using RollTheDice.API.Models.Game.Template;
-using RollTheDice.API.Models.Game;
+using Assets._Project.API.Model.Object.Game.Templates;
+using Assets._Project.API.Enums;
 
 
-namespace RollTheDice.API.Models.Game.Token
+namespace Assets._Project.API.Model.Object.Game.Token
 {
     public class Tokens
     {

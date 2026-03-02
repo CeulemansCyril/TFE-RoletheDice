@@ -1,15 +1,15 @@
 using System;
 using System.Collections.Generic;
-using RollTheDice.API.Models.Users;
+using Assets._Project.API.Model.Object.User;
 
-namespace RollTheDice.API.Models
+namespace Assets._Project.API.Model.Object
 {
     public class Conversations
     {
-         private long Id { get; set; }
-         private List<UserIdentifantData> Participants { get; set; }
-         private DateTime CreatedAt { get; set; }
-        private List<Message> Messages { get; set; }
+         public long Id { get; set; }
+        public List<UserIdentifantData> Participants { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public List<Message> Messages { get; set; }
 
         public Conversations(){}
         public Conversations(long id, List<UserIdentifantData> participants, DateTime createdAt,List<Message> messages)

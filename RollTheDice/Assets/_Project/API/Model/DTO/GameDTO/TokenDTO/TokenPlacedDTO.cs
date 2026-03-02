@@ -1,4 +1,4 @@
-namespace RollTheDice.API.DTO.GameDTO.TokenDTO
+namespace Assets._Project.API.Model.DTO.GameDTO.TokenDTO
 {
     public class TokenPlacedDTO
     {

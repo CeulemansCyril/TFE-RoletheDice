@@ -105,6 +105,13 @@ public class TemplateControllers {
         return ResponseEntity.ok(templateService.OptionListToDTO(customObject));
     }
 
+    @GetMapping("/GetAllOptionListByGameBundleId/{gameBundleId}")
+    public ResponseEntity<List<OptionListDTO>> GetAllOptionListByGameBundleId(@PathVariable Long gameBundleId) {
+        List<OptionList> optionLists = templateService.GetAllOptionListByGameBundleId(gameBundleId);
+        List<OptionListDTO> dts = optionLists.stream().map(templateService::OptionListToDTO).toList();
+        return ResponseEntity.ok(dts);
+    }
+
 
     // ------------------- Template      -------------------------
 
@@ -191,6 +198,7 @@ public class TemplateControllers {
 
         return ResponseEntity.ok(templateFieldResponseDTO);
     }
+
 
 
 

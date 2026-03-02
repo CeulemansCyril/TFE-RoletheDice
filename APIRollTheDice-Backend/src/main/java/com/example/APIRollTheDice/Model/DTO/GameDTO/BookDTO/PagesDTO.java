@@ -4,13 +4,15 @@ public class PagesDTO {
     private Long id;
     private String content;
     private int pageNumber;
-    private Long idBook;
+    private Long idChapter;
+    private String title ;
 
-    public PagesDTO(Long id, String content, int pageNumber, Long idBook) {
+    public PagesDTO(Long id, String content, int pageNumber, Long idChapter, String title) {
         this.id = id;
         this.content = content;
         this.pageNumber = pageNumber;
-        this.idBook = idBook;
+        this.idChapter = idChapter;
+        this.title =title;
     }
 
     public PagesDTO() {
@@ -40,11 +42,19 @@ public class PagesDTO {
         this.pageNumber = pageNumber;
     }
 
-    public Long getIdBook() {
-        return idBook;
+    public Long getIdChapter() {
+        return idChapter;
     }
 
-    public void setIdBook(Long idBook) {
-        this.idBook = idBook;
+    public void setIdChapter(Long idChapter) {
+        this.idChapter = idChapter;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

@@ -7,13 +7,14 @@ import com.example.APIRollTheDice.Model.DTO.Login.RegisterRequest;
 import com.example.APIRollTheDice.Model.Obj.User.User;
 import com.example.APIRollTheDice.Security.Service.CustomUserDetailsService;
 import com.example.APIRollTheDice.Security.jwt.JwtUtils;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,8 +22,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.Console;
+import java.util.Map;
+
 @RestController
-@RequestMapping("/auth/")
+@RequestMapping("/auth")
 public class LoginControllers {
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -60,8 +64,8 @@ public class LoginControllers {
            String jwt = jwtUtils.generateToken(authentication.getName(),roleUser.name(),userId);
 
            return ResponseEntity.ok(new JwtReponse(jwt,roleUser,userId));
-       } catch (Exception e) {
-           return ResponseEntity.status(400).body("Invalid username or password");
+       } catch (BadCredentialsException  e) {
+           return ResponseEntity.status(401).body("Invalid username or password");
        }
     }
 
@@ -80,14 +84,18 @@ public class LoginControllers {
                    .body("Error: Email is already in use!");
          }
 
+       System.out.println("Registering user: " + signUpRequest.getUsername() + ", " + signUpRequest.getEmail());
+       System.out.println("Password: " + signUpRequest.getPassword());
+
         User user = new User();
         user.setUsername(signUpRequest.getUsername());
         user.setEmail(signUpRequest.getEmail());
         user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
+        user.setRoleUser(RoleUser.USER);
 
         userDetailsService.SaveUser(user);
 
-        return ResponseEntity.ok("User registered successfully!");
+        return ResponseEntity.status(201).body("User registered successfully!");
 
 
 

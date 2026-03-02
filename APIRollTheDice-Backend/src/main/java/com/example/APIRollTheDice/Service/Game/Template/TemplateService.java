@@ -161,6 +161,9 @@ public class TemplateService {
     public OptionList GetOptionListByTemplateFieldId(Long id){
         return optionListInterface.findByTemplateField_Id(id).orElseThrow(()-> new NotFoundException("OptionList not found"));
     }
+    public List<OptionList> GetAllOptionListByGameBundleId(Long id){
+        return optionListInterface.findByGameBundle_Id(id).stream().map(opt -> opt.orElseThrow(()-> new NotFoundException("OptionList not found"))).toList();
+    }
 
     public OptionListDTO OptionListToDTO(OptionList optionList){
         return optionListMapper.toDTO(optionList);

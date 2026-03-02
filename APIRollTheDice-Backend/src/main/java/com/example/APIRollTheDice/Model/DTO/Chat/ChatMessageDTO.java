@@ -1,12 +1,14 @@
 package com.example.APIRollTheDice.Model.DTO.Chat;
 
 
+import com.example.APIRollTheDice.Model.DTO.UserDTo.UserIdentifantData;
+
 import java.time.LocalDateTime;
 
 public class ChatMessageDTO {
     private Long id;
 
-    private Long idSender;
+    private UserIdentifantData sender;
 
     private String messageContent;
 
@@ -21,9 +23,9 @@ public class ChatMessageDTO {
     public ChatMessageDTO() {
     }
 
-    public ChatMessageDTO(Long id, Long idSender, String messageContent, boolean isModified, LocalDateTime sentAt, Long idChatChanel) {
+    public ChatMessageDTO(Long id, UserIdentifantData sender, String messageContent, boolean isModified, LocalDateTime sentAt, Long idChatChanel) {
         this.id = id;
-        this.idSender = idSender;
+        this.sender =sender;
         this.messageContent = messageContent;
         this.isModified = isModified;
         this.sentAt = sentAt;
@@ -38,12 +40,12 @@ public class ChatMessageDTO {
         this.id = id;
     }
 
-    public Long getIdSender() {
-        return idSender;
+    public UserIdentifantData getSender() {
+        return sender;
     }
 
-    public void setIdSender(Long idSender) {
-        this.idSender = idSender;
+    public void setSender(UserIdentifantData sender) {
+        this.sender = sender;
     }
 
     public String getMessageContent() {

@@ -1,7 +1,11 @@
 package com.example.APIRollTheDice.Model.DTO.Login;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class LoginRequest {
+    @JsonProperty("Username")
     private String username;
+    @JsonProperty("Password")
     private String password;
 
     public LoginRequest() {

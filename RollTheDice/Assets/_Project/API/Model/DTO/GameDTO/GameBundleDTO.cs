@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace RollTheDice.API.DTO.GameDTO
+namespace Assets._Project.API.Model.DTO.GameDTO
 {
     public class GameBundleDTO
     {

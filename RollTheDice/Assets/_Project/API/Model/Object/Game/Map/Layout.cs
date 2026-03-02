@@ -1,24 +1,26 @@
 using System.Collections.Generic;
-using RollTheDice.API.Models.Game.Token;
+using Assets._Project.API.Model.Object.Game.Token;
 
-namespace RollTheDice.API.Models.Game.Map
+namespace Assets._Project.API.Model.Object.Game.Map
 {
     public class Layout
     {
-            private long Id { get; set;}
-            private string Name { get; set;}
-             private int IndexZ { get; set;}
-            private  string BackgroundImageURL { get; set;}
-            private List<TokenPlaced> Tokens { get; set;}  = new List<TokenPlaced>();
+            public long Id { get; set;}
+        public string Name { get; set;}
+        public int IndexZ { get; set;}
+        public string BackgroundImageURL { get; set;}
+        public List<TokenPlaced> Tokens { get; set;}  = new List<TokenPlaced>();
+        public long IdMap { get; set; }
 
         public Layout(){}
-        public Layout(long id, string name, int indexZ, string backgroundImageURL, List<TokenPlaced> tokens)
+        public Layout(long id, string name, int indexZ, string backgroundImageURL, List<TokenPlaced> tokens,long idMap)
         {
           Id = Id;   
           Name = name;
           IndexZ = indexZ;
           BackgroundImageURL = backgroundImageURL;
           Tokens = tokens;
+            IdMap = idMap;
         }
     }
 }

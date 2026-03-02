@@ -1,5 +1,4 @@
-
-namespace RollTheDice.API.Models.Users
+namespace Assets._Project.API.Model.Object.User
 {
     public class UserIdentifantData
     {

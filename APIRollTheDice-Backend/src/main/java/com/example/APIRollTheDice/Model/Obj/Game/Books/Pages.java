@@ -10,21 +10,23 @@ public class Pages {
     private Long id;
     private String content;
     private int pageNumber;
+    private String title ;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "books_id")
-    private Book books;
+    @JoinColumn(name = "chapters_id")
+    private Chapter chapter;
 
 
 
     public Pages() {
     }
 
-    public Pages(Long id, String content, int pageNumber, Book books) {
+    public Pages(Long id, String content, int pageNumber, Chapter chapter,String title) {
         this.id = id;
         this.content = content;
         this.pageNumber = pageNumber;
-        this.books = books;
+        this.chapter = chapter;
+        this.title = title;
 
     }
 
@@ -44,12 +46,12 @@ public class Pages {
         this.content = content;
     }
 
-    public Book getBooks() {
-        return books;
+    public Chapter getChapter() {
+        return chapter;
     }
 
-    public void setBooks(Book books) {
-        this.books = books;
+    public void setChapter(Chapter chapter) {
+        this.chapter = chapter;
     }
 
     public int getPageNumber() {
@@ -60,5 +62,11 @@ public class Pages {
         this.pageNumber = pageNumber;
     }
 
+    public String getTitle() {
+        return title;
+    }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
 }

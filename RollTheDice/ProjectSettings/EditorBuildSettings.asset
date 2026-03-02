@@ -5,9 +5,30 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
+  - enabled: 0
+    path: Assets/_Project/UI/Scenes/InitScene/InitScene.unity
+    guid: aa4dc5d65373c2c44a03be52f9dabcf0
+  - enabled: 1
+    path: Assets/_Project/UI/Scenes/GlobalManagers.unity
+    guid: 2a35f697c7151164994c07ccb0a5cc11
+  - enabled: 1
+    path: Assets/_Project/UI/Scenes/TemplateMaker/TemplateMaker.unity
+    guid: 51233afb569a3a44fbf69c76e39566a1
+  - enabled: 1
+    path: Assets/_Project/UI/Scenes/Menu/MainMenuCreate.unity
+    guid: 410a18488beadc94d9978c1609859d3c
+  - enabled: 1
+    path: Assets/_Project/UI/Scenes/Login/LoginScene.unity
+    guid: 12b4363926929f24c97b40703470c5c6
+  - enabled: 1
+    path: Assets/_Project/UI/Scenes/Menu/MainMenu.unity
+    guid: 18b25e607d4126946a040e76193d7671
+  - enabled: 1
+    path: Assets/_Project/UI/Scenes/BookMaker/BookMaker.unity
+    guid: cade21effc7c7db47afb80a9d51b92e7
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

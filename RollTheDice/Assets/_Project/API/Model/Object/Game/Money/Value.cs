@@ -1,4 +1,4 @@
- namespace RollTheDice.API.Models.Game.Money
+namespace Assets._Project.API.Model.Object.Game.Money
 {
     public class Value
     {

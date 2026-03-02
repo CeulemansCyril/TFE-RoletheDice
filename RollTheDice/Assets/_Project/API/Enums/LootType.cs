@@ -1,4 +1,4 @@
- namespace RollTheDice.API.Enums
+namespace Assets._Project.API.Enums
 {
     public enum LootType
     {

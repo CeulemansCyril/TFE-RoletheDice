@@ -9,9 +9,11 @@ import org.mapstruct.Mapping;
 public interface OptionListMapper {
 
     @Mapping(source = "templateField.id", target = "idTemplateField")
+    @Mapping(source = "gameBundle.id", target = "idGameBundle")
     OptionListDTO toDTO(OptionList optionList);
 
     @Mapping(target = "templateField", ignore = true)
+    @Mapping(target = "gameBundle", ignore = true)
     OptionList toEntity(OptionListDTO optionListDTO);
 
 

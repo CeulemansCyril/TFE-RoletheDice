@@ -9,18 +9,18 @@ public class BookDTO {
     private Long id;
     private String title;
     private BookTypes type;
-    private List<Long> idPages;
+    private List<Long> idChapters;
     private Long idGame;
     private Long idGameBundle;
 
     public BookDTO() {
     }
 
-    public BookDTO(Long id, BookTypes type, String title, List<Long> idPages, Long idGame, Long idGameBundle) {
+    public BookDTO(Long id, BookTypes type, String title, List<Long> idChapters, Long idGame, Long idGameBundle) {
         this.id = id;
         this.type = type;
         this.title = title;
-        this.idPages = idPages;
+        this.idChapters = idChapters;
         this.idGame = idGame;
         this.idGameBundle = idGameBundle;
     }
@@ -49,12 +49,12 @@ public class BookDTO {
         this.type = type;
     }
 
-    public List<Long> getIdPages() {
-        return idPages;
+    public List<Long> getIdChapters() {
+        return idChapters;
     }
 
-    public void setIdPages(List<Long> idPages) {
-        this.idPages = idPages;
+    public void setIdChapters(List<Long> idChapters) {
+        this.idChapters = idChapters;
     }
 
     public Long getIdGame() {

@@ -1,8 +1,8 @@
-using RollTheDice.API.Enums;
 using UnityEngine.UIElements.Experimental;
-using RollTheDice.API.Models.Game.Money; 
+using Assets._Project.API.Model.Object.Game.Money;
+using Assets._Project.API.Enums;
 
-namespace RollTheDice.API.DTO.GameDTO.LootTableDTO
+namespace Assets._Project.API.Model.DTO.GameDTO.LootTableDTO
 {
     public class LootElementDTO
     {

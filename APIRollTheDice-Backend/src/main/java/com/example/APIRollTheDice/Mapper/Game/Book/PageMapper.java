@@ -8,9 +8,9 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface PageMapper {
 
-    @Mapping(source = "books.id", target = "idBook")
+    @Mapping(source = "chapter.id", target = "idChapter")
     PagesDTO toDTO(Pages pages);
 
-    @Mapping(target = "books", ignore = true)
+    @Mapping(target = "chapter", ignore = true)
     Pages toEntity(PagesDTO pagesDTO);
 }

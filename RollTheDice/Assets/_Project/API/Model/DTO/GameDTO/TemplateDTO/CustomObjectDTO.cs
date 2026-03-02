@@ -1,8 +1,8 @@
 
 using System.Collections.Generic;
-using RollTheDice.API.Models.Game.Money;
+using Assets._Project.API.Model.Object.Game.Money;
 
-namespace RollTheDice.API.DTO.GameDTO.TemplateDTO
+namespace Assets._Project.API.Model.DTO.GameDTO.TemplateDTO
 {
     public class CustomObjectDTO
     {

@@ -1,17 +1,17 @@
 using System.Collections.Generic;
-using RollTheDice.API.Models.Game.Money;
+using Assets._Project.API.Model.Object.Game.Money;
 
-namespace RollTheDice.API.Models.Game.Template
+namespace Assets._Project.API.Model.Object.Game.Templates
 {
     public class CustomObject
     {
-        private long Id { get; set;}
-        private string Name { get; set;}
-        private Dictionary<string,string> FieldValues { get; set;}
-         private bool CanBeInInventory { get; set;}
-         private Value Price { get; set;}
+        public long Id { get; set;}
+        public string Name { get; set;}
+        public Dictionary<string,string> FieldValues { get; set;}
+        public bool CanBeInInventory { get; set;}
+        public Value Price { get; set;}
 
-         public CustomObject(){}
+        public CustomObject(){}
          public CustomObject(long id, string name, Dictionary<string,string> fieldValues, bool canBeInInventory, Value price)
         {
             Id = id;

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace  RollTheDice.API.DTO.GameDTO.MoneyDTO
+namespace Assets._Project.API.Model.DTO.GameDTO.MoneyDTO
 {
     public class CurrencyDTO
     {

@@ -125,7 +125,7 @@ public class ChatService {
     public ChatMessage ChatMessDTOToEntity(ChatMessageDTO chatMessageDTO){
         ChatMessage chatMessage = chatMessageMapper.toEntity(chatMessageDTO);
         chatMessage.setChatChanel(chatChanelInterface.findById(chatMessageDTO.getIdChatChanel()).orElseThrow(()-> new NotFoundException("Chat channel not found")));
-        chatMessage.setSender(userRepository.findById(chatMessageDTO.getIdSender()).orElseThrow(()-> new NotFoundException("User not found")));
+        chatMessage.setSender(userRepository.findById(chatMessageDTO.getSender().getIdUser()).orElseThrow(()-> new NotFoundException("User not found")));
         return chatMessage;
     }
 

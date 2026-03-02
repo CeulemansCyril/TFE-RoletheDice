@@ -20,9 +20,9 @@ public class MessageControllers {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<String> createMessage(@RequestBody Message message) {
-        messageService.createMessage(message);
-        return ResponseEntity.ok("Message send successfully");
+    public ResponseEntity<MessageDTO> createMessage(@RequestBody MessageDTO message) {
+        Message message1 =  messageService.createMessage(messageService.MessageDTOToEntity(message));
+        return ResponseEntity.ok(messageService.MessageToDTO(message1));
     }
 
     @GetMapping("/getById/{id}")

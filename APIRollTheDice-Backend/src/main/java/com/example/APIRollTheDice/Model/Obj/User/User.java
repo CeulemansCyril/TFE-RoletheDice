@@ -33,7 +33,7 @@ public class User {
     @JsonIgnore
     private String password;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String displayName;
 
     @Column(nullable = true)
@@ -98,15 +98,15 @@ public class User {
     @Column(nullable = false)
     private boolean isDeleted = false;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private UserCreationContent userCreationContent;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserCreationContent> userCreationContent;
 
 
     public User() {
     }
 
     public User(Long id, String username, String email, String password, String displayName, LocalDate dateOfBirth, RoleUser roleUser, boolean blocked, boolean isOnline, boolean profilePublic, List<User> friends, List<User> blockedUsers,
-           List<Conversation> userConversations, List<Player> players, boolean isDeleted, UserCreationContent userCreationContent, List<AgendaEvent> agendaEvents
+           List<Conversation> userConversations, List<Player> players, boolean isDeleted, List<UserCreationContent> userCreationContent, List<AgendaEvent> agendaEvents
             ) {
         this.id = id;
         this.username = username;
@@ -267,11 +267,11 @@ public class User {
         this.gamesAsCreator = gamesAsCreator;
     }
 
-    public UserCreationContent getUserCreationContent() {
+    public List<UserCreationContent> getUserCreationContent() {
         return userCreationContent;
     }
 
-    public void setUserCreationContent(UserCreationContent userCreationContent) {
+    public void setUserCreationContent(List<UserCreationContent> userCreationContent) {
         this.userCreationContent = userCreationContent;
     }
 

@@ -1,0 +1,11 @@
+﻿using UnityEngine;
+using System.Collections;
+
+namespace Assets._Project.API.Enums
+{
+	public enum DataMode 
+	{
+		CREATE,
+		EDIT
+    }
+}

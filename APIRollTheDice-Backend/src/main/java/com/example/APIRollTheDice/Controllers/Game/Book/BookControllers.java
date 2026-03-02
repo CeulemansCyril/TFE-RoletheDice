@@ -2,9 +2,11 @@ package com.example.APIRollTheDice.Controllers.Game.Book;
 
 import com.example.APIRollTheDice.Enum.CreatedItemType;
 import com.example.APIRollTheDice.Model.DTO.GameDTO.BookDTO.BookDTO;
+import com.example.APIRollTheDice.Model.DTO.GameDTO.BookDTO.ChapterDTO;
 import com.example.APIRollTheDice.Model.DTO.GameDTO.BookDTO.PagesDTO;
 import com.example.APIRollTheDice.Model.DTO.UserDTo.UserCreationContentDTO;
 import com.example.APIRollTheDice.Model.Obj.Game.Books.Book;
+import com.example.APIRollTheDice.Model.Obj.Game.Books.Chapter;
 import com.example.APIRollTheDice.Model.Obj.Game.Books.Pages;
 import com.example.APIRollTheDice.Service.Game.Book.BookService;
 import com.example.APIRollTheDice.Service.User.UserCreationContentService;
@@ -55,25 +57,38 @@ public class BookControllers {
         return ResponseEntity.ok("Book deleted successfully.");
     }
 
-    @GetMapping("/getBookByIdWithPages/{id}")
-    public ResponseEntity<Map<String, Object>>GetBookByIdWithPages(@PathVariable Long id) {
-        BookDTO book = bookService.BookInterfaceToDTO( bookService.GetBookById(id));
-        List<PagesDTO> pagesDTOList = bookService.GetAllPagesByBookId(id).stream()
-                .map(bookService::PagesInterfaceToDTO)
-                .toList();
 
-        Map<String,Object> response = new HashMap<>();
-        response.put("book", book);
-        response.put("pages", pagesDTOList);
-
-
-        return ResponseEntity.ok(response);
-    }
-
-    @GetMapping("/getBookByIdWithOutPages/{id}")
+    @GetMapping("/getBook/{id}")
     public ResponseEntity<BookDTO> GetBookByIdWithOutPages (@PathVariable Long id) {
         Book book = bookService.GetBookById(id);
         return ResponseEntity.ok(bookService.BookInterfaceToDTO(book));
+    }
+    // ------------------- Chapters ----------------------------
+    @PostMapping("/createChapter")
+    public ResponseEntity<ChapterDTO>CreateChapter(@RequestBody ChapterDTO chapterDTO) {
+        Chapter chapter = bookService.CreateChapter(bookService.ChapterDTOToEntity(chapterDTO));
+        return ResponseEntity.ok(bookService.ChapterInterfaceToDTO(chapter));
+    }
+
+    @PutMapping("/updateChapter")
+    public ResponseEntity<ChapterDTO>UpdateChapter(@RequestBody ChapterDTO chapterDTO) {
+        Chapter chapter = bookService.UpdateChapter(bookService.ChapterDTOToEntity(chapterDTO));
+        return ResponseEntity.ok(bookService.ChapterInterfaceToDTO(chapter));
+    }
+
+    @DeleteMapping("/deleteChapter/{id}")
+    public ResponseEntity<String>DeleteChapter(@PathVariable Long id) {
+        bookService.DeleteChapter(id);
+        return ResponseEntity.ok("Chapter deleted successfully.");
+    }
+
+    @GetMapping("/getChapterByBookId/{id}")
+    public ResponseEntity<List<ChapterDTO>>GetChapterByBookId(@PathVariable Long id) {
+        List<Chapter> chapterList = bookService.GetAllChaptersByBookId(id);
+        List<ChapterDTO> chapterDTOList = chapterList.stream()
+                .map(bookService::ChapterInterfaceToDTO)
+                .toList();
+        return ResponseEntity.ok(chapterDTOList);
     }
 
     // ------------------- Pages ----------------------------
@@ -109,9 +124,9 @@ public class BookControllers {
         return ResponseEntity.ok("Pages deleted successfully.");
     }
 
-    @GetMapping("/getPagesByBookId/{id}")
+    @GetMapping("/getPagesByChapterId/{id}")
     public ResponseEntity<List<PagesDTO>>GetPagesByBookId(@PathVariable Long id) {
-        List<Pages> pagesList = bookService.GetAllPagesByBookId(id);
+        List<Pages> pagesList = bookService.GetAllPagesByChapterId(id);
         List<PagesDTO> pagesDTOList = pagesList.stream()
                 .map(bookService::PagesInterfaceToDTO)
                 .toList();

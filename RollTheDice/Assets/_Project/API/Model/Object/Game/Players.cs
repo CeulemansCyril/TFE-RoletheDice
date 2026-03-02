@@ -1,22 +1,22 @@
 using System.Collections.Generic;
-using RollTheDice.API.Models.Game.Template;
-using RollTheDice.API.Models.Users;
-using RollTheDice.API.Models.Game.Storages;
-using RollTheDice.API.Models.Game.Books;
+using Assets._Project.API.Model.Object.Game.Storage;
+using Assets._Project.API.Model.Object.User;
+using Assets._Project.API.Model.Object.Game.Book;
+using Assets._Project.API.Model.Object.Game.Templates;
 
-namespace RollTheDice.API.Models.Game
+namespace Assets._Project.API.Model.Object.Game
 {
     public class Players
     {
-        private long Id { get; set; }
-        private string Name { get; set; }
-        private Book LoreBook { get; set; }
-        private List<Storage> Storages { get; set; }
-        private CustomObject CharacterModel { get; set; }
-         private User User { get; set; }
+        public long Id { get; set; }
+        public string Name { get; set; }
+        public Books LoreBook { get; set; }
+        public List<Storages> Storages { get; set; }
+        public CustomObject CharacterModel { get; set; }
+        public Users User { get; set; }
 
          public Players(){}
-         public Players(long id, string name, Book loreBook,  List<Storage> storages,CustomObject characterModel,User user)
+         public Players(long id, string name, Books loreBook,  List<Storages> storages,CustomObject characterModel,Users user)
         {
             Id = id;
             Name = name;

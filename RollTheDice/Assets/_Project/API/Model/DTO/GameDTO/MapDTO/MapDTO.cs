@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace RollTheDice.API.DTO.GameDTO.MapDTO
+namespace Assets._Project.API.Model.DTO.GameDTO.MapDTO
 {
     public class MapDTO
     {

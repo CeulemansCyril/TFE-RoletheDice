@@ -1,5 +1,6 @@
 package com.example.APIRollTheDice.Model.Obj.Game.Template;
 
+import com.example.APIRollTheDice.Model.Obj.Game.GameBundle;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -22,13 +23,20 @@ public class OptionList {
     @JoinColumn(name = "template_field_id", nullable = false)
     private TemplateField templateField;
 
+    @ManyToOne
+    @JoinColumn(name = "game_bundle_id", nullable = false)
+    private GameBundle gameBundle;
+
+
+
     public OptionList() {
     }
-    public OptionList(long id, String name, List<String> options, TemplateField templateField) {
+    public OptionList(long id, String name, List<String> options, TemplateField templateField, GameBundle gameBundle) {
         this.id = id;
         this.name = name;
         this.options = options;
         this.templateField = templateField;
+        this.gameBundle = gameBundle;
     }
 
     public long getId() {
@@ -61,5 +69,13 @@ public class OptionList {
 
     public void setTemplateField(TemplateField templateField) {
         this.templateField = templateField;
+    }
+
+    public GameBundle getGameBundle() {
+        return gameBundle;
+    }
+
+    public void setGameBundle(GameBundle gameBundle) {
+        this.gameBundle = gameBundle;
     }
 }

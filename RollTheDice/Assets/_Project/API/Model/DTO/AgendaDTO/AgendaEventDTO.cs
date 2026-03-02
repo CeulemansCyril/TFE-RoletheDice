@@ -1,6 +1,6 @@
 using System;
 
-namespace RollTheDice.API.Models.AgendaDTO
+namespace Assets._Project.API.Model.DTO.AgendaDTO
 {
 public class AgendaEventDTO
 {

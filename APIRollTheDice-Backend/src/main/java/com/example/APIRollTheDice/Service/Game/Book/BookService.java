@@ -2,14 +2,18 @@ package com.example.APIRollTheDice.Service.Game.Book;
 
 import com.example.APIRollTheDice.Exception.NotFoundException;
 import com.example.APIRollTheDice.Interface.GameInterface.BooksInterface.BookInterface;
+import com.example.APIRollTheDice.Interface.GameInterface.BooksInterface.ChapterInterface;
 import com.example.APIRollTheDice.Interface.GameInterface.BooksInterface.PagesInterface;
 import com.example.APIRollTheDice.Interface.GameInterface.GameBundleInterface;
 import com.example.APIRollTheDice.Interface.GameInterface.GameInterface;
 import com.example.APIRollTheDice.Mapper.Game.Book.BookMapper;
+import com.example.APIRollTheDice.Mapper.Game.Book.ChapterMapper;
 import com.example.APIRollTheDice.Mapper.Game.Book.PageMapper;
 import com.example.APIRollTheDice.Model.DTO.GameDTO.BookDTO.BookDTO;
+import com.example.APIRollTheDice.Model.DTO.GameDTO.BookDTO.ChapterDTO;
 import com.example.APIRollTheDice.Model.DTO.GameDTO.BookDTO.PagesDTO;
 import com.example.APIRollTheDice.Model.Obj.Game.Books.Book;
+import com.example.APIRollTheDice.Model.Obj.Game.Books.Chapter;
 import com.example.APIRollTheDice.Model.Obj.Game.Books.Pages;
 import org.springframework.stereotype.Service;
 
@@ -19,18 +23,27 @@ import java.util.List;
 public class BookService {
     private final PageMapper pageMapper;
     private final PagesInterface pagesInterface;
+
+    private final ChapterMapper chapterMapper;
+    private final ChapterInterface chapterInterface;
+
     private final BookMapper bookMapper;
     private final BookInterface bookInterface;
+
     private final GameInterface gameInterface;
     private final GameBundleInterface gameBundleInterface;
 
-    public BookService(PageMapper pageMapper, PagesInterface pagesInterface, BookMapper bookMapper, BookInterface bookInterface, GameInterface gameInterface, GameBundleInterface gameBundleInterface) {
+    public BookService(PageMapper pageMapper, PagesInterface pagesInterface, BookMapper bookMapper, BookInterface bookInterface, GameInterface gameInterface, GameBundleInterface gameBundleInterface
+    ,ChapterMapper chapterMapper, ChapterInterface chapterInterface
+    ) {
         this.pageMapper = pageMapper;
         this.pagesInterface = pagesInterface;
         this.bookMapper = bookMapper;
         this.bookInterface = bookInterface;
         this.gameInterface = gameInterface;
         this.gameBundleInterface = gameBundleInterface;
+        this.chapterMapper = chapterMapper;
+        this.chapterInterface = chapterInterface;
     }
 
     public Pages CreatePages(Pages pages){
@@ -59,8 +72,8 @@ public class BookService {
         }
     }
 
-    public List<Pages> GetAllPagesByBookId(Long id){
-        return pagesInterface.findAllByBooks_Id(id);
+    public List<Pages> GetAllPagesByChapterId(Long id){
+        return pagesInterface.findAllByChapter_Id(id);
     }
 
     public PagesDTO PagesInterfaceToDTO(Pages pages){
@@ -70,13 +83,60 @@ public class BookService {
     public Pages PagesDTOToEntity(PagesDTO pagesDTO){
         Pages pages = pageMapper.toEntity(pagesDTO);
 
-        if(pagesDTO.getIdBook() != null){
-            pages.setBooks(bookInterface.findById(pagesDTO.getIdBook()).orElseThrow(()-> new NotFoundException("Book not found")));
+        if(pagesDTO.getIdChapter() != null){
+            pages.setChapter(chapterInterface.findById(pagesDTO.getIdChapter()).orElseThrow(()-> new NotFoundException("Book not found")));
         }
 
         return pages;
     }
+    /// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    public Chapter CreateChapter(Chapter chapter){
+        return chapterInterface.save(chapter);
+    }
+
+    public Chapter UpdateChapter(Chapter chapter) {
+        Chapter existing = chapterInterface.findById(chapter.getId())
+                .orElseThrow(() -> new NotFoundException("Chapter not found"));
+
+        existing.setTitle(chapter.getTitle());
+        existing.setChapterNumber(chapter.getChapterNumber());
+        existing.setPages(chapter.getPages());
+
+        return chapterInterface.save(existing);
+    }
+
+    public void DeleteChapter(Long idChapter) {
+        if (chapterInterface.existsById(idChapter)) {
+            chapterInterface.deleteById(idChapter);
+        } else {
+            throw new NotFoundException("Chapter not found");
+        }
+    }
+
+    public List<Chapter> GetAllChaptersByBookId(Long id) {
+        return chapterInterface.findAllByBooks_Id(id);
+    }
+
+    public ChapterDTO ChapterInterfaceToDTO(Chapter chapter) {
+        return chapterMapper.toDTO(chapter);
+    }
+
+    public Chapter ChapterDTOToEntity(ChapterDTO chapterDTO) {
+        Chapter chapter = chapterMapper.toEntity(chapterDTO);
+
+        if (chapterDTO.getIdBook() != null) {
+            chapter.setBooks(bookInterface.findById(chapterDTO.getIdBook()).orElseThrow(() -> new NotFoundException("Book not found")));
+        }
+
+        if (chapterDTO.getIdPages() != null) {
+            chapter.setPages(pagesInterface.findAllByChapter_Id(chapterDTO.getId()));
+        }
+
+        return chapter;
+    }
 
     /// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -92,7 +152,7 @@ public class BookService {
 
         existing.setTitle(book.getTitle());
         existing.setType(book.getType());
-        existing.setPages(book.getPages());
+        existing.setChapters(book.getChapters());
 
 
         return bookInterface.save(existing);
@@ -133,8 +193,8 @@ public class BookService {
             book.setGameBundle(gameBundleInterface.findById(bookDTO.getIdGameBundle()).orElseThrow(() -> new NotFoundException("Game Bundle not found")));
         }
 
-        if (bookDTO.getIdPages() != null) {
-            book.setPages(pagesInterface.findAllByBooks_Id(bookDTO.getId()));
+        if (bookDTO.getIdChapters() != null) {
+            book.setChapters(chapterInterface.findAllByBooks_Id(bookDTO.getId()));
         }
 
         return book;

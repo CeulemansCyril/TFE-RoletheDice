@@ -1,8 +1,8 @@
-namespace RollTheDice.API.Enums
+namespace Assets._Project.API.Enums
 {
     public enum RoleUser
     {
-            ADMIN,
+        ADMIN,
         USER,
         DISABLED
     }

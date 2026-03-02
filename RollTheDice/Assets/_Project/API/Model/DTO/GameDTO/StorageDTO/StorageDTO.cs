@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace RollTheDice.API.DTO.GameDTO.StorageDTO
+namespace Assets._Project.API.Model.DTO.GameDTO.StorageDTO
 {
     public class StorageDTO
     {

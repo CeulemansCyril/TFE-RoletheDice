@@ -1,8 +1,13 @@
 package com.example.APIRollTheDice.Model.DTO.Login;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class RegisterRequest {
+    @JsonProperty("Username")
     private String username;
+    @JsonProperty("Password")
     private String password;
+    @JsonProperty("Email")
     private String email;
 
     public RegisterRequest() {

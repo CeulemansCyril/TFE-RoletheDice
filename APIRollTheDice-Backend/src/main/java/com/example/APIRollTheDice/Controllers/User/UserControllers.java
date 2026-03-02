@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@RestController
+@RequestMapping("/api/user")
 public class UserControllers {
     private final UserService userService;
     private final UserCreationContentService userCreationContentService;
@@ -94,8 +96,8 @@ public class UserControllers {
         return ResponseEntity.ok(count);
     }
 
-    @GetMapping("/SearchAvailableUsers")
-    public ResponseEntity<List<UserDTO>> SearchAvailableUsers(@RequestParam String query, @RequestParam Long userID) {
+    @GetMapping("/SearchAvailableUsers/{userID}/{query}")
+    public ResponseEntity<List<UserDTO>> SearchAvailableUsers( @PathVariable Long userID,@PathVariable  String query) {
         List<User> users = userService.searchAvailableUsers(userID,query );
         List<UserDTO> userDTOS = users.stream().map(userService::UserToDTO).toList();
         return ResponseEntity.ok(userDTOS);

@@ -1,26 +1,26 @@
 using System.Collections.Generic;
-using RollTheDice.API.Models.Game.Books;
-using RollTheDice.API.Models.Game.LootTable;
-using RollTheDice.API.Models.Game.Map;
-using RollTheDice.API.Models.Game.Money;
-using RollTheDice.API.Models.Game.Token;
-using RollTheDice.API.Models.Users;
+using Assets._Project.API.Model.Object.Game.Book;
+using Assets._Project.API.Model.Object.Game.LootTable;
+using Assets._Project.API.Model.Object.Game.Map;
+using Assets._Project.API.Model.Object.Game.Money;
+using Assets._Project.API.Model.Object.Game.Token;
+using Assets._Project.API.Model.Object.User;
 
-namespace RollTheDice.API.Models.Game
+namespace Assets._Project.API.Model.Object.Game
 {
     public class GameBundle
     {
         public long Id { get; set; }
         public string Name { get; set; }
-        public User Creator { get; set; }
+        public Users Creator { get; set; }
         public List<Tokens> Tokens { get; set; }
-        public List<Book> Books { get; set; }
+        public List<Books> Books { get; set; }
         public List<Currency> Currencies { get; set; }
         public List<LootTables> LootTables { get; set; }
         public List<Maps> Maps { get; set; }
 
         public GameBundle(){}
-        public GameBundle(long id, string name, User creator, List<Tokens> tokens, List<Book> books,List<Currency> currencies,List<LootTables> lootTables,List<Maps> maps)
+        public GameBundle(long id, string name, Users creator, List<Tokens> tokens, List<Books> books,List<Currency> currencies,List<LootTables> lootTables,List<Maps> maps)
         {
             Id = id;
             Name = name;

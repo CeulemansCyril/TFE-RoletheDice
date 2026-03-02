@@ -1,5 +1,8 @@
-namespace RollTheDice.API.DTO.Login
+using System;
+
+namespace Assets._Project.API.Model.DTO.Login
 {
+    [Serializable]
     public class RegisterRequest
     {
         public string Username { get; set; }

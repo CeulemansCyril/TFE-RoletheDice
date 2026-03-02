@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace RollTheDice.API.Models.Game.Template
+namespace Assets._Project.API.Model.Object.Game.Templates
 {
     public class Template
     {

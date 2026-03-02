@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using RollTheDice.API.Enums;
+using Assets._Project.API.Enums;
+using Assets._Project.API.Model.Object.User;
 
-
-namespace RollTheDice.API.DTO.UserDTO
+namespace Assets._Project.API.Model.DTO.UserDTO
 {
     public class UserDTO
     {
@@ -17,11 +17,18 @@ namespace RollTheDice.API.DTO.UserDTO
         public List<long> IdGamesAsAdmin { get; set; }
         public List<long> IdGamesAsCreator { get; set; }
         public List<long> IdConversations { get; set; }
-        public long IdUserCreationContent { get; set; }
+        public List<long> IdUserCreationContent { get; set; }
+
+        public List<long> IdAgendaEvent { get; set; }
+
+
+        public List<UserIdentifantData> BlockedUsers { get; set; }
+        public List<UserIdentifantData> Friends { get; set; }
 
         public UserDTO(){}
-        public UserDTO(long id, string username, string email, string displayName , DateTime dateOfBirth, RoleUser roleUser, List<long> idPlayers,
-            List<long> idGamesAsAdmin, List<long> idGamesAsCreator, List<long> idConversations, long idUserCreationContent
+        public UserDTO(long id, string username, string email, string displayName, DateTime dateOfBirth, RoleUser roleUser, List<long> idPlayers,
+            List<long> idGamesAsAdmin, List<long> idGamesAsCreator, List<long> idConversations, List<long> idUserCreationContent, List<UserIdentifantData> blockedUsers, List<UserIdentifantData> friends,
+            List<long> idAgendaEvent
          )
         {
             Id = id;
@@ -35,7 +42,10 @@ namespace RollTheDice.API.DTO.UserDTO
             IdGamesAsCreator = idGamesAsCreator;
             IdConversations = idConversations;
             IdUserCreationContent = idUserCreationContent;
-            
+            BlockedUsers = blockedUsers;
+            Friends = friends;
+            IdAgendaEvent = idAgendaEvent;
+
         }
     }
 }

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace RollTheDice.API.Models.Game.Map
+namespace Assets._Project.API.Model.Object.Game.Map
 {
     public class Maps
     {
@@ -17,10 +17,11 @@ namespace RollTheDice.API.Models.Game.Map
         public double GridThickness { get; set; }
         public string GridType { get; set; }
 
+        public List<long> IdGameBundle { get; set; } = new List<long>();
         public List<Layout> Layouts { get; set; } = new List<Layout>();
 
         public Maps(){}
-        public Maps(long id, string name,string description, int width,int height,bool gridEnabled,double cellSize, string gridColor,double gridThickness, string gridType,List<Layout> layouts)
+        public Maps(long id, string name,string description, int width,int height,bool gridEnabled,double cellSize, string gridColor,double gridThickness, string gridType,List<Layout> layouts,List<long> idGameBundle)
         {
             Id = id;
             Name = name;
@@ -33,7 +34,7 @@ namespace RollTheDice.API.Models.Game.Map
             GridThickness = gridThickness;
             GridType = gridType;
             Layouts = layouts;
-    
+            IdGameBundle = idGameBundle;
         } 
 
     }

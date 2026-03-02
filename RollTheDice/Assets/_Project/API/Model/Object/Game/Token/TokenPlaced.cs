@@ -1,4 +1,4 @@
-namespace RollTheDice.API.Models.Game.Token
+namespace Assets._Project.API.Model.Object.Game.Token
 {
     public class TokenPlaced
     {
@@ -9,8 +9,10 @@ namespace RollTheDice.API.Models.Game.Token
         public double Scale  { get; set; }
         public bool SawByEveryone { get; set; }
 
+        public Tokens Token { get; set; }
+
         public TokenPlaced(){}
-        public TokenPlaced(long id, double positionX, double positionY, double rotation, double scale, bool sawByEveryone)
+        public TokenPlaced(long id, double positionX, double positionY, double rotation, double scale, bool sawByEveryone, Tokens token)
         {
             Id = id;
             PositionX = positionX;
@@ -18,6 +20,7 @@ namespace RollTheDice.API.Models.Game.Token
             Rotation = rotation;
             Scale = scale;
             SawByEveryone = sawByEveryone;
+            Token = token;
         }
     }
 }

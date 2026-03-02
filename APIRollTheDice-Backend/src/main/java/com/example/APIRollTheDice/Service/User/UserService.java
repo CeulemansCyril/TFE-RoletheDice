@@ -9,6 +9,7 @@ import com.example.APIRollTheDice.Interface.User.UserCreationContentInterface;
 import com.example.APIRollTheDice.Interface.User.UserRepository;
 import com.example.APIRollTheDice.Mapper.User.UserMapper;
 import com.example.APIRollTheDice.Model.DTO.UserDTo.UserDTO;
+import com.example.APIRollTheDice.Model.DTO.UserDTo.UserIdentifantData;
 import com.example.APIRollTheDice.Model.Obj.Agenda.AgendaEvent;
 import com.example.APIRollTheDice.Model.Obj.User.User;
 import com.example.APIRollTheDice.Service.Agenda.AgendaService;
@@ -222,13 +223,13 @@ public class UserService {
             user.setUserConversations(conversationRepository.findAllById(userDTO.getIdConversations()));
         }
         if (userDTO.getIdFriends() != null) {
-            user.setFriends(userRepository.findAllById(userDTO.getIdFriends()));
+            user.setFriends(userRepository.findAllById(userDTO.getIdFriends().stream().map(UserIdentifantData::getIdUser).toList()));
         }
         if (userDTO.getIdBlockedUsers() != null) {
-            user.setBlockedUsers(userRepository.findAllById(userDTO.getIdBlockedUsers()));
+            user.setBlockedUsers(userRepository.findAllById(userDTO.getIdBlockedUsers().stream().map(UserIdentifantData::getIdUser).toList()));
         }
         if (userDTO.getIdUserCreationContent() != null) {
-            user.setUserCreationContent(userCreationContentRepository.findById(userDTO.getIdUserCreationContent()).orElse(null));
+            user.setUserCreationContent(userCreationContentRepository.findAllByUser_Id(userDTO.getId()));
         }
 
         if(userDTO.getIdAgendaEvent() != null){

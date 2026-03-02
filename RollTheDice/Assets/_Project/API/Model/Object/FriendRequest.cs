@@ -1,8 +1,9 @@
 using System;
-using RollTheDice.API.Enums;
-using RollTheDice.API.Models.Users;
+using Assets._Project.API.Enums;
+using Assets._Project.API.Model.Object.User;
 
-namespace RollTheDice.API.Models
+
+namespace Assets._Project.API.Model.Object
 {
     public class FriendRequest
     {

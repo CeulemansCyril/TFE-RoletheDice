@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace RollTheDice.API.DTO.GameDTO.TemplateDTO
+namespace Assets._Project.API.Model.DTO.GameDTO.TemplateDTO
 {
     public class TemplateFieldDTO
     {
@@ -13,10 +13,12 @@ namespace RollTheDice.API.DTO.GameDTO.TemplateDTO
         public double PositionX { get; set;}
         public double PositionY { get; set;}
         public long IdOptionList { get; set;}
+        public double Width { get; set; }
+        public double Height { get; set; }
         public List<long> IdTemplates { get; set;}
 
         public TemplateFieldDTO(){}
-        public TemplateFieldDTO(long id, string label, string type, bool required, double minValue, double maxValue, double positionX, double positionY, long idOptionList, List<long> idTemplates)
+        public TemplateFieldDTO(long id, string label, string type, bool required, double minValue, double maxValue, double positionX, double positionY, long idOptionList, List<long> idTemplates,double width,double height)
         {
             Id = id;
             Label = label;
@@ -28,7 +30,9 @@ namespace RollTheDice.API.DTO.GameDTO.TemplateDTO
             PositionY = positionY;
             IdOptionList = idOptionList;
             IdTemplates = idTemplates;
-        
+            Width = width;
+            Height = height;
+
         }
     }
 }

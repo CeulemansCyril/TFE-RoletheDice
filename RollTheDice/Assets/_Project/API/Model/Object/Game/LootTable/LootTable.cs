@@ -1,22 +1,24 @@
+using Assets._Project.API.Model.DTO.GameDTO.LootTableDTO;
 using System.Collections.Generic;
 
 
 
-namespace RollTheDice.API.Models.Game.LootTable
+namespace Assets._Project.API.Model.Object.Game.LootTable
 {
     public class LootTables
     {
         public long Id { get; set; }
         public string Name { get; set; }
-        public List<LootElement> LootElements { get; set; } = new List<LootElement>();
-
+        public List<LootElementDTO> LootElements { get; set; } = new List<LootElementDTO>();
+        public long IdGameBundle { get; set; }
         public LootTables(){}
 
-        public LootTables(long id, string name, List<LootElement> lootElements)
+        public LootTables(long id, string name, List<LootElementDTO> lootElements, long idGameBundle)
         {
             Id = id;
             Name = name;
             LootElements = lootElements;
+            IdGameBundle = idGameBundle;
         }
 
 

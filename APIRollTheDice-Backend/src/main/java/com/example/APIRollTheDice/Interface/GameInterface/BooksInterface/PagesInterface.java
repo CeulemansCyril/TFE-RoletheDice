@@ -8,5 +8,5 @@ import java.util.Optional;
 
 public interface PagesInterface extends JpaRepository<Pages,Long> {
     Optional<Pages> findById(Long id);
-    List<Pages> findAllByBooks_Id(Long id);
+    List<Pages> findAllByChapter_Id(Long id);
 }
