@@ -1,5 +1,4 @@
 using Assets._Project.API.Model.Object.Game.Templates;
-using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -7,21 +6,21 @@ using UnityEngine.EventSystems;
 public class BuildPanellDrop : MonoBehaviour, IDropHandler
 {
     [SerializeField] private GameObject fieldPrefab;
-    
+
     private RectTransform rectTransform;
-    private readonly List<FieldUI> fieldsUI = new();
 
 
-    public void Awake() {
+    public void Awake()
+    {
         rectTransform = GetComponent<RectTransform>();
-      
+
     }
 
 
 
     public void OnDrop(PointerEventData eventData)
     {
-        if(eventData.pointerDrag == null)
+        if (eventData.pointerDrag == null)
         {
             return;
         }
@@ -32,8 +31,7 @@ public class BuildPanellDrop : MonoBehaviour, IDropHandler
 
         TemplateFieldDragData dragData =
         eventData.pointerDrag.GetComponent<TemplateFieldDragData>();
-
-        
+ 
 
         if (dragData == null)
         {
@@ -45,7 +43,7 @@ public class BuildPanellDrop : MonoBehaviour, IDropHandler
         GameObject field = Instantiate(fieldPrefab, transform);
         field.tag = "TemplateFieldUI";
 
-            RectTransform fieldRect = field.GetComponent<RectTransform>();
+        RectTransform fieldRect = field.GetComponent<RectTransform>();
 
 
         Vector2 localPoint;
@@ -58,24 +56,24 @@ public class BuildPanellDrop : MonoBehaviour, IDropHandler
         );
 
         fieldRect.anchoredPosition = localPoint;
-     
+
 
         FieldUI fieldUI = field.GetComponent<FieldUI>();
-            if (fieldUI != null)
+        if (fieldUI != null)
+        {
+            TemplateField templateField = new TemplateField
             {
-                TemplateField templateField = new TemplateField
-                {
-                    Label = "New Field",
-                    Type = dragData.FieldType.ToString(),
-                    PositionX = localPoint.x,
-                    PositionY = localPoint.y,
-                    Width = 100,
-                    Height = 30,
-                    Required = false
-                };
-                fieldUI.Initialize(templateField);
-                FieldSelectionManager.Instance.SelectField(fieldUI);
-         
+                Label = "New Field",
+                Type = dragData.FieldType.ToString(),
+                PositionX = localPoint.x,
+                PositionY = localPoint.y,
+                Width = 100,
+                Height = 30,
+                Required = false
+            };
+            fieldUI.Initialize(templateField);
+            FieldSelectionManager.Instance.SelectField(fieldUI);
+
 
         }
 
@@ -94,17 +92,21 @@ public class BuildPanellDrop : MonoBehaviour, IDropHandler
     public void LoadFields(List<TemplateField> templateField)
     {
         ClearAllFields();
+
         foreach (TemplateField fieldData in templateField)
         {
             GameObject field = Instantiate(fieldPrefab, transform);
             field.tag = "TemplateFieldUI";
-            RectTransform fieldRect = field.GetComponent<RectTransform>();
-            fieldRect.anchoredPosition = new Vector2((float)fieldData.PositionX, (float)fieldData.PositionY);
+
             FieldUI fieldUI = field.GetComponent<FieldUI>();
-            fieldUI.Initialize(fieldData);
+
             if (fieldUI != null)
             {
                 fieldUI.Initialize(fieldData);
+            }
+            else
+            {
+                Debug.LogError("FieldUI component missing on prefab");
             }
         }
     }
@@ -112,19 +114,19 @@ public class BuildPanellDrop : MonoBehaviour, IDropHandler
 
     public List<TemplateField> GetAllField()
     {
-        List<TemplateField> fields = new List<TemplateField>(); 
+        List<TemplateField> fields = new List<TemplateField>();
 
-        GameObject[] fieldObjects = GameObject.FindGameObjectsWithTag("TemplateFieldUI");
+        FieldUI[] fieldUIs = GetComponentsInChildren<FieldUI>();
 
-        foreach (GameObject obj in fieldObjects)
+        foreach (FieldUI obj in fieldUIs)
         {
-            FieldUI fieldUI = obj.GetComponent<FieldUI>();
-            if (fieldUI != null)
+       
+            if (obj != null)
             {
-                fields.Add(fieldUI.GetTemplateField());
+                fields.Add(obj.GetTemplateField());
             }
         }
-        
+
         return fields;
     }
 }

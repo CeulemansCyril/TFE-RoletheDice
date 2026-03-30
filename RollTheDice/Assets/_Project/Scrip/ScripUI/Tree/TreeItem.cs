@@ -40,11 +40,15 @@ public class TreeItem : MonoBehaviour,IPointerEnterHandler, IPointerExitHandler,
 
 
     public Action<TreeItem> removeItem;
+    public Action<TreeItem> OnItemClicked;
+    public Action<string,long> renamed;
 
+    public long ID;
+ 
 
     public TreeNodeModel Data { get; private set; }
 
-    public Action<TreeItem> OnItemClicked;
+ 
     public event Action<TreeItem, TreeItem> OnItemDropped;
 
     private void Start()
@@ -76,15 +80,18 @@ public class TreeItem : MonoBehaviour,IPointerEnterHandler, IPointerExitHandler,
 
 
 
-    public void Bind(TreeNodeModel obj)
+    public void Bind(TreeNodeModel obj )
     {
+        ID = obj.Id;
         Data = obj;
 
         int indent = 0 * indentSize;
         
         indentSpacer.GetComponent<LayoutElement>().preferredWidth = indent;
-   
+
+        Debug.Log("obj name : " + obj.Label);
         label.text = obj.Label;
+        Debug.Log("label name : " + label.text);
 
         rectTransform.anchoredPosition = new Vector2(indent, rectTransform.anchoredPosition.y);
 
@@ -217,7 +224,9 @@ public class TreeItem : MonoBehaviour,IPointerEnterHandler, IPointerExitHandler,
         }
 
         label.text = Newname;
+       
         Data.Label = Newname;
+        
 
         FinishRename();
     }
@@ -233,6 +242,7 @@ public class TreeItem : MonoBehaviour,IPointerEnterHandler, IPointerExitHandler,
         isRenaming = false;
         rename.gameObject.SetActive(false);
         label.gameObject.SetActive(true);
+        renamed.Invoke(label.text,Data.Id);
     }
 
     public void IsActive(bool isActive)

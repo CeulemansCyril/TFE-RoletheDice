@@ -9,5 +9,5 @@ import java.util.Optional;
 public interface CurrencyInterface extends JpaRepository<Currency,Long> {
     Optional<Currency> findById(Long id);
 
-    List<Currency> findAllByGameBundles_id(Long id);
+    List<Currency> findAllByGameBundle_id(Long id);
 }

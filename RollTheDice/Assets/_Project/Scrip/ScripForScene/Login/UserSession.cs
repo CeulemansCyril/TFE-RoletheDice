@@ -15,6 +15,7 @@ namespace Assets._Project.Scrip.ScripForScene.Login
 
         void Awake()
         {
+             
             if (Intance == null)
             {
                 Intance = this;

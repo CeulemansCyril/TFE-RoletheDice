@@ -21,7 +21,7 @@ public class Book {
     @Enumerated(EnumType.STRING)
     private BookTypes type;
 
-    @OneToMany(mappedBy = "books", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "books", fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Chapter> chapters;
 
     @ManyToOne(fetch = FetchType.LAZY)

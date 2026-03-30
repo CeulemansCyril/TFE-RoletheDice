@@ -1,10 +1,7 @@
 using Assets._Project.API.Config;
-using Assets._Project.API.Model.DTO;
 using Newtonsoft.Json;
-using System.Collections;
-using System.Collections.Generic;
+ 
 using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -20,6 +17,7 @@ namespace Assets._Project.API.Interface
         protected ApiService(string endpoint)
         {
             baseUrl = APIConfig.BASE_URL + "api/" + endpoint;
+
         }
 
         protected async Awaitable<T> SendRequestAsync<T>(
@@ -28,9 +26,16 @@ namespace Assets._Project.API.Interface
             string jsonBody = null
             )
         {
+
+
             using (var request = CreateRequest(baseUrl + endpoint, method, jsonBody))
             {
+
+                Debug.Log("FINAL URL = " + baseUrl + endpoint);
                 var operation = request.SendWebRequest();
+
+
+
                 while (!operation.isDone)
                     await Awaitable.NextFrameAsync();
 
@@ -41,34 +46,39 @@ namespace Assets._Project.API.Interface
                     );
                 }
 
-                if(string.IsNullOrEmpty(request.downloadHandler.text))
-                {
+                var responseText = request.downloadHandler.text;
+
+
+                if (string.IsNullOrEmpty(responseText))
                     return default;
-                }
+
+
 
                 return JsonConvert.DeserializeObject<T>(request.downloadHandler.text);
             }
         }
 
-         protected UnityWebRequest CreateRequest(
-            string url,
-            string method,
-            string jsonBody = null,
-            bool isSse = false)
+
+        protected UnityWebRequest CreateRequest(string url, string method, string jsonBody = null)
         {
             UnityWebRequest request = new UnityWebRequest(url, method);
 
             if (jsonBody != null)
             {
-                request.uploadHandler =
-                    new UploadHandlerRaw(Encoding.UTF8.GetBytes(jsonBody));
+                var bytes = Encoding.UTF8.GetBytes(jsonBody);
+                request.uploadHandler = new UploadHandlerRaw(bytes)
+                {
+                    contentType = "application/json"
+                };
             }
 
+
             request.downloadHandler = new DownloadHandlerBuffer();
-            request.timeout = isSse ? 0 : APIConfig.Timeout;
+            request.timeout = APIConfig.Timeout;
 
             foreach (var header in APIConfig.DefaultHeaders)
             {
+
                 request.SetRequestHeader(header.Key, header.Value);
             }
 
@@ -92,6 +102,7 @@ namespace Assets._Project.API.Interface
             string endpoint,
             T item)
         {
+
             string json = JsonConvert.SerializeObject(item);
             return SendRequestAsync<T>(endpoint, "POST", json);
         }
@@ -112,12 +123,28 @@ namespace Assets._Project.API.Interface
             return SendRequestAsync<T>(endpoint, "PUT", json);
         }
 
+        protected Awaitable<T[]> UpadateManyAsync<T>(
+            string endpoint,
+            T[] items)
+        {
+            string json = JsonConvert.SerializeObject(items);
+            return SendRequestAsync<T[]>(endpoint, "PUT", json);
+        }
+
         protected Awaitable<string> DeleteAsync(
             string endpoint)
         {
             return SendRequestAsync<string>(endpoint, "DELETE");
         }
 
+        protected Awaitable<string> DeleteManyAsync<T>(
+            string endpoint,
+            T[] item
+            )
+        {
+            string json = JsonConvert.SerializeObject(item);
+            return SendRequestAsync<string>(endpoint, "DELETE", json);
+        }
 
 
 

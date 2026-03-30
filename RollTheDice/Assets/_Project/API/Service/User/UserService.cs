@@ -61,11 +61,11 @@ namespace Assets._Project.API.Service.User
         {
             return GetAsync<UserDTO>("/BlockUser/" + idUser + "/" + blockUserID);
         }
-        //TODO : faire une requete post avec un body qui contient la query et l'id de l'utilisateur pour eviter les probleme de longueur d'url
-        /*  public Awaitable<UserDTO[]> SearchAvailableUsers(string query,long idUser )
+
+          public Awaitable<UserDTO[]> SearchAvailableUsers(string query,long idUser )
           {
-              return CreateManyAsync<UserDTO>("/SearchAvailableUsers/" + idUser ,query);
-          }*/
+              return GetAllAsync<UserDTO>("/SearchAvailableUsers/" + idUser+ "/" + query);
+          }
 
 
 

@@ -9,8 +9,8 @@ import java.util.List;
 @Table(name = "templates")
 public class Template {
     @Id
-    @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
-    private long id;
+    @GeneratedValue(strategy =  GenerationType.IDENTITY)
+    private Long id;
 
     @Column(nullable = false)
     private String name;
@@ -19,29 +19,24 @@ public class Template {
     @JoinColumn(name = "game_bundles_id", nullable = false)
     private GameBundle gameBundle;
 
-    @ManyToMany
-    @JoinTable(
-            name = "template_template_fields",
-            joinColumns = @JoinColumn(name = "template_id"),
-            inverseJoinColumns = @JoinColumn(name = "template_fields_id")
-    )
+    @OneToMany(mappedBy = "template", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TemplateField> templateFieldList;
 
     public Template() {
     }
 
-    public Template(long id, String name, List<TemplateField> templateFieldList, GameBundle gameBundle) {
+    public Template(Long id, String name, List<TemplateField> templateFieldList, GameBundle gameBundle) {
         this.id = id;
         this.name = name;
         this.templateFieldList = templateFieldList;
         this.gameBundle = gameBundle;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

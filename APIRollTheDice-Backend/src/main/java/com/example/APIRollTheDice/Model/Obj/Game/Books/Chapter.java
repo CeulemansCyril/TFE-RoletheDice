@@ -3,6 +3,7 @@ package com.example.APIRollTheDice.Model.Obj.Game.Books;
 import jakarta.persistence.*;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -15,7 +16,7 @@ public class Chapter {
     private int chapterNumber;
 
     @OneToMany(mappedBy = "chapter",cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Pages> pages ;
+    private List<Pages> pages = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "books_id")

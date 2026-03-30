@@ -1,16 +1,35 @@
 package com.example.APIRollTheDice.Model.DTO.GameDTO;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
 public class GameBundleDTO {
+    @JsonProperty("Id")
     private Long id;
+
+    @JsonProperty("Name")
     private String name;
+
+    @JsonProperty("IdCreator")
     private Long idCreator;
+
+    @JsonProperty("IdGame")
     private List<Long> idGame;
+
+    @JsonProperty("IdTokens")
     private List<Long> idTokens;
+
+    @JsonProperty("IdBooks")
     private List<Long> idBooks;
+
+    @JsonProperty("IdCurrencies")
     private List<Long> idCurrencies;
+
+    @JsonProperty("IdLootTables")
     private List<Long> idLootTables;
+
+    @JsonProperty("IdMap")
     private List<Long> idMap;
 
     public GameBundleDTO(Long id, String name, Long idCreator, List<Long> idGame, List<Long> idBooks, List<Long> idTokens, List<Long> idCurrencies, List<Long> idLootTables, List<Long> idMap) {

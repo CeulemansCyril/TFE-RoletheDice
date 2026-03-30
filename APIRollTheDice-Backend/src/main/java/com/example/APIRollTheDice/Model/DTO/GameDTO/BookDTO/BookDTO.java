@@ -1,16 +1,23 @@
 package com.example.APIRollTheDice.Model.DTO.GameDTO.BookDTO;
 
 import com.example.APIRollTheDice.Enum.BookTypes;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 
 import java.util.List;
 
 public class BookDTO {
+    @JsonProperty("Id")
     private Long id;
+    @JsonProperty("Title")
     private String title;
+    @JsonProperty("Type")
     private BookTypes type;
+    @JsonProperty("IdChapters")
     private List<Long> idChapters;
+    @JsonProperty("IdGame")
     private Long idGame;
+    @JsonProperty("IdGameBundle")
     private Long idGameBundle;
 
     public BookDTO() {

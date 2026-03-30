@@ -4,8 +4,6 @@ import com.example.APIRollTheDice.Model.Obj.Game.GameBundle;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 
-import java.util.List;
-
 @Entity
 @Table(name = "currency")
 public class Currency{
@@ -18,19 +16,20 @@ public class Currency{
     @Min(1)
     private int baseUnit;
 
-    @ManyToMany(mappedBy = "currencies")
-    private List<GameBundle> gameBundles;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "game_bundles_id")
+    private GameBundle gameBundle;
 
     public Currency() {
     }
 
-    public Currency(Long id, String name, String symbol, String code, int baseUnit,List<GameBundle> gameBundle) {
+    public Currency(Long id, String name, String symbol, String code, int baseUnit,GameBundle gameBundle) {
         this.id = id;
         this.name = name;
         this.symbol = symbol;
         this.code = code;
         this.baseUnit = baseUnit;
-        this.gameBundles=gameBundle;
+        this.gameBundle =gameBundle;
     }
 
     public Long getId() {
@@ -73,11 +72,11 @@ public class Currency{
         this.baseUnit = baseUnit;
     }
 
-    public List<GameBundle> getGameBundles() {
-        return gameBundles;
+    public GameBundle getGameBundle() {
+        return gameBundle;
     }
 
-    public void setGameBundles(List<GameBundle> gameBundles) {
-        this.gameBundles = gameBundles;
+    public void setGameBundle(GameBundle gameBundle) {
+        this.gameBundle = gameBundle;
     }
 }

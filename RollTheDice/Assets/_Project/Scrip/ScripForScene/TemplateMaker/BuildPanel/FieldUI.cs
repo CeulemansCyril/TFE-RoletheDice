@@ -27,13 +27,16 @@ public class FieldUI: MonoBehaviour, IPointerClickHandler
 
     public void Initialize(TemplateField field)
     {
+        
         templateField = field;
+
         RefreshUI();
         RefreshTypeUI();
     }
 
     public void RefreshUI() { 
         labelText.text = templateField.Label;
+   
         rectTransform.anchoredPosition = new Vector2((float)templateField.PositionX, (float)templateField.PositionY);
     }
 
@@ -53,7 +56,7 @@ public class FieldUI: MonoBehaviour, IPointerClickHandler
         templateField.PositionX = rectTransform.anchoredPosition.x;
         templateField.PositionY = rectTransform.anchoredPosition.y;
         templateField.Label = labelText.text;
-   
+    
         return templateField;
     }
 
@@ -135,7 +138,7 @@ public class FieldUI: MonoBehaviour, IPointerClickHandler
 
     private void RefreshTypeUI()
     {
-      
+
         if (templateField == null) return;
 
         stringInput.gameObject.SetActive(false);
@@ -173,7 +176,7 @@ public class FieldUI: MonoBehaviour, IPointerClickHandler
         if (templateField.OptionList.Options == null) return;
 
         comboDropdown.AddOptions(templateField.OptionList.Options);
-        Debug.Log("Combo options refreshed with " + templateField.OptionList.Options.Count + " options.");
+        
     }
 
 

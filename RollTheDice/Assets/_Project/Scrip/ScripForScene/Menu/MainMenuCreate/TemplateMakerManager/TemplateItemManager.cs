@@ -1,6 +1,13 @@
+
+using Assets._Project.API.Model.DTO.GameDTO.TemplateDTO;
 using Assets._Project.API.Model.Object.Game.Templates;
+using Assets._Project.API.Service.Game.Templates;
+using Assets._Project.Localization;
 using Assets._Project.Scrip.Scene;
+using Assets._Project.Scrip.ScripForScene.Bundle;
+using Assets._Project.Scrip.ScripForScene.Login;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -16,19 +23,32 @@ public class TemplateItemManager : MonoBehaviour
     [SerializeField] private TMP_InputField searchBar;
 
     private List<Template> templates = new List<Template>();
+    private TemplateService templateService;
 
     private void Start()
     {
         CreateTemplateButton.onClick.AddListener(() => CreateTemplateClick());
         searchBar.onValueChanged.AddListener(OnSearchChanged);
         NoTemplateText.gameObject.SetActive(false);
-        LoadTestTemplates();
+        templateService = new TemplateService();
+       
         LoadList();
     }
-    private void LoadList() {
+    private async void LoadList() {
 
-        //TODO : Ajouter une recuperation des Template de la DB
+        try
+        {
+            TemplateDTO[] dto = await templateService.GetAllTemplateByGameBundleId(BundleSession.Intance.Bundle.Id);
 
+            if (dto != null) {
+                foreach (TemplateDTO templateDTO in dto)
+                {
+                    Template template =await templateService.TemplateDTOToTemplate(templateDTO);
+                    templates.Add(template);
+                }
+            }
+        }
+        catch (System.Exception) { }
 
         if (templateItemPrefab != null || templates != null || templates.Count >0 )
         {
@@ -60,19 +80,30 @@ public class TemplateItemManager : MonoBehaviour
 
     private void DeleteClick(TemplateItem templateItem)
     {
-        bool flag = false;
-        PopUpManager.Instance.ShowConfirmPopUp("Supprimer Template", "Es-tu sûr de vouloir supprimer ce template ?", () => flag = true, () => flag = false);
+        PopUpManager.Instance.ShowConfirmPopUp(
+            LocalizationControllers.Instance.GetLocalizedValue("PopUpDelTemplate.title"),
+            LocalizationControllers.Instance.GetLocalizedValue("PopUpDelTemplate.Message"),
+            () =>
+            {
+                Template templateToRemove = templateItem.Template;
 
-        if(flag) {
-            Template templateToRemove = templateItem.Template;
-             if (templates.Contains(templateToRemove))
-             {
+                if (templates.Contains(templateToRemove))
+                {
                     templates.Remove(templateToRemove);
-                //TODO : Ajouter une suppression du Template de la DB
-                Destroy(templateItem.gameObject);
-             }
-        }
+
+                    templateService
+                        .DeleteTemplate(templateToRemove.Id)
+                        .GetAwaiter()
+                        .GetResult();
+
+                    Destroy(templateItem.gameObject);
+                }
+            },
+            () => { }
+        );
     }
+
+   
 
     private void ModifyClick(TemplateItem templateItem)
     {
@@ -83,24 +114,34 @@ public class TemplateItemManager : MonoBehaviour
     }
 
     private void CreateTemplateClick()
-    {
-        //TODO : Ajouter une creation du Template de la DB
-        
+    {      
         string name = "";
-
-        //TODO : Ajouter une verification du nom du template (ex: pas de caractere speciaux, pas de nom deja existant, etc...) + traduction 
-        PopUpManager.Instance.ShowInputPopUp("Créer Template", "Entrez le nom du template :", NameTemplateConfirm,null);
-        
-
-     
+        PopUpManager.Instance.ShowInputPopUp(LocalizationControllers.Instance.GetLocalizedValue("PopUpCreatTemplate.title"), LocalizationControllers.Instance.GetLocalizedValue("PopUpCreatTemplate.Message"), NameTemplateConfirm,null); 
     }
 
-    private void NameTemplateConfirm(string name)
+    private async void NameTemplateConfirm(string name)
     {
-        Debug.Log("Name entered: " + name);
+
         if(!string.IsNullOrEmpty(name)) {
-            Template template = new Template();
-            template.Name = name;
+
+            if (templates.Exists(t => t.Name.ToLower() == name.ToLower()))
+            {
+                //TODO : Ajouter un message d'erreur disant que le nom existe déjà 
+                // PopUpManager.Instance.("Erreur", "Un template avec ce nom existe déjà.");
+                return;
+            }
+
+
+
+            TemplateDTO templateDTO = new TemplateDTO();
+           
+            templateDTO.Name = name;
+            templateDTO.IdGameBundle = BundleSession.Intance.Bundle.Id;
+
+            templateDTO = await templateService.CreateTemplate(templateDTO, UserSession.Intance.UserID);
+
+            Template template = await templateService.TemplateDTOToTemplate(templateDTO);
+
             SceneData.SetData("TemplateToCreate", template);
             SceneLoader.Instance.LoadScene(Scene.TemplateMaker);
         }
@@ -137,31 +178,6 @@ public class TemplateItemManager : MonoBehaviour
         }
     }
 
-    private void LoadTestTemplates()
-    {
-        templates = new List<Template>
-    {
-        new Template { Name = "Template Combat" },
-        new Template { Name = "Template Dialogue" },
-        new Template { Name = "Template Inventaire" },
-        new Template { Name = "Template Quête" },
-        new Template { Name = "Template Personnage" },
-        new Template { Name = "Template Environnement" },
-        new Template { Name = "Template UI" },
-        new Template { Name = "Template Boss Final" },
-        new Template { Name = "Template Tutoriel" },
-        new Template { Name = "Template Sauvegarde" },
-
-        // Cas intéressants pour tester la search
-        new Template { Name = "combat_avancé" },
-        new Template { Name = "Dialogue PNJ" },
-        new Template { Name = "quête_principale" },
-        new Template { Name = "UI - Mobile" },
-        new Template { Name = "UI - Desktop" },
-        new Template { Name = "TEST template" },
-        new Template { Name = "test rapide" },
-        new Template { Name = "123_Template_Debug" }
-    };
-    }
+   
 
 }

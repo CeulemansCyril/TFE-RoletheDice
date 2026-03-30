@@ -2,22 +2,26 @@ package com.example.APIRollTheDice.Model.Obj.Game.Money;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 
 @Embeddable
 public class Value {
+
     @Column(name = "amount")
     private double amount;
 
-    @Column(name = "currency_id")
-    private Long idCurrency;
+    @ManyToOne
+    @JoinColumn(name = "currency_id")
+    private Currency currency;
 
     public Value() {
     }
 
-    public Value(double amount, Long idCurrency) {
+    public Value(double amount, Currency currency) {
         this.amount = amount;
-        this.idCurrency = idCurrency;
+        this.currency = currency;
     }
 
     public double getAmount() {
@@ -28,11 +32,11 @@ public class Value {
         this.amount = amount;
     }
 
-    public Long getIdCurrency() {
-        return idCurrency;
+    public Currency getCurrency() {
+        return currency;
     }
 
-    public void setIdCurrency(Long currency) {
-        this.idCurrency = currency;
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
     }
 }

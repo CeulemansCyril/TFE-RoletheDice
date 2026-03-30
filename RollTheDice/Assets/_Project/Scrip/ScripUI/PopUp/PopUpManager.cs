@@ -6,6 +6,7 @@ public class PopUpManager : MonoBehaviour
 
     [SerializeField] private ConfirmPopUp confirmPopUpPrefab;
     [SerializeField] private InputPopUp inputPopUp;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)

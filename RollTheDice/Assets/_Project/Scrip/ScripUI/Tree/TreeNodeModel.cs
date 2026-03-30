@@ -7,6 +7,7 @@ namespace Assets._Project.Scrip.ScripUI.Tree
     public class TreeNodeModel
     {
     
+        public long Id { get; set; }
         public string Label;
         public bool IsExpanded =false;
         public object Data;

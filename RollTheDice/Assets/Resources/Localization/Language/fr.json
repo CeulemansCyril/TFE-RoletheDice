@@ -145,13 +145,13 @@
       "key": "InspectorPanel.Height.Title",
       "value": "Hauteur"
     },
-     {
+    {
       "_comment": "Option List"
     },
-     {
+    {
       "key": "OptionList.Title",
       "value": "Gestion des listes"
-    } ,
+    },
     {
       "key": "OptionList.List.Title",
       "value": "Listes"
@@ -180,14 +180,71 @@
       "key": "MainMenuCreate.LeftPanel.TemplateMaker",
       "value": "Menu Template"
     },
-     {
+    {
       "key": "TemplateMakerManager.EmptyMessage",
       "value": "Aucun Template disponible"
     },
     {
-      "_comment": "PopUp"
+      "key": "MainMenuCreate.LeftPanel.BookMaker",
+      "value": "Menu Livre"
     },
      {
+      "key": "MainMenuCreate.LeftPanel.CustomObject",
+      "value": "Menu Fiche"
+    },
+    {
+      "key": "BookMakerManager.EmptyMessage",
+      "value": "Aucun Livre disponible"
+    },
+    {
+      "_comment": "CurrencyMaker"
+    },
+    {
+      "key": "CurrencyMaker.Button",
+      "value": "Monnaie"
+    },
+    {
+      "_comment": "BookMaker"
+    },
+    {
+      "key": "BookMaker.NewBook",
+      "value": "Livre  "
+    },
+    {
+      "_comment": "CustomObject"
+    },
+    {
+      "key": "CustomObject.Value",
+      "value": "Valeur monnaitaire"
+    },
+    {
+      "key": "CustomObject.CanBeInventory",
+      "value": "Peut être stocker en inventaire"
+    },
+    {
+      "_comment": "FieldData"
+    },
+    {
+      "key": "FieldData.Error.Required",
+      "value": "Champ requis"
+    },
+    {
+      "key": "FieldData.Error.Number",
+      "value": "Nombre invalide"
+    },
+    {
+      "key": "FieldData.Error.Option",
+      "value": "Aucune option"
+    },
+     {
+      "key": "FieldData.Error.Enter",
+      "value": "Entre : "
+    },
+    
+    {
+      "_comment": "PopUp"
+    },
+    {
       "key": "PopUpSave.title",
       "value": "Fichier non sauvegarder"
     },
@@ -202,6 +259,62 @@
     {
       "key": "PopUpDel.Message",
       "value": "voulez-vous suprimer : "
+    },
+    {
+      "key": "PopUpCreatTemplate.title",
+      "value": "Créer Template"
+    },
+    {
+      "key": "PopUpCreatTemplate.Message",
+      "value": "Entrez le nom du template :  "
+    },
+    {
+      "key": "PopUpDelTemplate.title",
+      "value": "Supprimer Template"
+    },
+    {
+      "key": "PopUpDelTemplate.Message",
+      "value": "Es-tu sûr de vouloir supprimer ce template ?  "
+    },
+    {
+      "key": "PopUpDelBook.title",
+      "value": "Supprimer Livre"
+    },
+    {
+      "key": "PopUpDelBook.Message",
+      "value": "Es-tu sûr de vouloir supprimer ce Livre ?  "
+    },
+    {
+      "key": "PopUpCreatBundle.title",
+      "value": "Créer Bundle"
+    },
+    {
+      "key": "PopUpCreatBundle.Message",
+      "value": "Entrez le nom du bundle :  "
+    },
+    {
+      "key": "PopUpDelBundle.title",
+      "value": "Supprimer Bundle"
+    },
+    {
+      "key": "PopUpDelBundle.Message",
+      "value": "Es-tu sûr de vouloir supprimer ce Bundle ?  "
+    },
+    {
+      "key": "PopUpCreatCustom.title",
+      "value": "Créer fiche"
+    },
+    {
+      "key": "PopUpCreatCustom.Message",
+      "value": "Entrez le nom de la fiche  :  "
+    },
+    {
+      "key": "PopUpDelCustom.title",
+      "value": "Supprimer fiche "
+    },
+    {
+      "key": "PopUpDelCustom.Message",
+      "value": "Es-tu sûr de vouloir supprimer cette fiche ?  "
     }
   ]
 }

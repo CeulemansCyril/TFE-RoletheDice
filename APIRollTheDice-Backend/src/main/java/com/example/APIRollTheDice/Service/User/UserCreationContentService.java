@@ -7,6 +7,7 @@ import com.example.APIRollTheDice.Interface.User.UserRepository;
 import com.example.APIRollTheDice.Mapper.User.UserCreationContentMapper;
 import com.example.APIRollTheDice.Model.DTO.UserDTo.UserCreationContentDTO;
 import com.example.APIRollTheDice.Model.Obj.User.UserCreationContent;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,6 +38,7 @@ public class UserCreationContentService {
         userCreationContentInterface.deleteAll(userCreationContents);
     }
 
+    @Transactional
     public void DeleteByCreatedItemId(Long idCreatedItem, CreatedItemType createdItemType){
         userCreationContentInterface.deleteByCreatedItemIdAndCreatedItemType(idCreatedItem,createdItemType);
     }

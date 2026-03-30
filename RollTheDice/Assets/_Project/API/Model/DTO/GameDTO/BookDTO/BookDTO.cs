@@ -9,8 +9,8 @@ namespace Assets._Project.API.Model.DTO.GameDTO.BookDTO
         public string Title { get; set;}
         public BookTypes Type { get; set;}
         public List<long> IdChapter { get; set;} = new List<long>();
-        public long IdGame { get; set;}
-        public long IdGameBundle { get; set;}
+        public long? IdGame { get; set;}
+        public long? IdGameBundle { get; set;}
 
         public BookDTO(){}
         public BookDTO(long id, string title,BookTypes bookTypes, List<long> idCapter, long idGame, long idGameBundle)

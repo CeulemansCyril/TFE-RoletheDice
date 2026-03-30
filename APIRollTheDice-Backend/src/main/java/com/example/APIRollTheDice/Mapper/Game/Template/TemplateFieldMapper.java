@@ -12,22 +12,14 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface TemplateFieldMapper {
 
-    @Mapping(source = "templates", target = "idTemplates", qualifiedByName = "mapTemplatesToIds")
+    @Mapping(source = "template.id", target = "idTemplates")
     @Mapping(source = "optionList.id", target = "idOptionList")
     TemplateFieldDTO toDTO(TemplateField templateField);
 
-    @Mapping(target = "templates", ignore = true)
+    @Mapping(target = "template", ignore = true)
     @Mapping(target = "optionList", ignore = true)
     TemplateField toEntity(TemplateFieldDTO dto);
 
-    @Named("mapTemplatesToIds")
-    default List<Long> mapTemplatesToIds(List<Template> templates) {
-        if (templates == null) {
-            return null;
-        }
-        return templates.stream()
-                .map(Template::getId)
-                .toList();
-    }
+
 
 }

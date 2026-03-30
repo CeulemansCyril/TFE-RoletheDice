@@ -9,5 +9,5 @@ import java.util.Optional;
 public interface TemplateFieldInterface extends JpaRepository<TemplateField,Long> {
     Optional<TemplateField> findById(Long id);
 
-    List<TemplateField> findAllByTemplates_Id(Long id);
+    List<TemplateField> findAllByTemplate_Id(Long id);
 }

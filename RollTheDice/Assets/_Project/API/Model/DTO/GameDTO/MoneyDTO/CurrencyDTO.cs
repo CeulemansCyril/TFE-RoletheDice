@@ -9,10 +9,10 @@ namespace Assets._Project.API.Model.DTO.GameDTO.MoneyDTO
         public string Symbol { get; set; }
         public string Code { get; set; }
         public int BaseUnit { get; set; }
-        public List<long>IdGameBundle { get; set; }
+        public  long IdGameBundle { get; set; }
 
         public CurrencyDTO(){}
-        public CurrencyDTO(long id, string name, string symbol, int baseUnit, List<long> idGameBundle)
+        public CurrencyDTO(long id, string name, string symbol, int baseUnit,  long  idGameBundle)
         {
             Id = id;
             Name = name;

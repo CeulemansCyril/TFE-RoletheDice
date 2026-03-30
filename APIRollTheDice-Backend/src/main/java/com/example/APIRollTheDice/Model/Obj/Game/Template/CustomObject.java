@@ -4,6 +4,8 @@ import com.example.APIRollTheDice.Model.Obj.Game.GameBundle;
 import com.example.APIRollTheDice.Model.Obj.Game.Money.Value;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Entity
@@ -25,11 +27,8 @@ public class CustomObject {
 
 
 
-    @ElementCollection
-    @CollectionTable(name = "custom_object_attributes", joinColumns = @JoinColumn(name = "custom_object_id"))
-    @MapKeyColumn(name = "attribute_key")
-    @Column(name = "value")
-    private Map <String,String> fieldValues;
+    @OneToMany(mappedBy = "customObject", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CustomObjectAttribute> attributes;
 
     @Column(nullable = false)
     private boolean canBeInInventory;
@@ -40,12 +39,12 @@ public class CustomObject {
     public CustomObject() {
     }
 
-    public CustomObject(Long id, String name, Template template, GameBundle gameBundles, Map<String, String> fieldValues, boolean canBeInInventory, Value price) {
+    public CustomObject(Long id, String name, Template template, GameBundle gameBundles, List<CustomObjectAttribute> attributes, boolean canBeInInventory, Value price) {
         this.id = id;
         this.name = name;
         this.template = template;
         this.gameBundles = gameBundles;
-        this.fieldValues = fieldValues;
+        this.attributes = attributes;
         this.canBeInInventory = canBeInInventory;
         this.price = price;
     }
@@ -82,15 +81,13 @@ public class CustomObject {
         this.gameBundles = gameBundles;
     }
 
-    public Map<String, String> getFieldValues() {
-        return fieldValues;
+    public List<CustomObjectAttribute> getAttributes() {
+        return attributes;
     }
 
-    public void setFieldValues(Map<String, String> fieldValues) {
-        this.fieldValues = fieldValues;
+    public void setAttributes(List<CustomObjectAttribute> attributes) {
+        this.attributes = attributes;
     }
-
-
 
     public boolean isCanBeInInventory() {
         return canBeInInventory;

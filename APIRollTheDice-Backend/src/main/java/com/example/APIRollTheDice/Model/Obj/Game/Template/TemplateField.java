@@ -2,8 +2,6 @@ package com.example.APIRollTheDice.Model.Obj.Game.Template;
 
 import jakarta.persistence.*;
 
-import java.util.List;
-
 @Entity
 @Table(name = "template_fields")
 public class TemplateField {
@@ -28,13 +26,14 @@ public class TemplateField {
     @JoinColumn(name = "option_lists_id")
     private OptionList optionList;
 
-    @ManyToMany(mappedBy = "templateFieldList")
-    private List<Template> templates;
+    @ManyToOne
+    @JoinColumn(name = "template_id")
+    private Template template;
 
     public TemplateField() {
     }
 
-    public TemplateField(long id, String label, String type, boolean required, Double minValue, Double maxValue, double positionX, double positionY, OptionList optionList, List<Template> template, double width, double height) {
+    public TemplateField(long id, String label, String type, boolean required, Double minValue, Double maxValue, double positionX, double positionY, OptionList optionList, Template template, double width, double height) {
         this.id = id;
         this.label = label;
         this.type = type;
@@ -44,7 +43,7 @@ public class TemplateField {
         this.positionX = positionX;
         this.positionY = positionY;
         this.optionList = optionList;
-        this.templates = template;
+        this.template = template;
     }
 
     public long getId() {
@@ -119,12 +118,12 @@ public class TemplateField {
         this.optionList = optionList;
     }
 
-    public List<Template> getTemplates() {
-        return templates;
+    public Template getTemplate() {
+        return template;
     }
 
-    public void setTemplate(List<Template> template) {
-        this.templates = template;
+    public void setTemplate(Template template) {
+        this.template = template;
     }
 
     public double getHeight() {

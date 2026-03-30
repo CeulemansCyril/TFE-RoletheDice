@@ -12,13 +12,13 @@ namespace Assets._Project.API.Model.DTO.GameDTO.TemplateDTO
         public double MaxValue { get; set;}
         public double PositionX { get; set;}
         public double PositionY { get; set;}
-        public long IdOptionList { get; set;}
+        public long? IdOptionList { get; set;}
         public double Width { get; set; }
         public double Height { get; set; }
-        public List<long> IdTemplates { get; set;}
+        public long IdTemplates { get; set;}
 
         public TemplateFieldDTO(){}
-        public TemplateFieldDTO(long id, string label, string type, bool required, double minValue, double maxValue, double positionX, double positionY, long idOptionList, List<long> idTemplates,double width,double height)
+        public TemplateFieldDTO(long id, string label, string type, bool required, double minValue, double maxValue, double positionX, double positionY, long idOptionList, long idTemplates,double width,double height)
         {
             Id = id;
             Label = label;

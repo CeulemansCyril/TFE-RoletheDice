@@ -1,12 +1,19 @@
 package com.example.APIRollTheDice.Model.DTO.GameDTO.TemplateDTO;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
 public class OptionListDTO {
+    @JsonProperty("Id")
     private Long id;
+    @JsonProperty("Name")
     private String name;
+    @JsonProperty("Options")
     private List<String> options;
+    @JsonProperty("IdTemplateField")
     private Long idTemplateField;
+    @JsonProperty("IdGameBundle")
     private Long idGameBundle;
 
     public OptionListDTO() {

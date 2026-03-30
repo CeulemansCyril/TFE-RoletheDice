@@ -10,7 +10,7 @@ import java.util.List;
 public class OptionList {
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     private String name;
 
@@ -31,7 +31,7 @@ public class OptionList {
 
     public OptionList() {
     }
-    public OptionList(long id, String name, List<String> options, TemplateField templateField, GameBundle gameBundle) {
+    public OptionList(Long id, String name, List<String> options, TemplateField templateField, GameBundle gameBundle) {
         this.id = id;
         this.name = name;
         this.options = options;
@@ -39,11 +39,11 @@ public class OptionList {
         this.gameBundle = gameBundle;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

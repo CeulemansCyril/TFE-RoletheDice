@@ -14,6 +14,9 @@ import com.example.APIRollTheDice.Model.DTO.GameDTO.GameBundleDTO;
 import com.example.APIRollTheDice.Model.Obj.Game.GameBundle;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class GameBundleService {
     private final GameBundleInterface gameBundleInterface;
@@ -48,13 +51,26 @@ public class GameBundleService {
     public GameBundle UpdateGameBundle(GameBundle gameBundle){
         GameBundle existing = gameBundleInterface.findById(gameBundle.getId()).orElseThrow(()-> new NotFoundException("GameBundle not found"));
 
-        existing.setGames(gameBundle.getGames());
+        existing.getGames().clear();
+        existing.getGames().addAll(gameBundle.getGames());
+
         existing.setName(gameBundle.getName());
-        existing.setBooks(gameBundle.getBooks());
-        existing.setCurrencies(gameBundle.getCurrencies());
-        existing.setMaps(gameBundle.getMaps());
-        existing.setLootTables(gameBundle.getLootTables());
-        existing.setTokens(gameBundle.getTokens());
+
+        existing.getBooks().clear();
+        existing.getBooks().addAll(gameBundle.getBooks());
+
+        existing.getCurrencies().clear();
+        existing.getCurrencies().addAll(gameBundle.getCurrencies());
+
+        existing.getMaps().clear();
+        existing.getMaps().addAll(gameBundle.getMaps());
+
+        existing.getLootTables().clear();
+        existing.getLootTables().addAll(gameBundle.getLootTables());
+
+        existing.getTokens().clear();
+        existing.getTokens().addAll(gameBundle.getTokens());
+
 
         return gameBundleInterface.save(existing);
     }
@@ -68,21 +84,45 @@ public class GameBundleService {
         return gameBundleInterface.findById(id).orElseThrow(()-> new NotFoundException("GameBundle not found"));
     }
 
+    public List<GameBundle> GetAllGameBundleByUserId(Long userId){
+        return gameBundleInterface.findByCreatorId(userId);
+    }
+
     public GameBundleDTO  GameBundleToDTO(GameBundle gameBundle){
         return gameBundleMapper.toDTO(gameBundle);
     }
 
     public GameBundle GameBundleDTOToEntity(GameBundleDTO gameBundleDTO){
-        GameBundle gameBundle =gameBundleMapper.toEntity(gameBundleDTO);
+        GameBundle gameBundle = gameBundleMapper.toEntity(gameBundleDTO);
 
-        gameBundle.setTokens(tokenInterface.findAllByGameBundle_id(gameBundleDTO.getId()));
-        gameBundle.setMaps(mapInterface.findAllByGameBundle_Id(gameBundleDTO.getId()));
-        gameBundle.setGames(gameInterface.findAllById(gameBundleDTO.getIdGame()));
-        gameBundle.setBooks(bookInterface.findAllByGameBundle_Id(gameBundleDTO.getId()));
-        gameBundle.setLootTables(lootTableInterface.findAllById(gameBundleDTO.getIdLootTables()));
-        gameBundle.setCurrencies(currencyInterface.findAllByGameBundles_id(gameBundleDTO.getId()));
-        gameBundle.setCreator(userRepository.findById(gameBundleDTO.getIdCreator()).orElseThrow(()-> new NotFoundException("User not found")));
+        // Si c'est une nouvelle entité, ne pas set les collections basées sur l'ID
+        if(gameBundleDTO.getId() != null && gameBundleDTO.getId() > 0) {
+            gameBundle.setTokens(tokenInterface.findAllByGameBundle_id(gameBundleDTO.getId()));
+            gameBundle.setMaps(mapInterface.findAllByGameBundle_Id(gameBundleDTO.getId()));
+            gameBundle.setBooks(bookInterface.findAllByGameBundle_Id(gameBundleDTO.getId()));
+            gameBundle.setCurrencies(currencyInterface.findAllByGameBundle_id(gameBundleDTO.getId()));
+            if(gameBundleDTO.getIdLootTables() != null)
+                gameBundle.setLootTables(lootTableInterface.findAllById(gameBundleDTO.getIdLootTables()));
+            else
+                gameBundle.setLootTables(new ArrayList<>());
+        } else {
+            // Nouvelle entité → initialiser collections vides
+            gameBundle.setTokens(new ArrayList<>());
+            gameBundle.setMaps(new ArrayList<>());
+            gameBundle.setBooks(new ArrayList<>());
+            gameBundle.setCurrencies(new ArrayList<>());
+            gameBundle.setLootTables(new ArrayList<>());
+        }
 
+        // Always set creator
+        gameBundle.setCreator(userRepository.findById(gameBundleDTO.getIdCreator())
+                .orElseThrow(() -> new NotFoundException("User not found")));
+
+        // Set games if DTO contains IdGame
+        if(gameBundleDTO.getIdGame() != null)
+            gameBundle.setGames(gameInterface.findAllById(gameBundleDTO.getIdGame()));
+        else
+            gameBundle.setGames(new ArrayList<>());
 
         return gameBundle;
     }

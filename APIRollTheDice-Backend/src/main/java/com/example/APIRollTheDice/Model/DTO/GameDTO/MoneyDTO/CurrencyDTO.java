@@ -1,21 +1,28 @@
 package com.example.APIRollTheDice.Model.DTO.GameDTO.MoneyDTO;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Min;
 
 import java.util.List;
 
 public class CurrencyDTO {
+    @JsonProperty("Id")
     private Long id;
+    @JsonProperty("Name")
     private String name;
+    @JsonProperty("Symbol")
     private String symbol;
+    @JsonProperty("Code")
     private String code;
+    @JsonProperty("BaseUnit")
     private int baseUnit;
-    private List<Long>idGameBundle;
+    @JsonProperty("IdGameBundle")
+    private Long idGameBundle;
 
     public CurrencyDTO() {
     }
 
-    public CurrencyDTO(Long id, String name, String symbol, String code, int baseUnit,List<Long>idGameBundle ) {
+    public CurrencyDTO(Long id, String name, String symbol, String code, int baseUnit,Long idGameBundle ) {
         this.id = id;
         this.name = name;
         this.symbol = symbol;
@@ -64,11 +71,11 @@ public class CurrencyDTO {
         this.baseUnit = baseUnit;
     }
 
-    public List<Long> getIdGameBundle() {
+    public Long getIdGameBundle() {
         return idGameBundle;
     }
 
-    public void setIdGameBundle(List<Long> idGameBundle) {
+    public void setIdGameBundle(Long idGameBundle) {
         this.idGameBundle = idGameBundle;
     }
 }

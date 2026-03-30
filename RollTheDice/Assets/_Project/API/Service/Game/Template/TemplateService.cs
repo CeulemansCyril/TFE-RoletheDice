@@ -1,102 +1,172 @@
 ﻿using Assets._Project.API.Interface;
-using Assets._Project.API.Model.DTO;
+using Assets._Project.API.Model.DTO.GameDTO.MoneyDTO;
 using Assets._Project.API.Model.DTO.GameDTO.TemplateDTO;
+using Assets._Project.API.Model.DTO.ReponseDTO;
+using Assets._Project.API.Model.Object.Game.Money;
 using Assets._Project.API.Model.Object.Game.Templates;
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Text;
-using UnityEditor.PackageManager;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Assets._Project.API.Service.Game.Templates
 {
     class TemplateService : ApiService
     {
-        private CatchError onError;
+
         public TemplateService() : base("template") { }
 
         // ------------------- CustomObject  -------------------------
-        public Awaitable<CustomObjectDTO> CreateCustomObject<CustomObjectDTO>(CustomObjectDTO customObject, long idUser)
+        public Awaitable<CustomObjectDTO> CreateCustomObject(CustomObjectDTO customObject, long idUser)
         {
             return CreateAsync("/createCustomObject/" + idUser, customObject);
         }
 
-        public Awaitable<CustomObjectDTO> UpdateCustomObject<CustomObjectDTO>(CustomObjectDTO customObject)
+        public Awaitable<CustomObjectDTO> UpdateCustomObject(CustomObjectDTO customObject)
         {
             return UpdateAsync("/updateCustomObject", customObject);
         }
 
-       public Awaitable<string> DeleteCustomObject(long id)
+        public Awaitable<string> DeleteCustomObject(long id)
         {
             return DeleteAsync("/deleteCustomObject/" + id);
         }
 
-        public Awaitable<CustomObjectDTO> GetCustomObjectById<CustomObjectDTO>(long id)
+        public Awaitable<CustomObjectDTO> GetCustomObjectById(long id)
         {
             return GetAsync<CustomObjectDTO>("/getCustomObjectById/" + id);
-        }   
+        }
 
-       public Awaitable<CustomObjectDTO[]> GetAllCustomObjectByGameBundleId<CustomObjectDTO>(long id)
+        public Awaitable<CustomObjectDTO[]> GetAllCustomObjectByGameBundleId(long id)
         {
             return GetAllAsync<CustomObjectDTO>("/GetAllCustomObjectByGameBundleId/" + id);
         }
 
-       
+        
 
-        public CustomObject CustomObjectDTOToCustomObject(CustomObjectDTO dto)
+
+        public   async Task<CustomObject> CustomObjectDTOToCustomObjectAsync(CustomObjectDTO dto)
         {
             CustomObject customObject = new CustomObject();
             customObject.Id = dto.Id;
             customObject.Name = dto.Name;
-            customObject.FieldValues = dto.FieldValues;
+            customObject.Attributes = dto.CustomObjectAttributeDTO;
             customObject.CanBeInInventory = dto.CanBeInInventory;
-            customObject.Price = dto.Price;
+
+            if (dto.Price != null)
+            {
+       
+                var currency = dto.Price.CurrencyId.HasValue
+                               ? new Currency { Id = dto.Price.CurrencyId.Value }
+                               : new Currency();
+
+                customObject.Price = new Value(dto.Price.Amount, currency);
+            }
+            TemplateDTO templateDTO = await GetTemplateById(dto.IdTemplate);
+            customObject.Template = await TemplateDTOToTemplate(templateDTO);
             return customObject;
         }
 
-        public CustomObjectDTO CustomObjectToCustomObjectDTO(CustomObject customObject,long idTemplate,long idGamebundle)
+        public CustomObjectDTO CustomObjectToCustomObjectDTO(CustomObject customObject, long idTemplate, long idGamebundle)
         {
             CustomObjectDTO dto = new CustomObjectDTO();
             dto.Id = customObject.Id;
             dto.Name = customObject.Name;
-            dto.FieldValues = customObject.FieldValues;
+            dto.CustomObjectAttributeDTO = customObject.Attributes;
+          
             dto.CanBeInInventory = customObject.CanBeInInventory;
-            dto.Price = customObject.Price;
+            dto.Price = ValueToValueDTO( customObject.Price);
+ 
             dto.IdTemplate = idTemplate;
             dto.IdGameBundles = idGamebundle;
             return dto;
 
         }
 
+        public Value ValueToDTO(ValueDTO valueDTO)
+        {
+            Value value = new Value();
+            value.Amount = valueDTO.Amount;
+            if(valueDTO.CurrencyId != null) value.Currency = new Currency { Id = (long)valueDTO.CurrencyId };
+            else value.Currency = new Currency();
+            return value;
+        }
+         public ValueDTO ValueToValueDTO(Value value)
+        {
+            ValueDTO dto = new ValueDTO();
+            dto.Amount = value.Amount;
+            dto.CurrencyId = value.Currency.Id;
+            Debug.Log("ValueToValueDTO: Amount = " + dto.Amount + ", CurrencyId = " + dto.CurrencyId);
+            return dto;
+        }
+
+
+        //-------------------- CustomObjectAttribu -------------------
+        public Awaitable<CustomObjectAttributeDTO[]> CreateManyCustomObjectAttribute( CustomObjectAttributeDTO[] list)
+        {
+            return CreateManyAsync("/createManyCustomObjectAttribute", list);
+        }
+
+        public Awaitable<CustomObjectAttributeDTO[]> UpdateManyCustomObjectAttribute(CustomObjectAttributeDTO[] list)
+        {
+            return UpadateManyAsync("/updateManyCustomObjectAttribute", list);
+        }
+
+        public Awaitable<string> DeleteManyCustomObjectAttribute(long[] id)
+        {
+            return DeleteManyAsync("/deleteManyCustomObjectAttribute", id);
+        }
+
+        public Awaitable<CustomObjectAttributeDTO[]> GetCustomObjectAttributeByCustomObjectId(long id)
+        {
+            return GetAllAsync<CustomObjectAttributeDTO>("/GetAllAttributesByCustomObjectId/" + id);
+        }
+
+
         // ------------------- OptionList    -------------------------
-        
-        public Awaitable<OptionListDTO> CreateOptionList<OptionListDTO>(OptionListDTO customObject, long idUser)
+
+        public Awaitable<OptionListDTO> CreateOptionList(OptionListDTO customObject, long idUser)
         {
             return CreateAsync("/createOptionList/" + idUser, customObject);
         }
 
-        public Awaitable<OptionListDTO> UpdateOptionList<OptionListDTO>(OptionListDTO customObject)
+        public Awaitable<OptionListDTO[]> CreateManyOption(long id, OptionListDTO[] list)
+        {
+            return CreateManyAsync("/getOptionListByTemplateFieldId/" + id, list);
+        }
+
+        public Awaitable<OptionListDTO> UpdateOptionList(OptionListDTO customObject)
         {
             return UpdateAsync("/updateOptionList", customObject);
         }
 
-       public Awaitable<string> DeleteOptionList(long id)
+        public Awaitable<OptionListDTO[]> UpdateManyOption(OptionListDTO[] list)
+        {
+            return UpadateManyAsync("/updateManyOptionList", list);
+        }
+
+        public Awaitable<string> DeleteOptionList(long id)
         {
             return DeleteAsync("/deleteOptionList/" + id);
         }
 
-        public Awaitable<OptionListDTO> GetOptionListById<OptionListDTO>(long id)
+        public Awaitable<string> DeleteManyOptionList(long[] id)
+        {
+            return DeleteManyAsync("/deleteManyOptionList", id);
+        }
+
+
+
+        public Awaitable<OptionListDTO> GetOptionListById(long id)
         {
             return GetAsync<OptionListDTO>("/getOptionListById/" + id);
         }
-        
-        public Awaitable<OptionListDTO[]> GetOptionListByIdGameBundle<OptionListDTO>(long id)
+
+        public Awaitable<OptionListDTO[]> GetOptionListByIdGameBundle(long id)
         {
             return GetAllAsync<OptionListDTO>("/GetAllOptionListByGameBundleId/" + id);
         }
 
-        
+
 
         public OptionList OptionListDTOToOptionList(OptionListDTO dto)
         {
@@ -104,27 +174,28 @@ namespace Assets._Project.API.Service.Game.Templates
             optionList.Id = dto.Id;
             optionList.Name = dto.Name;
             optionList.Options = dto.Options;
+ 
             return optionList;
         }
 
-        public OptionListDTO OptionListToOptionListDTO(OptionList optionList,long IdTemplateField,long idGameBundle)
+        public OptionListDTO OptionListToOptionListDTO(OptionList optionList, long IdTemplateField, long idGameBundle)
         {
             OptionListDTO dto = new OptionListDTO();
             dto.Id = optionList.Id;
             dto.Name = optionList.Name;
-            dto.Options = optionList.Options;
+            if(optionList.Options != null)  dto.Options = optionList.Options;
             dto.IdTemplateField = IdTemplateField;
             dto.IdGameBundle = idGameBundle;
             return dto;
         }
 
         // ------------------- Template      -------------------------
-        public Awaitable<TemplateDTO> CreateTemplate<TemplateDTO>(TemplateDTO customObject, long idUser)
+        public Awaitable<TemplateDTO> CreateTemplate(TemplateDTO customObject, long idUser)
         {
             return CreateAsync("/createTemplate/" + idUser, customObject);
         }
-        
-        public Awaitable<TemplateDTO> UpdateTemplate<TemplateDTO>(TemplateDTO customObject)
+
+        public Awaitable<TemplateDTO> UpdateTemplate(TemplateDTO customObject)
         {
             return UpdateAsync("/updateTemplate", customObject);
         }
@@ -135,31 +206,44 @@ namespace Assets._Project.API.Service.Game.Templates
         }
 
 
-        public Awaitable<TemplateDTO> GetTemplateById<TemplateDTO>(long id)
+        public Awaitable<TemplateDTO> GetTemplateById(long id)
         {
             return GetAsync<TemplateDTO>("/getTemplateById/" + id);
         }
 
-        
+        public Awaitable<TemplateDTO[]> GetAllTemplateByGameBundleId(long id)
+        {
+            return GetAllAsync<TemplateDTO>("/GetAllTemplateByGameBundleId/" + id);
+        }
 
-        public Template TemplateDTOToTemplate(TemplateDTO dto)
+
+
+        public async Task<Template> TemplateDTOToTemplate(TemplateDTO dto)
         {
             Template template = new Template();
             template.Id = dto.Id;
             template.Name = dto.Name;
             template.TemplateFieldList = new List<TemplateField>();
 
-            foreach (long idField in dto.IdTemplateFieldList)
+            TemplateFieldResponse[] templateFieldDTOs = await GetTemplateFieldByTemplateId(dto.Id);
+
+            int x = templateFieldDTOs.Length;   
+
+            for (int i = 0; i <x; i++)
             {
-                TemplateField field = new TemplateField();
-                field.Id = idField;
-                template.TemplateFieldList.Add(field);
+                TemplateField templateField = new TemplateField();
+                
+                templateField = TemplateFieldDTOToTemplateField(  templateFieldDTOs[i].TemplateField);
+                if(templateFieldDTOs[i].OptionList != null)   templateField.OptionList = OptionListDTOToOptionList(templateFieldDTOs[i].OptionList);
+
+                template.TemplateFieldList.Add(templateField);  
             }
+             
 
             return template;
         }
 
-        public TemplateDTO TemplateToTemplateDTO(Template template,long idGameBundle)
+        public TemplateDTO TemplateToTemplateDTO(Template template, long idGameBundle)
         {
             TemplateDTO dto = new TemplateDTO();
             dto.Id = template.Id;
@@ -174,14 +258,24 @@ namespace Assets._Project.API.Service.Game.Templates
         }
 
         // ------------------- TemplateField -------------------------
-        public Awaitable<TemplateFieldDTO> CreateTemplateField<TemplateFieldDTO>(TemplateFieldDTO customObject, long idUser)
+        public Awaitable<TemplateFieldDTO> CreateTemplateField(TemplateFieldDTO customObject, long idUser)
         {
             return CreateAsync("/createTemplateField/" + idUser, customObject);
         }
 
-        public Awaitable<TemplateFieldDTO> UpdateTemplateField<TemplateFieldDTO>(TemplateFieldDTO customObject)
+        public Awaitable<TemplateFieldDTO[]> CreateManyTemplateField(long id, TemplateFieldDTO[] list)
+        {
+            return CreateManyAsync("/createManyTemplateField/" + id, list);
+        }
+
+        public Awaitable<TemplateFieldDTO> UpdateTemplateField(TemplateFieldDTO customObject)
         {
             return UpdateAsync("/updateTemplateField", customObject);
+        }
+
+        public Awaitable<TemplateFieldDTO[]> UpdateManyTemplateField(TemplateFieldDTO[] list)
+        {
+            return UpadateManyAsync("/updateManyTemplateField", list);
         }
 
         public Awaitable<string> DeleteTemplateField(long id)
@@ -189,12 +283,12 @@ namespace Assets._Project.API.Service.Game.Templates
             return DeleteAsync("/deleteTemplateField/" + id);
         }
 
-        public Awaitable<TemplateFieldDTO> GetTemplateFieldByTemplateId<TemplateFieldDTO>(long id)
+        public Awaitable<TemplateFieldResponse[]> GetTemplateFieldByTemplateId(long id)
         {
-            return GetAsync<TemplateFieldDTO>("/getTemplateFieldByTemplateId/" + id);
+            return GetAllAsync<TemplateFieldResponse> ("/getTemplateFieldByTemplateId/" + id);
         }
 
-        
+
 
         public TemplateField TemplateFieldDTOToTemplateField(TemplateFieldDTO dto)
         {
@@ -202,18 +296,20 @@ namespace Assets._Project.API.Service.Game.Templates
             templateField.Id = dto.Id;
             templateField.Label = dto.Label;
             templateField.Type = dto.Type;
+          
             templateField.Required = dto.Required;
             templateField.MinValue = dto.MinValue;
             templateField.MaxValue = dto.MaxValue;
             templateField.PositionX = dto.PositionX;
             templateField.PositionY = dto.PositionY;
 
-            templateField.OptionList = new OptionList { Id = dto.IdOptionList};
+            if(dto.IdOptionList != null)   templateField.OptionList = new OptionList { Id = (long)dto.IdOptionList };
+            else templateField.OptionList = null;
 
             return templateField;
         }
 
-        public TemplateFieldDTO TemplateFieldToTemplateFieldDTO(TemplateField templateField,List<long> idTemplate)
+        public TemplateFieldDTO TemplateFieldToTemplateFieldDTO(TemplateField templateField, long idTemplate)
         {
             TemplateFieldDTO dto = new TemplateFieldDTO();
             dto.Id = templateField.Id;

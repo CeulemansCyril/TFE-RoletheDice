@@ -1,17 +1,23 @@
 package com.example.APIRollTheDice.Model.DTO.GameDTO.TemplateDTO;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
 public class TemplateDTO {
+    @JsonProperty("Id")
     private Long id;
+    @JsonProperty("Name")
     private String name;
+    @JsonProperty("IdGameBundle")
     private Long idGameBundle;
+    @JsonProperty("IdTemplateFieldList")
     private List<Long> idTemplateFieldList;
 
     public TemplateDTO() {
     }
 
-    public TemplateDTO(long id, String name, Long idGameBundle, List<Long> idTemplateFieldList) {
+    public TemplateDTO(Long id, String name, Long idGameBundle, List<Long> idTemplateFieldList) {
         this.id = id;
         this.name = name;
         this.idGameBundle = idGameBundle;
@@ -19,7 +25,7 @@ public class TemplateDTO {
     }
 
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 

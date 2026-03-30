@@ -12,17 +12,11 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface CurrencyMapper {
 
-    @Mapping(source = "gameBundles", target = "idGameBundle", qualifiedByName = "mapGameBundleToId")
+    @Mapping(source = "gameBundle.id", target = "idGameBundle" )
     CurrencyDTO toDTO(Currency currency);
 
-    @Mapping(target = "gameBundles", ignore = true)
+    @Mapping(target = "gameBundle", ignore = true)
     Currency toEntity(CurrencyDTO dto);
 
-    @Named("mapGameBundleToId")
-    default List<Long> mapGameBundleToId(List<GameBundle> gameBundle) {
-        if(gameBundle == null) return null;
-        return gameBundle.stream().map(GameBundle::getId).toList();
-
-    }
 
 }

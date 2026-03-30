@@ -40,6 +40,10 @@ public class ListManager : MonoBehaviour
 
     private bool AddElementsAreEnabler;
 
+    public List<OptionList> NewList { get;  set; }
+    public List<OptionList> UpdatedList { get;  set; }
+
+    public List<OptionList> RemoveList { get;  set; }
 
     private void Awake()
     {
@@ -48,6 +52,9 @@ public class ListManager : MonoBehaviour
         BindActionButton();
 
         AddElementsAreEnabler = false;
+
+        NewList = new List<OptionList>();
+        UpdatedList = new List<OptionList>();
 
     }
 
@@ -111,7 +118,7 @@ public class ListManager : MonoBehaviour
 
         foreach (OptionList option in options)
         {
-            CreateList(option.Name);
+            CreateList(option.Name,true);
         }
     }
 
@@ -144,7 +151,7 @@ public class ListManager : MonoBehaviour
          
     }
 
-    private void CreateList(string nameList)
+    private void CreateList(string nameList, bool isFromDB = false)
     {
         Transform transform = contentListElement.transform;
         var go = Instantiate(ListItem, transform);
@@ -159,6 +166,10 @@ public class ListManager : MonoBehaviour
 
         options.Add(list);
 
+        if (!isFromDB)
+        {
+            NewList.Add(list);
+        }
 
     }
 
@@ -174,6 +185,7 @@ public class ListManager : MonoBehaviour
                 {
                     Destroy(child.gameObject);
                     options.Remove(activeList);
+                    RemoveList.Add(activeList);
                     activeList = null;
                     EmptyListElement();
                     break;
@@ -208,7 +220,8 @@ public class ListManager : MonoBehaviour
         }
 
         activeList.Options = elements;
-     
+        
+        MarkAsUpdate(activeList);
     }
 
    
@@ -237,7 +250,8 @@ public class ListManager : MonoBehaviour
     private void EndRename()
     {
         EmptyListElement();
-
+        MarkAsUpdate(activeList);
+         
     }
 
     public OptionList FindOptionListByName(string name)
@@ -285,6 +299,7 @@ public class ListManager : MonoBehaviour
 
             addElementInput.text = "";
         }
+        MarkAsUpdate(activeList);
     }
 
     public bool ListAlreadyExist(string name)
@@ -325,7 +340,17 @@ public class ListManager : MonoBehaviour
         AddElementsAreEnabler = enabled;
     }
 
-   
+    private void MarkAsUpdate(OptionList options)
+    {
+        if(options == null) return;
+
+        if(!NewList.Contains(options) || !UpdatedList.Contains(options)) { return; }
+
+        UpdatedList.Add(options);
+        
+    }
+
+
 
     private void OnEnable()
     {

@@ -1,30 +1,40 @@
 package com.example.APIRollTheDice.Model.DTO.GameDTO.TemplateDTO;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
 public class TemplateFieldDTO {
+    @JsonProperty("Id")
     private long id;
 
+    @JsonProperty("Label")
     private String label;
+    @JsonProperty("Type")
     private String type;
+    @JsonProperty("Required")
     private boolean required;
-
+    @JsonProperty("MinValue")
     private Double minValue;
+    @JsonProperty("MaxValue")
     private Double maxValue;
-
+    @JsonProperty("PositionX")
     private double positionX;
+    @JsonProperty("PositionY")
     private double positionY;
-
+    @JsonProperty("Width")
     private double width;
+    @JsonProperty("Height")
     private double height;
-
+    @JsonProperty("IdOptionList")
     private Long idOptionList;
-    private List<Long> idTemplates;
+    @JsonProperty("IdTemplates")
+    private Long idTemplates;
 
     public TemplateFieldDTO() {
     }
 
-    public TemplateFieldDTO(long id, String label, boolean required, String type, Double maxValue, double positionX, Double minValue, Long idOptionList, double positionY, List<Long> idTemplates, double width, double height) {
+    public TemplateFieldDTO(long id, String label, boolean required, String type, Double maxValue, double positionX, Double minValue, Long idOptionList, double positionY, Long idTemplates, double width, double height) {
         this.id = id;
         this.label = label;
         this.required = required;
@@ -111,11 +121,11 @@ public class TemplateFieldDTO {
         this.idOptionList = idOptionList;
     }
 
-    public List<Long> getIdTemplates() {
+    public Long getIdTemplates() {
         return idTemplates;
     }
 
-    public void setIdTemplates(List<Long> idTemplates) {
+    public void setIdTemplates(Long idTemplates) {
         this.idTemplates = idTemplates;
     }
 

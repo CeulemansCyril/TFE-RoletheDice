@@ -42,7 +42,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()   // Login, register, refresh token
                         .requestMatchers("/public/**").permitAll() // Si tu veux des ressources publiques
-                        .requestMatchers("/api/**").authenticated() // Protège TOUT ton backend
+                        .requestMatchers("/api/**").permitAll() // Protège TOUT ton backend
                         .anyRequest().denyAll()
                 )
 

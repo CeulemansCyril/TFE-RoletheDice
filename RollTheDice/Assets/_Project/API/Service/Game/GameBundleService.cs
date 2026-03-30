@@ -20,12 +20,14 @@ namespace Assets._Project.API.Service.Game
         private CatchError onError;
         public GameBundleService() : base("gameBundle") { }
 
-        public Awaitable<GameBundleDTO> CreateGameBundle<GameBundleDTO>(GameBundleDTO gameBundle, long idUser)
+        public Awaitable<GameBundleDTO> CreateGameBundle(GameBundleDTO gameBundle, long idUser)
         {
+   
+
             return CreateAsync("/CreateGameBundle/" + idUser, gameBundle);
         }
 
-        public Awaitable<GameBundleDTO> UpdateGameBundle<GameBundleDTO>(GameBundleDTO gameBundle)
+        public Awaitable<GameBundleDTO> UpdateGameBundle (GameBundleDTO gameBundle)
         {
             return UpdateAsync("/UpdateGameBundle ", gameBundle);
         }
@@ -35,16 +37,23 @@ namespace Assets._Project.API.Service.Game
             return DeleteAsync("/DeleteGameBundle/" + id);
         } 
 
-        public Awaitable<GameBundleDTO> GetGameBundleById<GameBundleDTO>(long id)
+        public Awaitable<GameBundleDTO> GetGameBundleById (long id)
         {
             return GetAsync<GameBundleDTO>("/GetGameBundleById/" + id);
         }
 
-         
+        public Awaitable<GameBundleDTO[]> GetGameBundlesByUserId(long idUser)
+        {
+            return GetAsync<GameBundleDTO[]>("/GetGameBundlesByUserId/" + idUser);
+        }
+
 
         public GameBundle GameBundleDTOToGameBundle(GameBundleDTO gameBundleDTO)
         {
             GameBundle gameBundle = new GameBundle();
+
+            
+
             gameBundle.Id = gameBundleDTO.Id;
             gameBundle.Name = gameBundleDTO.Name;
             gameBundle.Creator = new Users { Id = gameBundleDTO.IdCreator };

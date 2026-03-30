@@ -37,12 +37,7 @@ public class GameBundle {
     @OneToMany(mappedBy = "gameBundle", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Book> books;
 
-    @ManyToMany
-    @JoinTable(
-            name = "gameBundle_currency",
-            joinColumns = @JoinColumn(name = "game_bundles_id"),
-            inverseJoinColumns = @JoinColumn(name = "currency_id")
-    )
+    @OneToMany(mappedBy = "gameBundle", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Currency> currencies;
 
     @OneToMany(mappedBy = "gameBundle", cascade = CascadeType.ALL, orphanRemoval = true)

@@ -11,7 +11,7 @@ namespace Assets._Project.Scrip.ScripUI.Tree
 	{
 		[SerializeField] private GameObject treeItemPrefab;
 		[SerializeField] private Transform treeContainer;
-		[SerializeField] private TMP_Text title;
+	
         /// TODO: bug visuelle
         public List<TreeNodeModel> Nodes { get; set; } = new List<TreeNodeModel>();	
 		
@@ -21,10 +21,11 @@ namespace Assets._Project.Scrip.ScripUI.Tree
         public Action<TreeNodeModel> OnNodeSelected;
         public Action<TreeNodeModel> RemoveItem;
         public Action<TreeNodeModel,TreeNodeModel> DroppenItem;
+        public Action<string, long> renamed;
 
-        public void Init(string title,List<TreeNodeModel> node)
+        public void Init(List<TreeNodeModel> node)
 		{
-			this.title.text = title;
+	 
 			this.Nodes = node;
 
             ClearTree();
@@ -114,15 +115,21 @@ namespace Assets._Project.Scrip.ScripUI.Tree
        
        
 
-        private void AddNodeToView(TreeNodeModel node)
+        private void AddNodeToView(TreeNodeModel node )
         {
             GameObject gameObject = Instantiate(treeItemPrefab, treeContainer);
             TreeItem treeItem = gameObject.GetComponent<TreeItem>();
-
-            treeItem.Bind(node);
+            Debug.Log("node name : " + node.Label);
+            treeItem.Bind(node );
             treeItem.OnItemClicked += OnItemClicked;
             treeItem.OnItemDropped += OnItemDropped;
             treeItem.removeItem += RemoveTreeItem;
+            treeItem.renamed += RenamedNode;
+        }
+
+        private void RenamedNode(string newName,long id)
+        {
+            renamed.Invoke(newName, id);
         }
 
         private void RemoveTreeItem(TreeItem treeItem)
@@ -192,9 +199,13 @@ namespace Assets._Project.Scrip.ScripUI.Tree
             SelectedNode = node;
 
             if (node.Children.Count > 0)
+            {
                 node.IsExpanded = !node.IsExpanded;
+                RefreshTree();
+            }
+              
 
-            //RefreshTree();
+            
         }
 
 
@@ -244,11 +255,7 @@ namespace Assets._Project.Scrip.ScripUI.Tree
             RefreshTree();
            
         }
-
-        public string GetTitle()
-        {
-            return title.text;
-        }
+ 
 
         public void DisableNode(TreeNodeModel node)
         {

@@ -6,20 +6,25 @@ using UnityEngine;
 
 namespace Assets._Project.Scrip.ScripForScene.Bundle
 {
-    class BundleSession : MonoBehaviour
+    public class BundleSession : MonoBehaviour
+    
     {
-        public GameBundle Bundle { get; private set; }
-        public static BundleSession Instant { get; private set; }
+        public static BundleSession Intance { get; private set; }
+
+        public GameBundle Bundle { get; set; }
 
         private void Awake()
         {
-            if (Instant != null)
+            
+            if (Intance == null)
+            {
+                Intance = this;
+                DontDestroyOnLoad(gameObject);
+            }
+            else
             {
                 Destroy(gameObject);
-                return;
             }
-            Instant = this;
-            DontDestroyOnLoad(gameObject);
         }
     }
 

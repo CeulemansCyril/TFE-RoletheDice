@@ -1,14 +1,20 @@
 package com.example.APIRollTheDice.Model.DTO.GameDTO.BookDTO;
 
 import com.example.APIRollTheDice.Model.Obj.Game.Books.Book;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
 public class ChapterDTO {
+    @JsonProperty("Id")
     private Long id;
+    @JsonProperty("Title")
     private String title;
+    @JsonProperty("ChapterNumber")
     private int chapterNumber;
+    @JsonProperty("IdPages")
     private List<Long> idPages;
+    @JsonProperty("IdBook")
     private Long idBook;
 
     public ChapterDTO(Long id, String title, int chapterNumber, List<Long> idPages, Long idBook) {

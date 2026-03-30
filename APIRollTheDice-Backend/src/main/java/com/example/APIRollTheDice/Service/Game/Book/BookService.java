@@ -15,9 +15,12 @@ import com.example.APIRollTheDice.Model.DTO.GameDTO.BookDTO.PagesDTO;
 import com.example.APIRollTheDice.Model.Obj.Game.Books.Book;
 import com.example.APIRollTheDice.Model.Obj.Game.Books.Chapter;
 import com.example.APIRollTheDice.Model.Obj.Game.Books.Pages;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BookService {
@@ -64,6 +67,20 @@ public class BookService {
         return pagesInterface.save(existing);
     }
 
+    public  List<Pages> UpdateManyPages(List<Pages> pagesList){
+        List<Pages> updatePages = new ArrayList<>();
+        for(Pages pages : pagesList){
+            Pages existing = pagesInterface.findById(pages.getId())
+                    .orElseThrow(() -> new NotFoundException("Pages not found"));
+
+            existing.setContent(pages.getContent());
+            existing.setPageNumber(pages.getPageNumber());
+            updatePages.add(existing);
+        }
+
+        return pagesInterface.saveAll(updatePages);
+    }
+
     public void DeletePages(Long idPage){
         if(pagesInterface.existsById(idPage)){
             pagesInterface.deleteById(idPage);
@@ -75,6 +92,9 @@ public class BookService {
     public List<Pages> GetAllPagesByChapterId(Long id){
         return pagesInterface.findAllByChapter_Id(id);
     }
+    public List<Pages> GetAllPagesByBookId(Long id){
+        return pagesInterface.findByIdWithChapterAndBook(id);
+    }
 
     public PagesDTO PagesInterfaceToDTO(Pages pages){
         return pageMapper.toDTO(pages);
@@ -84,8 +104,10 @@ public class BookService {
         Pages pages = pageMapper.toEntity(pagesDTO);
 
         if(pagesDTO.getIdChapter() != null){
-            pages.setChapter(chapterInterface.findById(pagesDTO.getIdChapter()).orElseThrow(()-> new NotFoundException("Book not found")));
-        }
+            pages.setChapter(
+                    chapterInterface.findById(pagesDTO.getIdChapter())
+                            .orElseThrow(() -> new NotFoundException("Chapter not found PagesDTOToEntity for id " + pagesDTO.getIdChapter()))
+            );        }
 
         return pages;
     }
@@ -97,17 +119,76 @@ public class BookService {
         return chapterInterface.save(chapter);
     }
 
+    public List<Chapter> CreateManyChapter(List<Chapter> chapterList){
+        return chapterInterface.saveAll(chapterList);
+    }
+
     public Chapter UpdateChapter(Chapter chapter) {
         Chapter existing = chapterInterface.findById(chapter.getId())
                 .orElseThrow(() -> new NotFoundException("Chapter not found"));
 
         existing.setTitle(chapter.getTitle());
         existing.setChapterNumber(chapter.getChapterNumber());
-        existing.setPages(chapter.getPages());
+
+
+        if (chapter.getPages() != null) {
+            List<Long> keepPageIds = chapter.getPages().stream()
+                    .map(Pages::getId)
+                    .filter(id -> id != null && id > 0)
+                    .toList();
+            existing.getPages().removeIf(p -> !keepPageIds.contains(p.getId()));
+
+
+            for (Pages page : chapter.getPages()) {
+                page.setChapter(existing);
+                if (!existing.getPages().contains(page)) {
+                    existing.getPages().add(page);
+                }
+            }
+        } else {
+            existing.getPages().clear();
+        }
 
         return chapterInterface.save(existing);
     }
 
+    public List<Chapter> UpdateManyChapter(List<Chapter> chapters) {
+        List<Chapter> chapterListUpdate = new ArrayList<>();
+
+        for (Chapter chapter : chapters) {
+            Chapter existing = chapterInterface.findById(chapter.getId())
+                    .orElseThrow(() -> new NotFoundException("Chapter not found"));
+
+            existing.setTitle(chapter.getTitle());
+            existing.setChapterNumber(chapter.getChapterNumber());
+
+
+            if (chapter.getPages() != null) {
+
+                List<Long> keepPageIds = chapter.getPages().stream()
+                        .map(Pages::getId)
+                        .filter(id -> id != null && id > 0)
+                        .toList();
+
+
+                existing.getPages().removeIf(p -> !keepPageIds.contains(p.getId()));
+
+
+                for (Pages page : chapter.getPages()) {
+                    page.setChapter(existing);
+                    if (!existing.getPages().contains(page)) {
+                        existing.getPages().add(page);
+                    }
+                }
+            } else {
+                existing.getPages().clear();
+            }
+
+            chapterListUpdate.add(existing);
+        }
+
+        return chapterInterface.saveAll(chapterListUpdate);
+    }
     public void DeleteChapter(Long idChapter) {
         if (chapterInterface.existsById(idChapter)) {
             chapterInterface.deleteById(idChapter);
@@ -127,12 +208,23 @@ public class BookService {
     public Chapter ChapterDTOToEntity(ChapterDTO chapterDTO) {
         Chapter chapter = chapterMapper.toEntity(chapterDTO);
 
+
         if (chapterDTO.getIdBook() != null) {
-            chapter.setBooks(bookInterface.findById(chapterDTO.getIdBook()).orElseThrow(() -> new NotFoundException("Book not found")));
+            Optional<Book> bookOpt = bookInterface.findById(chapterDTO.getIdBook());
+            if (bookOpt.isEmpty()) {
+                throw new NotFoundException("Book not found for id chapter " + chapterDTO.getIdBook());
+            }
+            chapter.setBooks(bookOpt.get());
+        } else {
+
+            chapter.setBooks(null);
         }
 
-        if (chapterDTO.getIdPages() != null) {
+
+        if (chapterDTO.getId() != null && chapterDTO.getIdPages() != null) {
             chapter.setPages(pagesInterface.findAllByChapter_Id(chapterDTO.getId()));
+        } else {
+            chapter.setPages(new ArrayList<>());
         }
 
         return chapter;
@@ -147,31 +239,44 @@ public class BookService {
     }
 
     public Book UpdateBook(Book book){
+        if (book.getTitle() == null || book.getTitle().isBlank()) {
+            throw new IllegalArgumentException("Book title cannot be null or empty");
+        }
+
         Book existing = bookInterface.findById(book.getId())
                 .orElseThrow(() -> new NotFoundException("Book not found"));
 
         existing.setTitle(book.getTitle());
         existing.setType(book.getType());
-        existing.setChapters(book.getChapters());
+
+        if (book.getChapters() != null) {
+
+            List<Long> keepChapterIds = book.getChapters().stream()
+                    .map(Chapter::getId)
+                    .filter(id -> id != null && id > 0)
+                    .toList();
+
+            existing.getChapters().removeIf(chapter ->
+                    chapter.getId() != null && !keepChapterIds.contains(chapter.getId())
+            );
+        }
 
 
         return bookInterface.save(existing);
     }
 
+    @Transactional
     public void DeleteBook(Long idBook){
         if(bookInterface.existsById(idBook)){
+
             bookInterface.deleteById(idBook);
         }else {
             throw  new NotFoundException("Book not found");
         }
     }
 
-    public List<Book> GetAllPagesByGameId(Long id){
-        return bookInterface.findAllByGame_Id(id);
-    }
-
-    public List<Book> GetAllPagesByGameBundleId(Long id){
-        return bookInterface.findAllByGameBundle_Id(id);
+    public List<Book> GetAllBooksByBundleId(Long id){
+         return  bookInterface.findAllByGameBundle_Id(id);
     }
 
     public Book GetBookById(Long id){
@@ -186,16 +291,16 @@ public class BookService {
 
     public Book BookDTOToEntity(BookDTO bookDTO){
         Book book = bookMapper.toEntity(bookDTO);
-        if (bookDTO.getIdGame() != null) {
+        if (bookDTO.getIdGame() != null &&  bookDTO.getIdGame()>0) {
             book.setGame(gameInterface.findById(bookDTO.getIdGame()).orElseThrow(() -> new NotFoundException("Game not found")));
-        }
-        if (bookDTO.getIdGameBundle() != null) {
+        } else book.setGame(null);
+        if (bookDTO.getIdGameBundle() != null &&  bookDTO.getIdGameBundle()>0) {
             book.setGameBundle(gameBundleInterface.findById(bookDTO.getIdGameBundle()).orElseThrow(() -> new NotFoundException("Game Bundle not found")));
-        }
+        }else book.setGameBundle(null);
 
-        if (bookDTO.getIdChapters() != null) {
+        if (bookDTO.getIdChapters() != null &&  !bookDTO.getIdChapters().isEmpty()) {
             book.setChapters(chapterInterface.findAllByBooks_Id(bookDTO.getId()));
-        }
+        }else book.setChapters(null);
 
         return book;
     }

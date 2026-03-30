@@ -1,26 +1,36 @@
 package com.example.APIRollTheDice.Model.DTO.GameDTO.TemplateDTO;
 
+import com.example.APIRollTheDice.Model.DTO.GameDTO.MoneyDTO.ValueDTO;
 import com.example.APIRollTheDice.Model.Obj.Game.Money.Value;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.List;
 import java.util.Map;
 
 public class CustomObjectDTO {
+    @JsonProperty("Id")
     private Long id;
+    @JsonProperty("Name")
     private String name;
+    @JsonProperty("IdTemplate")
     private Long idTemplate;
+    @JsonProperty("IdGameBundles")
     private Long idGameBundles;
-    private Map<String,String> fieldValues;
+    @JsonProperty("AttributeDTOs")
+    private List<CustomObjectAttributeDTO> attributeDTOs;
+    @JsonProperty("CanBeInInventory")
     private boolean canBeInInventory;
-    private Value price;
+    @JsonProperty("Price")
+    private ValueDTO price;
 
-    public CustomObjectDTO(Long id, String name, Long idTemplate, Long idGameBundles, boolean canBeInInventory, Value price, Map<String, String> fieldValues) {
+    public CustomObjectDTO(Long id, String name, Long idTemplate, Long idGameBundles, boolean canBeInInventory, ValueDTO price, List<CustomObjectAttributeDTO> attributes) {
         this.id = id;
         this.name = name;
         this.idTemplate = idTemplate;
         this.idGameBundles = idGameBundles;
         this.canBeInInventory = canBeInInventory;
         this.price = price;
-        this.fieldValues = fieldValues;
+        this.attributeDTOs = attributes;
     }
 
     public CustomObjectDTO() {
@@ -58,12 +68,12 @@ public class CustomObjectDTO {
         this.idGameBundles = idGameBundles;
     }
 
-    public Map<String, String> getFieldValues() {
-        return fieldValues;
+    public List<CustomObjectAttributeDTO> getAttributes() {
+        return attributeDTOs;
     }
 
-    public void setFieldValues(Map<String, String> fieldValues) {
-        this.fieldValues = fieldValues;
+    public void setAttributes(List<CustomObjectAttributeDTO> attributes) {
+        this.attributeDTOs = attributes;
     }
 
     public boolean isCanBeInInventory() {
@@ -74,11 +84,11 @@ public class CustomObjectDTO {
         this.canBeInInventory = canBeInInventory;
     }
 
-    public Value getPrice() {
+    public ValueDTO getPrice() {
         return price;
     }
 
-    public void setPrice(Value price) {
+    public void setPrice(ValueDTO price) {
         this.price = price;
     }
 }

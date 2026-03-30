@@ -29,6 +29,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Project/UI/Scenes/BookMaker/BookMaker.unity
     guid: cade21effc7c7db47afb80a9d51b92e7
+  - enabled: 1
+    path: Assets/_Project/UI/Scenes/CustomObjectMaker/CustomObjectMaker.unity
+    guid: 11dd849510f6c5e4d80b4502b816ae51
+  - enabled: 1
+    path: Assets/_Project/UI/Scenes/CurrencyMaker/CurrencyMaker.unity
+    guid: f6687a2f23554c9499fef774fb9aa9f7
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0
