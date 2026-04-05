@@ -1,14 +1,7 @@
 using Assets._Project.Localization;
 using Assets._Project.Scrip.ScripUI.Tree;
-using System;
-using System.Collections;
-using TMPro;
-using UnityEditor.Experimental.GraphView;
-using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
-public class TreeItem : MonoBehaviour,IPointerEnterHandler, IPointerExitHandler,IBeginDragHandler, IEndDragHandler, IDragHandler,IDropHandler, IPointerClickHandler
+public class TreeItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IBeginDragHandler, IEndDragHandler, IDragHandler, IDropHandler, IPointerClickHandler
 {
     [SerializeField] private Button expandBut;
     [SerializeField] private TMP_Text expandText;
@@ -28,10 +21,10 @@ public class TreeItem : MonoBehaviour,IPointerEnterHandler, IPointerExitHandler,
     [SerializeField] private Button remove;
 
     public bool isExpandable = false;
-    private bool isActive = false;   
+    private bool isActive = false;
     private int indentSize = 20;
 
-    private float lastClickTime =0;
+    private float lastClickTime = 0;
 
 
     private CanvasGroup canvasGroup;
@@ -41,19 +34,19 @@ public class TreeItem : MonoBehaviour,IPointerEnterHandler, IPointerExitHandler,
 
     public Action<TreeItem> removeItem;
     public Action<TreeItem> OnItemClicked;
-    public Action<string,long> renamed;
+    public Action<string, long> renamed;
 
     public long ID;
- 
+
 
     public TreeNodeModel Data { get; private set; }
 
- 
+
     public event Action<TreeItem, TreeItem> OnItemDropped;
 
     private void Start()
     {
-       
+
         remove.onClick.AddListener(RemoveBut);
     }
 
@@ -67,9 +60,9 @@ public class TreeItem : MonoBehaviour,IPointerEnterHandler, IPointerExitHandler,
 
     private void RemoveBut()
     {
-       
-        PopUpManager.Instance.ShowConfirmPopUp(LocalizationControllers.Instance.GetLocalizedValue("PopUpDel.title"), LocalizationControllers.Instance.GetLocalizedValue("PopUpDel.Message") + label.text, ()=>ValideRemove(), null);
-        
+
+        PopUpManager.Instance.ShowConfirmPopUp(LocalizationControllers.Instance.GetLocalizedValue("PopUpDel.title"), LocalizationControllers.Instance.GetLocalizedValue("PopUpDel.Message") + label.text, () => ValideRemove(), null);
+
     }
 
     private void ValideRemove()
@@ -80,13 +73,13 @@ public class TreeItem : MonoBehaviour,IPointerEnterHandler, IPointerExitHandler,
 
 
 
-    public void Bind(TreeNodeModel obj )
+    public void Bind(TreeNodeModel obj)
     {
         ID = obj.Id;
         Data = obj;
 
         int indent = 0 * indentSize;
-        
+
         indentSpacer.GetComponent<LayoutElement>().preferredWidth = indent;
 
         Debug.Log("obj name : " + obj.Label);
@@ -102,17 +95,17 @@ public class TreeItem : MonoBehaviour,IPointerEnterHandler, IPointerExitHandler,
     public void OnPointerClick(PointerEventData eventData)
     {
         if (isRenaming) return;
- 
+
 
         if (eventData.clickCount == 2)
         {
-     
+
             lastClickTime = 0f;
             StarRename();
         }
         else
         {
- 
+
             lastClickTime = Time.time;
             HandleSingleClick();
         }
@@ -130,7 +123,7 @@ public class TreeItem : MonoBehaviour,IPointerEnterHandler, IPointerExitHandler,
 
     public void UpdateExpandIcon()
     {
-    
+
         if (Data.Children.Count == 0)
         {
             expandText.text = "---";
@@ -147,10 +140,10 @@ public class TreeItem : MonoBehaviour,IPointerEnterHandler, IPointerExitHandler,
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-       
-      background.color = highlightColor;
-      expandBut.GetComponent<Image>().color = highlightColor;
-      expandText.color = Color.white;
+
+        background.color = highlightColor;
+        expandBut.GetComponent<Image>().color = highlightColor;
+        expandText.color = Color.white;
 
     }
 
@@ -175,8 +168,8 @@ public class TreeItem : MonoBehaviour,IPointerEnterHandler, IPointerExitHandler,
 
     public void OnEndDrag(PointerEventData eventData)
     {
-       canvasGroup.blocksRaycasts = true;
-         transform.SetParent(originalParent);
+        canvasGroup.blocksRaycasts = true;
+        transform.SetParent(originalParent);
         StartCoroutine(ResetDrag());
     }
     private IEnumerator ResetDrag()
@@ -187,13 +180,13 @@ public class TreeItem : MonoBehaviour,IPointerEnterHandler, IPointerExitHandler,
 
     public void OnDrag(PointerEventData eventData)
     {
-         rectTransform.position = eventData.position;
+        rectTransform.position = eventData.position;
     }
 
     public void OnDrop(PointerEventData eventData)
     {
         TreeItem dropItem = eventData.pointerDrag?.GetComponent<TreeItem>();
-        if (dropItem != null && dropItem !=this)
+        if (dropItem != null && dropItem != this)
         {
             OnItemDropped?.Invoke(dropItem, this);
         }
@@ -201,7 +194,7 @@ public class TreeItem : MonoBehaviour,IPointerEnterHandler, IPointerExitHandler,
 
     private void StarRename()
     {
-        if (isRenaming)  return; 
+        if (isRenaming) return;
         isRenaming = true;
 
         label.gameObject.SetActive(false);
@@ -215,7 +208,7 @@ public class TreeItem : MonoBehaviour,IPointerEnterHandler, IPointerExitHandler,
 
     private void OnRenameSubmit(string Newname)
     {
-        if(!isRenaming) return;
+        if (!isRenaming) return;
 
         if (string.IsNullOrWhiteSpace(Newname))
         {
@@ -224,9 +217,9 @@ public class TreeItem : MonoBehaviour,IPointerEnterHandler, IPointerExitHandler,
         }
 
         label.text = Newname;
-       
+
         Data.Label = Newname;
-        
+
 
         FinishRename();
     }
@@ -242,12 +235,12 @@ public class TreeItem : MonoBehaviour,IPointerEnterHandler, IPointerExitHandler,
         isRenaming = false;
         rename.gameObject.SetActive(false);
         label.gameObject.SetActive(true);
-        renamed.Invoke(label.text,Data.Id);
+        renamed.Invoke(label.text, Data.Id);
     }
 
     public void IsActive(bool isActive)
     {
         this.isActive = isActive;
-        if(!isActive) background.color = normalColor;
+        if (!isActive) background.color = normalColor;
     }
 }

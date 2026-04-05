@@ -25,7 +25,9 @@ public class LootTableControllers {
 
     @PostMapping("/CreateLootTables/{userId}")
     public ResponseEntity<LootTableDTO> CreateLootTables(@PathVariable Long userId,@RequestBody LootTableDTO lootTableDTO){
-        LootTable lootTable = lootTableService.CreateLootTable(lootTableService.LootTableDTOToEntity(lootTableDTO));
+        LootTable lootTable = lootTableService.LootTableDTOToEntity(lootTableDTO);
+        lootTable.setId(null);
+        lootTableService.CreateLootTable(lootTable);
 
         UserCreationContentDTO userCreationContent = new UserCreationContentDTO();
 

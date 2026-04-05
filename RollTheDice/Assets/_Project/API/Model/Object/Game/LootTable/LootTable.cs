@@ -9,11 +9,11 @@ namespace Assets._Project.API.Model.Object.Game.LootTable
     {
         public long Id { get; set; }
         public string Name { get; set; }
-        public List<LootElementDTO> LootElements { get; set; } = new List<LootElementDTO>();
+        public  LootElementDTO[] LootElements { get; set; } = new LootElementDTO[];
         public long IdGameBundle { get; set; }
         public LootTables(){}
 
-        public LootTables(long id, string name, List<LootElementDTO> lootElements, long idGameBundle)
+        public LootTables(long id, string name, LootElementDTO[] lootElements, long idGameBundle)
         {
             Id = id;
             Name = name;

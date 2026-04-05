@@ -58,6 +58,7 @@
     <Compile Include="Assets\_Project\API\Model\Object\Game\Book\Page.cs" />
     <Compile Include="Assets\_Project\API\Service\Game\Storage\StorageService.cs" />
     <Compile Include="Assets\_Project\API\Model\DTO\GameDTO\MoneyDTO\ValueDTO.cs" />
+    <Compile Include="Assets\_Project\Scrip\ScripForScene\LootTable\LootTableRow.cs" />
     <Compile Include="Assets\_Project\Scrip\ScripForScene\TemplateMaker\OptionList\ListItem.cs" />
     <Compile Include="Assets\_Project\Scrip\ScripForScene\TemplateMaker\InspectorPanel\Row\ConfigRowBool.cs" />
     <Compile Include="Assets\_Project\Scrip\Scene\Scene.cs" />
@@ -72,7 +73,7 @@
     <Compile Include="Assets\_Project\Scrip\ScripForScene\TemplateMaker\BuildPanel\BuildPanellDrop.cs" />
     <Compile Include="Assets\_Project\Scrip\ScripUI\Accordion\AccordionDirection.cs" />
     <Compile Include="Assets\_Project\API\Model\DTO\Login\RegisterRequest.cs" />
-    <Compile Include="Assets\_Project\Scrip\ScripForScene\LootTable\LooTableRow.cs" />
+    <Compile Include="Assets\_Project\Scrip\ScripForScene\LootTable\LooTableElementRow.cs" />
     <Compile Include="Assets\_Project\Scrip\ScripForScene\TemplateMaker\TemplateField\TemplateFieldDragData.cs" />
     <Compile Include="Assets\_Project\Scrip\ScripForScene\Menu\MainMenuCreate\BookMakerManager\BookItem.cs" />
     <Compile Include="Assets\_Project\API\Model\Object\Game\Token\Token.cs" />

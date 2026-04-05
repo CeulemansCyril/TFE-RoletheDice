@@ -1,7 +1,9 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\APIRollTheDice-Backend\\src",
+    "\\RollTheDice"
   ],
-  "SelectedNode": "\\RollTheDice.slnx",
+  "SelectedNode": "\\APIRollTheDice-Backend",
   "PreviewInSolutionExplorer": false
 }
