@@ -27,9 +27,9 @@ namespace Assets._Project.Scrip.ScripForScene.CurrencyMaker
 		{
 			label.SetText(currency.Name)  ;
 
-            baseValue.Setup(EndRenameBasicValue);
-            symbol.Setup(EndRenameSymbole);
-            code.Setup(EndRenameCode);
+            baseValue.SetupRename(EndRenameBasicValue);
+            symbol.SetupRename(EndRenameSymbole);
+            code.SetupRename(EndRenameCode);
 
 
             code.SetText(currency.Code);

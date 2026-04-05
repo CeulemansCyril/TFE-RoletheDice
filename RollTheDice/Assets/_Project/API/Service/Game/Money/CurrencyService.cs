@@ -47,6 +47,11 @@ namespace Assets._Project.API.Service.Game.Money
             return GetAllAsync<CurrencyDTO>("/GetAllCurrenciesByGameBundleId/" + id);
         }
 
+        public Awaitable<CurrencyDTO> GetCurrencyById (long id)
+        {
+            return GetAsync<CurrencyDTO>("/GetCurrencyById/" + id);
+        }
+
 
         public async Task<Currency[]> SaveAllCurrencies(CurrencyDTO[] currencies, long idUser)
         {

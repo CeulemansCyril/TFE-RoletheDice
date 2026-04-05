@@ -28,33 +28,52 @@ namespace Assets._Project.API.Interface
         {
 
 
-            using (var request = CreateRequest(baseUrl + endpoint, method, jsonBody))
+            try
             {
-
-                Debug.Log("FINAL URL = " + baseUrl + endpoint);
-                var operation = request.SendWebRequest();
-
-
-
-                while (!operation.isDone)
-                    await Awaitable.NextFrameAsync();
-
-                if (request.result != UnityWebRequest.Result.Success)
+                using (var request = CreateRequest(baseUrl + endpoint, method, jsonBody))
                 {
-                    throw new System.Exception(
-                        $"Error: {request.error}, Status Code: {request.responseCode}"
-                    );
+                    Debug.Log("FINAL URL = " + baseUrl + endpoint);
+                    var operation = request.SendWebRequest();
+
+                    if (operation == null)
+                    {
+                        Debug.LogWarning("SendWebRequest returned null operation for: " + baseUrl + endpoint);
+                        return default;
+                    }
+
+                    // wait for request to complete
+                    while (!operation.isDone)
+                        await Awaitable.NextFrameAsync();
+
+                    // If request failed, log and return default
+                    if (request.result != UnityWebRequest.Result.Success)
+                    {
+                        Debug.LogWarning($"Request failed: {request.error}, Status Code: {request.responseCode}, URL: {baseUrl + endpoint}");
+                        return default;
+                    }
+
+                    // Safely get response text
+                    var responseText = request.downloadHandler != null ? request.downloadHandler.text : null;
+
+                    if (string.IsNullOrEmpty(responseText))
+                        return default;
+
+                    // Try deserialize, but guard against malformed JSON or unexpected exceptions
+                    try
+                    {
+                        return JsonConvert.DeserializeObject<T>(responseText);
+                    }
+                    catch (System.Exception ex)
+                    {
+                        Debug.LogWarning($"Failed to deserialize response for '{baseUrl + endpoint}': {ex.Message}\nResponse: {responseText}");
+                        return default;
+                    }
                 }
-
-                var responseText = request.downloadHandler.text;
-
-
-                if (string.IsNullOrEmpty(responseText))
-                    return default;
-
-
-
-                return JsonConvert.DeserializeObject<T>(request.downloadHandler.text);
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogError($"SendRequestAsync exception for '{baseUrl + endpoint}': {ex}");
+                return default;
             }
         }
 

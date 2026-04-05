@@ -10,7 +10,9 @@ public class Rename : MonoBehaviour, IPointerClickHandler
 
     private string oldName = "";
     private bool isRenaming = false;
+
     public Action endRename;
+    public Action click;
 
     private void Awake()
     {
@@ -59,5 +61,6 @@ public class Rename : MonoBehaviour, IPointerClickHandler
     public void OnPointerClick(PointerEventData eventData)
     {
         StartRename();
+        click?.Invoke();
     }
 }

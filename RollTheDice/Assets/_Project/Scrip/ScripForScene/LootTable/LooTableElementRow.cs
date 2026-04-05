@@ -4,6 +4,7 @@ using Assets._Project.API.Model.Object.Game.Money;
 using Assets._Project.Scrip.ScripUI.RenameField;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -25,11 +26,11 @@ namespace Assets._Project.Scrip.ScripForScene.LootTable
         {
             LootElement = loot;
             
-            MinAmount.OnEndEdit.AddListener((string txt) => { EndRenameBasicValue(); });
-            MaxAmount.OnEndEdit.AddListener((string txt) => { EndRenameBasicValue(); });
-            Weight.OnEndEdit.AddListener((string txt) => { EndRenameBasicValue(); });
-            DropChance.OnEndEdit.AddListener((string txt) => { EndRenameBasicValue(); });
-
+            MinAmount.EndRename +=     () => EndRenameBasicValue(MinAmount); 
+            MaxAmount.EndRename +=     () => EndRenameBasicValue(MaxAmount); 
+            Weight.EndRename +=        () => EndRenameBasicValue(Weight); 
+            DropChance.EndRename +=    () => EndRenameBasicValue(DropChance);
+            
 
             LoadList(); 
         }
@@ -38,9 +39,8 @@ namespace Assets._Project.Scrip.ScripForScene.LootTable
         {
             dropdown.ClearOptions();
 
-
             dropdown.AddOptions(new List<string> { LootType.OBJECT.ToString(), LootType.CURRENCY.ToString() });
-            if (LootElement.id != null)
+            if (LootElement != null)
             {
                 MaxAmount.SetText(LootElement.MaxAmount.ToString());
                 MinAmount.SetText(LootElement.MinAmount.ToString());
@@ -57,14 +57,12 @@ namespace Assets._Project.Scrip.ScripForScene.LootTable
         }
 
 
-        private void EndRenameBasicValue()
+        private void EndRenameBasicValue(RenameField baseValue)
         {
-
             string txt = baseValue.GetTitle();
 
             if (!string.IsNullOrEmpty(txt))
             {
-
                 string digitsOnly = new string(txt.Where(char.IsDigit).ToArray());
 
                 if (!string.IsNullOrEmpty(digitsOnly))
@@ -82,6 +80,15 @@ namespace Assets._Project.Scrip.ScripForScene.LootTable
             }
         }
 
+        public LootElementDTO GetLootElement()
+        {
+            LootElement.MinAmount = int.Parse(MinAmount.GetTitle());
+            LootElement.MinAmount = int.Parse(MaxAmount.GetTitle());
+            LootElement.Weight = int.Parse(Weight.GetTitle());
+            LootElement.DropChance = double.Parse(DropChance.GetTitle());
+            LootElement.Type = (LootType)dropdown.value;
 
+            return LootElement;
+        }
     }
 }

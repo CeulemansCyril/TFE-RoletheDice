@@ -1,5 +1,11 @@
 using Assets._Project.Localization;
 using Assets._Project.Scrip.ScripUI.Tree;
+using System;
+using System.Collections;
+using TMPro;
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class TreeItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IBeginDragHandler, IEndDragHandler, IDragHandler, IDropHandler, IPointerClickHandler
 {

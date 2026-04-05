@@ -1,9 +1,9 @@
-
 using Assets._Project.API.Interface;
 using Assets._Project.API.Model.DTO;
 using Assets._Project.API.Model.DTO.GameDTO.LootTableDTO;
 using Assets._Project.API.Model.Object.Game.LootTable;
 using System.Collections;
+using System.Linq;
 using UnityEngine;
 
 namespace Assets._Project.API.Service.Game.LootTable
@@ -47,7 +47,7 @@ namespace Assets._Project.API.Service.Game.LootTable
             lootTable.Id = lootTableDTO.Id;
             lootTable.Name = lootTableDTO.Name;
             lootTable.IdGameBundle = lootTableDTO.IdGameBundle;
-            lootTable.LootElements = lootTableDTO.LootElements;
+            lootTable.LootElements = lootTableDTO.LootElements ;
             return lootTable;
         }
 
@@ -57,7 +57,7 @@ namespace Assets._Project.API.Service.Game.LootTable
             lootTableDTO.Id = lootTable.Id;
             lootTableDTO.Name = lootTable.Name;
             lootTableDTO.IdGameBundle = lootTable.IdGameBundle;
-            lootTableDTO.LootElements = lootTable.LootElements;
+            lootTableDTO.LootElements = lootTable.LootElements  ;
             return lootTableDTO;
         }
     }

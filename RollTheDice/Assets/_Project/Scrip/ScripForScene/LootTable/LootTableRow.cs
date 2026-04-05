@@ -1,5 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.EventSystems;
+using Assets._Project.Scrip.ScripUI.RenameField;
+using Assets._Project.API.Model.Object.Game.LootTable;
+using System;
 
 namespace Assets._Project.Scrip.ScripForScene.LootTable
 {
@@ -18,8 +22,8 @@ namespace Assets._Project.Scrip.ScripForScene.LootTable
 			this.lootTable = lootTable;
 
 			label.SetText(lootTable.Name);
-			label.onClick.AddListener(OnPointerClick);
-            label.onEndEdit.AddListener(OnEndEdit);
+ 
+            label.EndRename += ()=> OnEndEdit();
         }
 
         public void OnPointerClick(PointerEventData eventData)
@@ -31,7 +35,7 @@ namespace Assets._Project.Scrip.ScripForScene.LootTable
             {
 
                 lastClickTime = 0f;
-                StarRename();
+                ClickRename();
             }
             else
             {
@@ -46,8 +50,9 @@ namespace Assets._Project.Scrip.ScripForScene.LootTable
 			click?.Invoke(lootTable);
         }
 
-        private void OnEndEdit(string newName)
+        private void OnEndEdit( )
         {
+            string newName = label.GetTitle();
             if (string.IsNullOrEmpty(newName))
             {
                 label.SetText(lootTable.Name);

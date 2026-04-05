@@ -133,6 +133,12 @@ public class FieldUI: MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        if (FieldSelectionManager.Instance == null)
+        {
+            Debug.LogError("FieldSelectionManager.Instance is null in OnPointerClick");
+            return;
+        }
+
         FieldSelectionManager.Instance.SelectField(this);
     }
 

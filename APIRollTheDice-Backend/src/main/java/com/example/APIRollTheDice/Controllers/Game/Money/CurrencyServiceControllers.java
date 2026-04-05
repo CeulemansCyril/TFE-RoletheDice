@@ -112,5 +112,11 @@ public class CurrencyServiceControllers {
         return ResponseEntity.ok(currencyDTOs);
     }
 
+    @GetMapping("/GetCurrencyById/{currencyId}")
+    public ResponseEntity<CurrencyDTO> GetCurrencyById(@PathVariable Long currencyId) {
+        Currency currency = currencyService.GetCurrencyById(currencyId);
+        return ResponseEntity.ok(currencyService.toDTO(currency));
+    }
+
 
 }

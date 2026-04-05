@@ -30,6 +30,7 @@ public class TemplateControllers {
     public ResponseEntity<CustomObjectDTO>CreateCustomObject(@PathVariable Long userId, @RequestBody CustomObjectDTO customObjectDTO){
         CustomObject customObject = templateService.CustomObjectDTOToEntity(customObjectDTO);
         customObject.setId(null);
+        System.out.println("customObjectDTO value: " + customObjectDTO.getPrice().getAmount() + " " + customObjectDTO.getPrice().getCurrencyId());
          customObject = templateService.CreateCustomObject(customObject);
 
         UserCreationContentDTO userCreationContentDTO = new UserCreationContentDTO();
@@ -45,7 +46,7 @@ public class TemplateControllers {
     @PutMapping("/updateCustomObject")
     public ResponseEntity<CustomObjectDTO> UpdateCustomObject(@RequestBody CustomObjectDTO customObjectDTO){
         CustomObject customObject = templateService.CustomObjectDTOToEntity(customObjectDTO);
-
+        System.out.println("customObjectDTO value: " + customObjectDTO.getPrice().getAmount() + " " + customObjectDTO.getPrice().getCurrencyId());
          customObject = templateService.UpdateCustomObject(customObject);
         return ResponseEntity.ok(templateService.CustomObjectToDTO(customObject));
     }

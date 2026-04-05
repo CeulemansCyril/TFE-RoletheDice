@@ -4,7 +4,27 @@ using UnityEngine;
 
 public class FieldSelectionManager : MonoBehaviour
 {
-    public static FieldSelectionManager Instance { get; private set; }
+    private static FieldSelectionManager _instance;
+    public static FieldSelectionManager Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                
+                _instance = FindObjectOfType<FieldSelectionManager>();
+                if (_instance == null)
+                {
+         
+                    var go = new GameObject("FieldSelectionManager");
+                    _instance = go.AddComponent<FieldSelectionManager>();
+                }
+            }
+
+            return _instance;
+        }
+        private set => _instance = value;
+    }
 
     public FieldUI ActiveField { get; private set; }
 

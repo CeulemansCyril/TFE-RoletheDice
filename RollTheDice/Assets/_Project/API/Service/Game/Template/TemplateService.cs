@@ -46,21 +46,19 @@ namespace Assets._Project.API.Service.Game.Templates
 
         public   async Task<CustomObject> CustomObjectDTOToCustomObjectAsync(CustomObjectDTO dto)
         {
-            CustomObject customObject = new CustomObject();
-            customObject.Id = dto.Id;
-            customObject.Name = dto.Name;
-            customObject.Attributes = dto.CustomObjectAttributeDTO;
-            customObject.CanBeInInventory = dto.CanBeInInventory;
+            CustomObject customObject = new()
+            {
+                Id = dto.Id,
+                Name = dto.Name,
+                Attributes = dto.CustomObjectAttributeDTO,
+                CanBeInInventory = dto.CanBeInInventory
+            };
 
             if (dto.Price != null)
             {
-       
-                var currency = dto.Price.CurrencyId.HasValue
-                               ? new Currency { Id = dto.Price.CurrencyId.Value }
-                               : new Currency();
+                customObject.Price = ValueDTOToValue(dto.Price);
+            }else customObject.Price = null;
 
-                customObject.Price = new Value(dto.Price.Amount, currency);
-            }
             TemplateDTO templateDTO = await GetTemplateById(dto.IdTemplate);
             customObject.Template = await TemplateDTOToTemplate(templateDTO);
             return customObject;
@@ -82,7 +80,7 @@ namespace Assets._Project.API.Service.Game.Templates
 
         }
 
-        public Value ValueToDTO(ValueDTO valueDTO)
+        public Value ValueDTOToValue(ValueDTO valueDTO)
         {
             Value value = new Value();
             value.Amount = valueDTO.Amount;

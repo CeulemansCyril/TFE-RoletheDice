@@ -52,13 +52,13 @@
     <Compile Include="Assets\_Project\API\Model\Object\Game\Template\CustomObject.cs" />
     <Compile Include="Assets\_Project\API\Model\Object\Game\GameBundle.cs" />
     <Compile Include="Assets\Resources\Localization\Localization\LocalizationItem.cs" />
+    <Compile Include="Assets\_Project\Scrip\ScripForScene\LootTable\LootTableRow.cs" />
     <Compile Include="Assets\_Project\API\Model\Object\Game\LootTable\LootTable.cs" />
     <Compile Include="Assets\_Project\API\Model\Object\User\UserCreationContent.cs" />
     <Compile Include="Assets\_Project\API\Service\Game\Map\MapService.cs" />
     <Compile Include="Assets\_Project\API\Model\Object\Game\Book\Page.cs" />
     <Compile Include="Assets\_Project\API\Service\Game\Storage\StorageService.cs" />
     <Compile Include="Assets\_Project\API\Model\DTO\GameDTO\MoneyDTO\ValueDTO.cs" />
-    <Compile Include="Assets\_Project\Scrip\ScripForScene\LootTable\LootTableRow.cs" />
     <Compile Include="Assets\_Project\Scrip\ScripForScene\TemplateMaker\OptionList\ListItem.cs" />
     <Compile Include="Assets\_Project\Scrip\ScripForScene\TemplateMaker\InspectorPanel\Row\ConfigRowBool.cs" />
     <Compile Include="Assets\_Project\Scrip\Scene\Scene.cs" />
@@ -73,7 +73,6 @@
     <Compile Include="Assets\_Project\Scrip\ScripForScene\TemplateMaker\BuildPanel\BuildPanellDrop.cs" />
     <Compile Include="Assets\_Project\Scrip\ScripUI\Accordion\AccordionDirection.cs" />
     <Compile Include="Assets\_Project\API\Model\DTO\Login\RegisterRequest.cs" />
-    <Compile Include="Assets\_Project\Scrip\ScripForScene\LootTable\LooTableElementRow.cs" />
     <Compile Include="Assets\_Project\Scrip\ScripForScene\TemplateMaker\TemplateField\TemplateFieldDragData.cs" />
     <Compile Include="Assets\_Project\Scrip\ScripForScene\Menu\MainMenuCreate\BookMakerManager\BookItem.cs" />
     <Compile Include="Assets\_Project\API\Model\Object\Game\Token\Token.cs" />
@@ -214,6 +213,7 @@
     <Compile Include="Assets\_Project\Scrip\ScripForScene\Menu\MainMenuCreate\PrefabManager.cs" />
     <Compile Include="Assets\_Project\Scrip\ScripForScene\Menu\MainMenuCreate\NavigationMenuButton.cs" />
     <Compile Include="Assets\_Project\API\Model\Object\Notification.cs" />
+    <Compile Include="Assets\_Project\Scrip\ScripForScene\LootTable\LooTableElementRow.cs" />
     <Compile Include="Assets\_Project\API\Model\Object\Game\Token\TokenPlaced.cs" />
     <Compile Include="Assets\_Project\Scrip\ScripUI\Table\Table.cs" />
     <Compile Include="Assets\_Project\Scrip\ScripForScene\Menu\MainMenuCreate\CustomObjectManager\CustomObjectItem.cs" />

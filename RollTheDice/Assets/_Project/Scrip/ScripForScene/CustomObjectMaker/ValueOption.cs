@@ -39,20 +39,33 @@ namespace Assets._Project.Scrip.ScripForScene.CustomObjectMaker
 
         private async void LoadCombobox()
         {
-            CurrencyDTO[] currencyDTOs = await currencyService.GetAllCurrenciesByGameBundleId(BundleSession.Intance.Bundle.Id);
-            ListcurrencyDTOs = currencyDTOs;
-            int x = currencyDTOs.Length;
-
-            List<string> list = new List<string>();
-            list.Add("------");
-
-            for (int i = 0; i < x; i++)
+            try
             {
-                list.Add(currencyDTOs[i].Name);
+                if (BundleSession.Intance == null || BundleSession.Intance.Bundle == null)
+                {
+                    Debug.LogWarning("BundleSession or Bundle is null in LoadCombobox");
+                    return;
+                }
+
+                CurrencyDTO[] currencyDTOs = await currencyService.GetAllCurrenciesByGameBundleId(BundleSession.Intance.Bundle.Id);
+                ListcurrencyDTOs = currencyDTOs;
+                if (currencyDTOs == null) return;
+                int x = currencyDTOs.Length;
+
+                List<string> list = new List<string>();
+                list.Add("------");
+
+                for (int i = 0; i < x; i++)
+                {
+                    list.Add(currencyDTOs[i].Name);
+                }
+
+                dropdownField.AddOptions(list);
             }
-
-            dropdownField.AddOptions(list);
-
+            catch (Exception ex)
+            {
+                Debug.LogWarning("Failed to load currencies for dropdown: " + ex.Message);
+            }
         }
 
         private void CheckInputFieldValue(string value)
@@ -86,8 +99,13 @@ namespace Assets._Project.Scrip.ScripForScene.CustomObjectMaker
             return value;
         }
 
-        public void SetValue(Value value)
+        public async Task SetValue(Value value)
         {
+            if (field == null || dropdownField == null)
+            {
+                return;
+            }
+
             if (value == null)
             {
                 field.text = "";
@@ -96,12 +114,79 @@ namespace Assets._Project.Scrip.ScripForScene.CustomObjectMaker
                 return;
             }
 
-            field.text = value.Amount.ToString();
+            field.text = value.Amount.ToString(System.Globalization.CultureInfo.InvariantCulture);
+               
 
-            if (value.Currency != null && dropdownField.options != null && dropdownField.options.Count > 0)
+            if (value.Currency != null)
             {
-                int foundIndex = dropdownField.options
-                    .FindIndex(o => o.text.Equals(value.Currency.Name, StringComparison.OrdinalIgnoreCase));
+               
+                if (currencyService == null)
+                    currencyService = new CurrencyService();
+
+                
+                CurrencyDTO currencyDTO = null;
+                if (ListcurrencyDTOs != null && ListcurrencyDTOs.Length > 0)
+                {
+                    currencyDTO = Array.Find(ListcurrencyDTOs, d => d.Id == value.Currency.Id);
+                }
+
+                if (currencyDTO == null)
+                {
+        
+                    currencyDTO = await currencyService.GetCurrencyById(value.Currency.Id);
+                }
+
+                Currency currency = currencyService.CurrencyDTOToCurrency(currencyDTO);
+                Debug.Log("Currency Name: " + currency.Name + " Currency id : " + currency.Id);
+
+                int foundIndex = -1;
+
+         
+                if (dropdownField.options == null || dropdownField.options.Count == 0)
+                {
+                    if (ListcurrencyDTOs == null || ListcurrencyDTOs.Length == 0)
+                    {
+                        try
+                        {
+                            ListcurrencyDTOs = await currencyService.GetAllCurrenciesByGameBundleId(BundleSession.Intance.Bundle.Id);
+                        }
+                        catch (Exception ex)
+                        {
+                            Debug.LogWarning("Failed to load currencies for dropdown: " + ex.Message);
+                        }
+                    }
+
+                    if (ListcurrencyDTOs != null && ListcurrencyDTOs.Length > 0)
+                    {
+                        List<string> list = new List<string> { "------" };
+                        for (int i = 0; i < ListcurrencyDTOs.Length; i++)
+                            list.Add(ListcurrencyDTOs[i].Name ?? string.Empty);
+
+                        dropdownField.ClearOptions();
+                        dropdownField.AddOptions(list);
+                    }
+                }
+
+    
+                if (dropdownField.options != null && dropdownField.options.Count > 0)
+                {
+                    string target = (currency.Name ?? string.Empty).Trim();
+                    foundIndex = dropdownField.options
+                        .FindIndex(o => (o.text ?? string.Empty).Trim().Equals(target, StringComparison.OrdinalIgnoreCase));
+
+                
+                    for (int i = 0; i < dropdownField.options.Count; i++)
+                    {
+                        Debug.Log($"Dropdown option [{i}] = '" + (dropdownField.options[i].text ?? string.Empty) + "'");
+                    }
+                    Debug.Log($"Searching for target '{target}' foundIndex={foundIndex}");
+                }
+                else if (ListcurrencyDTOs != null && ListcurrencyDTOs.Length > 0)
+                {
+                    int dtoIdx = Array.FindIndex(ListcurrencyDTOs, d => string.Equals(d.Name, currency.Name, StringComparison.OrdinalIgnoreCase));
+                    if (dtoIdx >= 0)
+                        foundIndex = dtoIdx + 1; 
+                }
 
                 dropdownField.value = foundIndex >= 0 ? foundIndex : 0;
             }

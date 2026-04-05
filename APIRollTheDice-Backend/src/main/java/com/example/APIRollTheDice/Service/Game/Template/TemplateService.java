@@ -11,10 +11,14 @@ import com.example.APIRollTheDice.Model.DTO.GameDTO.TemplateDTO.*;
 import com.example.APIRollTheDice.Model.Obj.Game.Money.Value;
 import com.example.APIRollTheDice.Model.Obj.Game.Template.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Objects;
+import java.util.Set;
+import java.util.HashSet;
 
 @Service
 public class TemplateService {
@@ -80,33 +84,79 @@ public class TemplateService {
         existing.setType(templateField.getType());
         existing.setRequired(templateField.isRequired());
 
-        return templateFieldInterface.save(templateField);
+        return templateFieldInterface.save(existing);
     }
+    @Transactional
     public List<TemplateField> UpdateManyTemplateField(List<TemplateField> templateFields){
-        List<TemplateField> updatedTemplateFields = new ArrayList<>();
-        for (TemplateField temp : templateFields) {
-            if (!templateFieldInterface.existsById(temp.getId())) {
-                CreateTemplateField(temp);
-            }else{
-                TemplateField existing = templateFieldInterface.findById(temp.getId()).orElseThrow(() -> new NotFoundException("TemplateField not found"));
-                existing.setTemplate(temp.getTemplate());
-                existing.setLabel(temp.getLabel());
-                existing.setMaxValue(temp.getMaxValue());
-                existing.setMinValue(temp.getMinValue());
-                existing.setOptionList(temp.getOptionList());
-                existing.setPositionX(temp.getPositionX());
-                existing.setPositionY(temp.getPositionY());
-                existing.setType(temp.getType());
-                existing.setRequired(temp.isRequired());
-                updatedTemplateFields.add(existing);
+        // If nothing to update, return empty list
+        if (templateFields == null || templateFields.isEmpty()) return new ArrayList<>();
+
+        // Determine the template id from the provided fields (they should all belong to the same template)
+        Long templateId = null;
+        for (TemplateField tf : templateFields) {
+            if (tf != null && tf.getTemplate() != null && tf.getTemplate().getId() != null) {
+                templateId = tf.getTemplate().getId();
+                break;
             }
         }
 
-        return templateFieldInterface.saveAll(updatedTemplateFields);
+        if (templateId == null) throw new NotFoundException("Template id not provided in TemplateField items");
+
+        // Collect ids sent by client (id > 0)
+        Set<Long> incomingIds = new HashSet<>();
+        for (TemplateField tf : templateFields) {
+            if (tf != null && tf.getId() > 0) incomingIds.add(Long.valueOf(tf.getId()));
+        }
+
+        // Find existing fields for this template and delete those that are not present in the incoming list
+        List<TemplateField> existingFields = templateFieldInterface.findAllByTemplate_Id(templateId);
+        List<TemplateField> toDelete = new ArrayList<>();
+        for (TemplateField existing : existingFields) {
+            if (existing.getId() > 0 && !incomingIds.contains(Long.valueOf(existing.getId()))) {
+                toDelete.add(existing);
+            }
+        }
+        if (!toDelete.isEmpty()) {
+            // delete dependent custom object attributes first to avoid FK constraint violations
+            List<Long> idsToDelete = toDelete.stream().map(f -> Long.valueOf(f.getId())).toList();
+            customObjectAttributeInterface.deleteAllByTemplateField_IdIn(idsToDelete);
+            templateFieldInterface.deleteAll(toDelete);
+        }
+
+        // Prepare list to save: create new ones and update existing ones
+        List<TemplateField> toSave = new ArrayList<>();
+        for (TemplateField tf : templateFields) {
+            if (tf == null) continue;
+            if (tf.getId() <= 0 || !templateFieldInterface.existsById(tf.getId())) {
+                // new field: ensure template relation is set
+                toSave.add(tf);
+            } else {
+                TemplateField existing = templateFieldInterface.findById(tf.getId()).orElseThrow(() -> new NotFoundException("TemplateField not found"));
+                existing.setTemplate(tf.getTemplate());
+                existing.setLabel(tf.getLabel());
+                existing.setMaxValue(tf.getMaxValue());
+                existing.setMinValue(tf.getMinValue());
+                existing.setOptionList(tf.getOptionList());
+                existing.setPositionX(tf.getPositionX());
+                existing.setPositionY(tf.getPositionY());
+                existing.setType(tf.getType());
+                existing.setRequired(tf.isRequired());
+                toSave.add(existing);
+            }
+        }
+
+        // Save all (new and updated) and return
+        return templateFieldInterface.saveAll(toSave);
     }
 
+    @Transactional
     public void DeleteTemplateField (Long id){
-        if (templateFieldInterface.existsById(id))templateFieldInterface.deleteById(id);
+        if (templateFieldInterface.existsById(id)){
+            // remove dependent custom attributes first
+            List<Long> ids = new ArrayList<>(); ids.add(id);
+            customObjectAttributeInterface.deleteAllByTemplateField_IdIn(ids);
+            templateFieldInterface.deleteById(id);
+        }
         else throw  new NotFoundException("TemplateField not found");
     }
 
@@ -144,6 +194,7 @@ public class TemplateService {
         return templateInterface.saveAll(templates);
     }
 
+    @Transactional
     public Template UpdateTemplate(Template template){
         Template existing = templateInterface.findById(template.getId()).orElseThrow(()->new NotFoundException("Template not found"));
 

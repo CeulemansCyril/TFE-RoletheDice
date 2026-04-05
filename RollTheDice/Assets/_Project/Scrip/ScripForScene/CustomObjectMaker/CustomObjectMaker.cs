@@ -89,7 +89,7 @@ namespace Assets._Project.Scrip.ScripForScene.CustomObjectMaker
 
             if (templateField == null)
             {
-                Debug.LogError("templateField est null !");
+  
                 return;
             }
             fields.Clear();
@@ -97,14 +97,10 @@ namespace Assets._Project.Scrip.ScripForScene.CustomObjectMaker
 
             if (Attributes == null)
             {
-                Debug.LogWarning("Attributes est null → initialisation liste vide");
+    
                 Attributes = new  CustomObjectAttributeDTO[0];
             }
-
-            foreach (CustomObjectAttributeDTO attr in Attributes)
-            {
-                Debug.Log($"ATTR → TemplateFieldId: {attr.IdTemplateField} | Value: {attr.Value}");
-            }
+ 
 
            
 
@@ -127,13 +123,10 @@ namespace Assets._Project.Scrip.ScripForScene.CustomObjectMaker
                         custom = Attributes.FirstOrDefault(c => c.IdTemplateField == fieldData.Id);
                     }
 
-                    Debug.Log($"FIELD → Id: {fieldData.Id} | Label: {fieldData.Label}");
+                   
                     fieldUI.Init(fieldData, custom);
                 }
-                else
-                {
-                    Debug.LogError("FieldData component missing on prefab");
-                }
+               
             }
         }
 

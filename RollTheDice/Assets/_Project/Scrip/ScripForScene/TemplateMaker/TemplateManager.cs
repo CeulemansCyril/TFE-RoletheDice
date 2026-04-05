@@ -93,10 +93,9 @@ public class TemplateManager : MonoBehaviour
     }
 
 
-    private void OnSaveButtonClicked()
+    private async void OnSaveButtonClicked()
     {
-        
-        OnSave();
+        await OnSave();
     }
 
     private void OnCloseButton()
@@ -115,9 +114,9 @@ public class TemplateManager : MonoBehaviour
         }
     }
 
-    private void OnConfirmCloseWithSave()
+    private async void OnConfirmCloseWithSave()
     {
-        OnSave();
+        await OnSave();
         OnClose();
     }
 
@@ -127,7 +126,7 @@ public class TemplateManager : MonoBehaviour
     }
 
 
-    private void OnSave()
+    private async Task OnSave()
     {
  
         TemplateActive.Name = NameTemplate.text;
@@ -148,19 +147,26 @@ public class TemplateManager : MonoBehaviour
 
         TemplateDTO templateDTO = templateService.TemplateToTemplateDTO(TemplateActive,BundleSession.Intance.Bundle.Id);
 
-        if (isNewTemplate)
+        try
+        {
+            if (isNewTemplate)
             {
-                templateService.CreateTemplate(templateDTO, UserSession.Intance.UserID).GetAwaiter().GetResult(); 
-                templateService.CreateManyTemplateField (UserSession.Intance.UserID,fieldDTOs).GetAwaiter().GetResult() ;
-        }
+                await templateService.CreateTemplate(templateDTO, UserSession.Intance.UserID);
+                await templateService.CreateManyTemplateField(UserSession.Intance.UserID, fieldDTOs);
+            }
             else
             {
-                templateService.UpdateTemplate(templateDTO).GetAwaiter().GetResult();
-                templateService.UpdateManyTemplateField(fieldDTOs).GetAwaiter().GetResult();
+                await templateService.UpdateTemplate(templateDTO);
+                await templateService.UpdateManyTemplateField(fieldDTOs);
+            }
+
+            IsSave = true;
         }
-
-
-        IsSave = true;
+        catch (System.Exception ex)
+        {
+            Debug.LogError("Error saving template or template fields: " + ex);
+            IsSave = false;
+        }
     }
 
     private void OnClose()

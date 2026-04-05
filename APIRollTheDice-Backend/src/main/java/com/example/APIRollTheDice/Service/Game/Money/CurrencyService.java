@@ -65,6 +65,10 @@ public class CurrencyService {
         return currencyInterface.findAllByGameBundle_id(idGameBundle);
     }
 
+    public Currency GetCurrencyById(Long id){
+        return currencyInterface.findById(id).orElseThrow(()-> new NotFoundException("Currency not found"));
+    }
+
 
     public CurrencyDTO toDTO(Currency currency){
         return currencyMapper.toDTO(currency);

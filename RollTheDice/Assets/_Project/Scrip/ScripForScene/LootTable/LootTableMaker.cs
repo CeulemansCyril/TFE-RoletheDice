@@ -2,6 +2,9 @@
 using Assets._Project.API.Model.Object.Game.LootTable;
 using Assets._Project.API.Service.Game.LootTable;
 using Assets._Project.Localization;
+using Assets._Project.Scrip.ScripForScene.Login;
+using UnityEngine;
+using UnityEngine.UI;
 namespace Assets._Project.Scrip.ScripForScene.LootTable
 {
     class LootTableMaker : MonoBehaviour
@@ -24,11 +27,11 @@ namespace Assets._Project.Scrip.ScripForScene.LootTable
 
         private bool IsSave = true;
 
-        private LootTableService lootTableService = new LootTableService();
+        private LootTableService lootTableService ;
 
         public void Init(LootTables[] lootTable)
         {
-            LootTable = lootTable;
+            this.lootTable = lootTable;
 
             AddRow.onClick.AddListener(AddNewRow);
             SaveBut.onClick.AddListener(OnSaveButtonClicked);
@@ -99,7 +102,7 @@ namespace Assets._Project.Scrip.ScripForScene.LootTable
 
             if (currentLootTable.Id == 0)
             {
-                lootTable = await lootTableService.CreateLootTable(lootTable);
+                lootTable = await lootTableService.CreateLootTable(lootTable, UserSession.Intance.UserID );
                 currentLootTable.Id = lootTable.Id;
             }
             else
