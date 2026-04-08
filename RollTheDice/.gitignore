@@ -81,6 +81,46 @@ Desktop.ini
 /Assets/Collaborate*
 
 # =========================
+# NuGet
+# =========================
+[Pp]ackages/
+*.nupkg
+*.snupkg
+*.nuget.props
+*.nuget.targets
+
+# =========================
+# TextMeshPro generated files
+# =========================
+[Aa]ssets/TextMesh*Pro/Resources/Fonts & Materials/*.mat
+
+# =========================
+# Recordings / Profiler
+# =========================
+[Rr]ecordings/
+
+# =========================
+# Unity generated on crash
+# =========================
+sysinfo.txt
+crashlytics-build.properties
+
+# =========================
+# Additional VS artifacts
+# =========================
+*.suo
+*.tmp
+*.VC.db
+*.rsuser
+*.userosscache
+*.sln.docstates
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Bb]in/
+
+# =========================
 # Git LFS (si non utilisé)
 # =========================
 *.psd

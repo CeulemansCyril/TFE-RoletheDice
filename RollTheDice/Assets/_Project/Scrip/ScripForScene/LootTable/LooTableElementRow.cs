@@ -1,7 +1,9 @@
 ﻿using Assets._Project.API.Enums;
 using Assets._Project.API.Model.DTO.GameDTO.LootTableDTO;
 using Assets._Project.API.Model.Object.Game.Money;
+using Assets._Project.Scrip.ScripForScene.CustomObjectMaker;
 using Assets._Project.Scrip.ScripUI.RenameField;
+using Assets._Project.Scrip.ScripUI.SearchableDropdown;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +20,10 @@ namespace Assets._Project.Scrip.ScripForScene.LootTable
         [SerializeField] private RenameField MaxAmount;
         [SerializeField] private RenameField Weight;
         [SerializeField] private RenameField DropChance;
+
+        [SerializeField] private ValueOption valueOption;
+        [SerializeField] private SearchableDropdown listCustomObject;
+        
 
 
         private LootElementDTO LootElement;
@@ -89,6 +95,11 @@ namespace Assets._Project.Scrip.ScripForScene.LootTable
             LootElement.Type = (LootType)dropdown.value;
 
             return LootElement;
+        }
+
+        private void LoadListCustomObject()
+        {
+
         }
     }
 }
