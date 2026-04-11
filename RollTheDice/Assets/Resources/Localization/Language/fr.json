@@ -188,9 +188,13 @@
       "key": "MainMenuCreate.LeftPanel.BookMaker",
       "value": "Menu Livre"
     },
-     {
+    {
       "key": "MainMenuCreate.LeftPanel.CustomObject",
       "value": "Menu Fiche"
+    },
+     {
+      "key": "MainMenuCreate.LeftPanel.LootTable",
+      "value": "Menu LootTable"
     },
     {
       "key": "BookMakerManager.EmptyMessage",
@@ -236,11 +240,33 @@
       "key": "FieldData.Error.Option",
       "value": "Aucune option"
     },
-     {
+    {
       "key": "FieldData.Error.Enter",
       "value": "Entre : "
     },
-    
+    {
+      "_comment": "LootTable"
+    },
+    {
+      "key": "LootTable.TableHeader.MinVal",
+      "value": "Quantité minimal "
+    },
+    {
+      "key": "LootTable.TableHeader.MaxVal",
+      "value": "Quantité maximal "
+    },
+    {
+      "key": "LootTable.TableHeader.Weight",
+      "value": "Pondération"
+    },
+    {
+      "key": "LootTable.TableHeader.DropChance",
+      "value": "Chance de drop (%)"
+    },
+    {
+      "key": "LootTable.TableHeader.Dropdown",
+      "value": "Type de drop"
+    },
     {
       "_comment": "PopUp"
     },

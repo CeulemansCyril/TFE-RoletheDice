@@ -13,9 +13,12 @@ namespace Assets._Project.Scrip.ScripUI.RenameField
         [SerializeField] private Rename rename;
 
         public Action EndRename;
-        public Action Onclick;
 
- 
+        private void Awake()
+        {
+            rename.endRename += () => EndRename?.Invoke();
+        }
+
         public void SetText(string text)
         {
             titleRename.text = text;
@@ -33,12 +36,9 @@ namespace Assets._Project.Scrip.ScripUI.RenameField
             rename.endRename += callback;
         }
 
-        public void SetupOnClick(Action callback)
+        public void StartRename()
         {
-            rename.click -= callback;
-            rename.click += callback;
+            rename.StartRename();
         }
-
-   
     }
 }

@@ -1626,6 +1626,7 @@ GameObject:
   - component: {fileID: 9159077056158515780}
   - component: {fileID: 2697643442317908778}
   - component: {fileID: 4565402440144809681}
+  - component: {fileID: 8917332636893734227}
   m_Layer: 5
   m_Name: SearchableDropdown
   m_TagString: Untagged
@@ -1718,6 +1719,20 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &8917332636893734227
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7438532073327467924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40c72c3a3772f4d459eb8658e2d4bece, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Assets._Project.Scrip.ScripUI.SearchableDropdown.SearchableDropdown
+  dropdown: {fileID: 2003213607087143775}
+  searchField: {fileID: 1801975619101595702}
 --- !u!1 &7505697187701235089
 GameObject:
   m_ObjectHideFlags: 0

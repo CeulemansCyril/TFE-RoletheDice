@@ -15,21 +15,21 @@ namespace Assets._Project.API.Service.Game.LootTable
         {
         }
 
-        public Awaitable<LootTableDTO> CreateLootTable<LootTableDTO>(LootTableDTO lootTable, long idUser)
+        public Awaitable<LootTableDTO> CreateLootTable(LootTableDTO lootTable, long idUser)
         {
                         return CreateAsync("/CreateLootTables/" + idUser, lootTable);
         }
         
-        public Awaitable<LootTableDTO> UpdateLootTable<LootTableDTO>(LootTableDTO lootTable)
+        public Awaitable<LootTableDTO> UpdateLootTable(LootTableDTO lootTable)
         {
             return UpdateAsync("/UpdateLootTables ", lootTable);
         }
 
-        public Awaitable<LootTableDTO> GetLootTableById<LootTableDTO>(long id)
+        public Awaitable<LootTableDTO> GetLootTableById(long id)
         {
             return GetAsync<LootTableDTO>("/GetLootTableById/" + id);
         }
-          public Awaitable<LootTableDTO[]> GetAllLootTableByGameBundleId <LootTableDTO>(long id)
+          public Awaitable<LootTableDTO[]> GetAllLootTableByGameBundleId (long id)
         {
             return GetAllAsync<LootTableDTO>("/GetLootTableByByGameBundleId/"+id) ;
         }

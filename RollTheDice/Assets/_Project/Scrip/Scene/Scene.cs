@@ -13,6 +13,7 @@ namespace Assets._Project.Scrip.Scene
 		public const string BookMaker = "BookMaker";
 		public const string CustomObjectMaker = "CustomObjectMaker";
 		public const string CurrencyMaker = "CurrencyMaker";
+		public const string LootTableMaker = "LootTableMaker";
     }
 		 
 	

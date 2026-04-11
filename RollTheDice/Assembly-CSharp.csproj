@@ -78,6 +78,7 @@
     <Compile Include="Assets\_Project\API\Model\Object\Game\Token\Token.cs" />
     <Compile Include="Assets\_Project\Scrip\ScripForScene\Menu\MainMenuCreate\CustomObjectManager\CustomObjectMenuBut.cs" />
     <Compile Include="Assets\_Project\API\Enums\RoleUser.cs" />
+    <Compile Include="Assets\_Project\Scrip\ScripForScene\Menu\MainMenuCreate\LootTableMaker\LootTableMaker.cs" />
     <Compile Include="Assets\_Project\API\Model\DTO\NotificationDTO.cs" />
     <Compile Include="Assets\_Project\API\Service\Game\Token\TokenService.cs" />
     <Compile Include="Assets\_Project\API\Model\DTO\GameDTO\BookDTO\BookDTO.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="Assets\_Project\API\Model\DTO\GameDTO\TemplateDTO\TemplateFieldDTO.cs" />
     <Compile Include="Assets\_Project\API\Enums\TokenType.cs" />
     <Compile Include="Assets\_Project\Scrip\ScripUI\Accordion\AccordionSection.cs" />
+    <Compile Include="Assets\_Project\Scrip\ScripUI\SearchableDropdown\SearchableDropdown.cs" />
     <Compile Include="Assets\_Project\API\Service\Game\Book\BookService.cs" />
     <Compile Include="Assets\_Project\Scrip\ScripUI\Tab-SwitchPanel\SwitchPanel.cs" />
     <Compile Include="Assets\_Project\API\Model\Object\Chat\ChatChanel.cs" />

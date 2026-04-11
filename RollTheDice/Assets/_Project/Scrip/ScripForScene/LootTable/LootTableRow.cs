@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
-using System.Collections;
 using UnityEngine.EventSystems;
 using Assets._Project.Scrip.ScripUI.RenameField;
 using Assets._Project.API.Model.Object.Game.LootTable;
 using System;
+using UnityEngine.UI;
 
 namespace Assets._Project.Scrip.ScripForScene.LootTable
 {
@@ -11,11 +11,15 @@ namespace Assets._Project.Scrip.ScripForScene.LootTable
     {
 		[SerializeField] private RenameField label;
 
-        private float lastClickTime = 0;
+		[Header("Selection")]
+		[SerializeField] private Image backgroundImage;
+		[SerializeField] private Color normalColor = new Color(1f, 1f, 1f, 0f);
+		[SerializeField] private Color selectedColor = new Color(0.8f, 0.9f, 1f, 1f);
 
-        private LootTables lootTable;
+		private LootTables lootTable;
 		public Action<LootTables> click;
-        private bool isRenaming = false;
+		public event Action<LootTableRow> OnRowClicked;
+		private bool isRenaming = false;
 
         public void Init(LootTables lootTable)
 		{
@@ -23,50 +27,60 @@ namespace Assets._Project.Scrip.ScripForScene.LootTable
 
 			label.SetText(lootTable.Name);
  
-            label.EndRename += ()=> OnEndEdit();
+            label.EndRename += () => OnEndEdit();
         }
 
-        public void OnPointerClick(PointerEventData eventData)
-        {
-            if (isRenaming) return;
+		public void OnPointerClick(PointerEventData eventData)
+		{
+			if (isRenaming) return;
 
+			if (eventData.clickCount == 2)
+			{
+			 
+                isRenaming = true;
+				label.StartRename();
+			}
+			else if (eventData.clickCount == 1)
+			{
+			 
+                Select();
+			}
+		}
 
-            if (eventData.clickCount == 2)
-            {
-
-                lastClickTime = 0f;
-                ClickRename();
-            }
-            else
-            {
-                ClickRename();
-                lastClickTime = Time.time;
-            }
-        }
-
-
-        private void ClickRename()
+		private void Select()
 		{
 			click?.Invoke(lootTable);
-        }
+			OnRowClicked?.Invoke(this);
+		}
 
-        private void OnEndEdit( )
+		private void OnEndEdit()
+		{
+			isRenaming = false;
+
+			string newName = label.GetTitle();
+			if (string.IsNullOrEmpty(newName))
+			{
+				label.SetText(lootTable.Name);
+			}
+			else
+			{
+				lootTable.Name = newName;
+				label.SetText(newName);
+			}
+		}
+
+        public void SetSelected(bool selected)
         {
-            string newName = label.GetTitle();
-            if (string.IsNullOrEmpty(newName))
+            if (backgroundImage != null)
             {
-                label.SetText(lootTable.Name);
+                backgroundImage.color = selected ? selectedColor : normalColor;
             }
-            else
-            {
-                lootTable.Name = newName;
-                label.SetText(newName);
-            }
- 
         }
 
-       
-
+        public LootTables GetLootTable()
+        {
+            return lootTable;
+        }
 
     }
 }

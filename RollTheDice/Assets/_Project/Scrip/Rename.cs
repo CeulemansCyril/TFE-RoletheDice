@@ -1,9 +1,8 @@
 using System;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
-public class Rename : MonoBehaviour, IPointerClickHandler
+public class Rename : MonoBehaviour
 {
     [SerializeField] private TMP_Text title;
     [SerializeField] private TMP_InputField renameInput;
@@ -12,7 +11,6 @@ public class Rename : MonoBehaviour, IPointerClickHandler
     private bool isRenaming = false;
 
     public Action endRename;
-    public Action click;
 
     private void Awake()
     {
@@ -58,9 +56,4 @@ public class Rename : MonoBehaviour, IPointerClickHandler
  
     }
 
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        StartRename();
-        click?.Invoke();
     }
-}

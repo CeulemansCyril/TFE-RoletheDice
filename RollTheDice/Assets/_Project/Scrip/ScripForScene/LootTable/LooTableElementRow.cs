@@ -1,18 +1,24 @@
 ﻿using Assets._Project.API.Enums;
 using Assets._Project.API.Model.DTO.GameDTO.LootTableDTO;
+using Assets._Project.API.Model.DTO.GameDTO.TemplateDTO;
 using Assets._Project.API.Model.Object.Game.Money;
+using Assets._Project.API.Service.Game.Templates;
+using Assets._Project.Scrip.ScripForScene.Bundle;
 using Assets._Project.Scrip.ScripForScene.CustomObjectMaker;
 using Assets._Project.Scrip.ScripUI.RenameField;
 using Assets._Project.Scrip.ScripUI.SearchableDropdown;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace Assets._Project.Scrip.ScripForScene.LootTable
 {
-    public class LooTableElementRow: MonoBehaviour
+    public class LooTableElementRow: MonoBehaviour, IPointerClickHandler
     {
         [SerializeField] private TMP_Dropdown dropdown;
 
@@ -23,22 +29,33 @@ namespace Assets._Project.Scrip.ScripForScene.LootTable
 
         [SerializeField] private ValueOption valueOption;
         [SerializeField] private SearchableDropdown listCustomObject;
-        
 
+        [Header("Selection")]
+        [SerializeField] private Image backgroundImage;
+        [SerializeField] private Color normalColor = new Color(1f, 1f, 1f, 0f);
+        [SerializeField] private Color selectedColor = new Color(0.8f, 0.9f, 1f, 1f);
+
+        public event Action<LooTableElementRow> OnRowClicked;
 
         private LootElementDTO LootElement;
+        private TemplateService templateService;
+        private CustomObjectDTO[] customObjects;
 
         public void Init(LootElementDTO loot)
         {
             LootElement = loot;
-            
+            templateService = new TemplateService();
+
             MinAmount.EndRename +=     () => EndRenameBasicValue(MinAmount); 
             MaxAmount.EndRename +=     () => EndRenameBasicValue(MaxAmount); 
             Weight.EndRename +=        () => EndRenameBasicValue(Weight); 
             DropChance.EndRename +=    () => EndRenameBasicValue(DropChance);
-            
 
-            LoadList(); 
+            dropdown.onValueChanged.AddListener(OnTypeChanged);
+
+            LoadList();
+            LoadListCustomObject();
+            OnTypeChanged(dropdown.value);
         }
 
         private void LoadList()
@@ -89,17 +106,90 @@ namespace Assets._Project.Scrip.ScripForScene.LootTable
         public LootElementDTO GetLootElement()
         {
             LootElement.MinAmount = int.Parse(MinAmount.GetTitle());
-            LootElement.MinAmount = int.Parse(MaxAmount.GetTitle());
+            LootElement.MaxAmount = int.Parse(MaxAmount.GetTitle());
             LootElement.Weight = int.Parse(Weight.GetTitle());
             LootElement.DropChance = double.Parse(DropChance.GetTitle());
             LootElement.Type = (LootType)dropdown.value;
 
+            if (LootElement.Type == LootType.OBJECT)
+            {
+                int selectedIndex = listCustomObject.GetSelectedOriginalIndex();
+                if (customObjects != null && selectedIndex >= 0 && selectedIndex < customObjects.Length)
+                {
+                    LootElement.IdDropObject = customObjects[selectedIndex].Id;
+                }
+            }
+            else
+            {
+                Value price = valueOption.GetValue();
+                LootElement.Value = price;
+            }
+
             return LootElement;
         }
 
-        private void LoadListCustomObject()
+        private async void LoadListCustomObject()
         {
+            if (BundleSession.Intance == null || BundleSession.Intance.Bundle == null) return;
 
+            try
+            {
+                customObjects = await templateService.GetAllCustomObjectByGameBundleId(BundleSession.Intance.Bundle.Id);
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogError("Error loading custom objects: " + ex.Message);
+                customObjects = null;
+            }
+
+            if (customObjects == null || customObjects.Length == 0)
+            {
+                listCustomObject.ClearOptions();
+                return;
+            }
+
+            List<string> names = new List<string>();
+            for (int i = 0; i < customObjects.Length; i++)
+            {
+                names.Add(customObjects[i].Name ?? "???");
+            }
+
+            listCustomObject.SetOptions(names);
+
+            if (LootElement != null && LootElement.IdDropObject > 0)
+            {
+                for (int i = 0; i < customObjects.Length; i++)
+                {
+                    if (customObjects[i].Id == LootElement.IdDropObject)
+                    {
+                        listCustomObject.SetValue(i);
+                        break;
+                    }
+                }
+            }
+        }
+
+        private void OnTypeChanged(int index)
+        {
+            LootType selectedType = (LootType)index;
+
+            bool isObject = selectedType == LootType.OBJECT;
+
+            listCustomObject.gameObject.SetActive(isObject);
+            valueOption.gameObject.SetActive(!isObject);
+        }
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            OnRowClicked?.Invoke(this);
+        }
+
+        public void SetSelected(bool selected)
+        {
+            if (backgroundImage != null)
+            {
+                backgroundImage.color = selected ? selectedColor : normalColor;
+            }
         }
     }
 }
