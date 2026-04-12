@@ -64,7 +64,7 @@ public class User {
     private List<Game> gamesAsCreator = new ArrayList<>();
 
     @OneToMany(mappedBy = "creator")
-    @JsonManagedReference
+    @JsonManagedReference("user-agendaEvents")
     private List<AgendaEvent> agendaEvents = new ArrayList<>();
 
 
@@ -78,7 +78,7 @@ public class User {
 
 
     @ManyToMany
-    @JsonManagedReference
+    @JsonIgnore
     @JoinTable(
             name = "user_friends",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -87,7 +87,7 @@ public class User {
     private List<User> friends = new ArrayList<>();
 
     @ManyToMany
-    @JsonManagedReference
+    @JsonIgnore
     @JoinTable(
             name = "user_blocked",
             joinColumns = @JoinColumn(name = "user_id"),

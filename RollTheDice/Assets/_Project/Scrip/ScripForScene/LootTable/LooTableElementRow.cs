@@ -184,6 +184,8 @@ namespace Assets._Project.Scrip.ScripForScene.LootTable
             OnRowClicked?.Invoke(this);
         }
 
+   
+
         public void SetSelected(bool selected)
         {
             if (backgroundImage != null)

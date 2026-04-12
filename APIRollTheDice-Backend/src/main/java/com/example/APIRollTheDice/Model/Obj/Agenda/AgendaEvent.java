@@ -26,12 +26,12 @@ public class AgendaEvent {
 
     @ManyToOne
     @JoinColumn(name = "user_id",nullable = false)
-    @JsonBackReference
+    @JsonBackReference("user-agendaEvents")
     private User creator;
 
     @ManyToOne
     @JoinColumn(name = "agenda_id", nullable = false)
-    @JsonBackReference
+    @JsonBackReference("agenda-agendaEvents")
     private Agenda agenda;
 
     public AgendaEvent() {

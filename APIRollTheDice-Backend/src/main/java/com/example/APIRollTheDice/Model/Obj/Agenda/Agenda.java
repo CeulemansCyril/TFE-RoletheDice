@@ -29,7 +29,7 @@ public class Agenda {
 
 
     @OneToMany(mappedBy = "agenda", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonManagedReference("agenda-agendaEvents")
     private List<AgendaEvent> agendaEvents;
 
     @Column(nullable = false)

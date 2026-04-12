@@ -1,11 +1,17 @@
 package com.example.APIRollTheDice.Model.DTO.GameDTO.LootTableDTO;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
 public class LootTableDTO {
+    @JsonProperty("Id")
     private Long id;
+    @JsonProperty("Name")
     private String name;
+    @JsonProperty("LootElements")
     private List<LootElementDTO> lootElements;
+    @JsonProperty("IdGameBundle")
     private Long idGameBundle;
 
     public LootTableDTO(Long id, String name, List<LootElementDTO> lootElements, Long idGameBundle) {

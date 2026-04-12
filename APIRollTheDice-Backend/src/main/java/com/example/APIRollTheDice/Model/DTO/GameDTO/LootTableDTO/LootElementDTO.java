@@ -2,17 +2,24 @@ package com.example.APIRollTheDice.Model.DTO.GameDTO.LootTableDTO;
 
 import com.example.APIRollTheDice.Enum.LootType;
 import com.example.APIRollTheDice.Model.Obj.Game.Money.Value;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class LootElementDTO {
+    @JsonProperty("Type")
     private LootType type;
+    @JsonProperty("MinAmount")
     private int minAmount;
+    @JsonProperty("MaxAmount")
     private int maxAmount;
+    @JsonProperty("Weight")
     private int weight;
+    @JsonProperty("DropChance")
     private double dropChance;
-
+    @JsonProperty("IdDropObject")
     private Long idDropObject;
+    @JsonProperty("IdDropMoney")
     private Long idDropMoney;
-
+    @JsonProperty("Value")
     private Value value;
 
     public LootElementDTO() {

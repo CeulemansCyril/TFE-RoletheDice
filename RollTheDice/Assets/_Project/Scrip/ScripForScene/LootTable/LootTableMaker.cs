@@ -82,12 +82,12 @@ namespace Assets._Project.Scrip.ScripForScene.LootTable
             if (currentLootTable != null && currentLootTable.Id != lootTable.Id)
             {
                 SaveLootTable();
-
-            } else if (currentLootTable == null)
+            }else if(currentLootTable != null && currentLootTable.Id == lootTable.Id)
             {
-                currentLootTable = lootTable;
+                return;
             }
 
+            currentLootTable = lootTable;
 
             table.Clear();
 
@@ -170,9 +170,12 @@ namespace Assets._Project.Scrip.ScripForScene.LootTable
 
         private async void SaveLootTable()
         {
+            if (currentLootTable == null) return;
+
             LooTableElementRow[] list = table.GetRows<LooTableElementRow>();
 
             currentLootTable.LootElements = new LootElementDTO[list.Length];
+            currentLootTable.IdGameBundle = BundleSession.Intance.Bundle.Id;
 
             for (int i = 0; i < list.Length; i++)
             {

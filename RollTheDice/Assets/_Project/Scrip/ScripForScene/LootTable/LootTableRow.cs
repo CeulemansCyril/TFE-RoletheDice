@@ -26,8 +26,9 @@ namespace Assets._Project.Scrip.ScripForScene.LootTable
 			this.lootTable = lootTable;
 
 			label.SetText(lootTable.Name);
- 
-            label.EndRename += () => OnEndEdit();
+			label.SetClickable(false);
+
+			label.EndRename += () => OnEndEdit();
         }
 
 		public void OnPointerClick(PointerEventData eventData)

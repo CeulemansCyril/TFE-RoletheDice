@@ -21,7 +21,7 @@ public class Message {
     private boolean isRead;
     @Column(nullable = false)
     private boolean isModified;
-    @JsonBackReference
+    @JsonBackReference("conversation-messages")
     @ManyToOne(optional = false)
     @JoinColumn(name = "conversation_id", nullable = false)
     private Conversation conversation;

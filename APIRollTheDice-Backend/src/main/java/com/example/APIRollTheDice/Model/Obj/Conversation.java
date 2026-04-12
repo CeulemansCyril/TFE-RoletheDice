@@ -21,7 +21,8 @@ public class Conversation {
     private List<User> participants;
     @Column(nullable = false)
     private LocalDateTime createdAt;
-    @OneToMany
+    @OneToMany(mappedBy = "conversation", cascade = CascadeType.ALL, orphanRemoval = true)
+    @com.fasterxml.jackson.annotation.JsonManagedReference("conversation-messages")
     private List<Message> messages;
 
 
