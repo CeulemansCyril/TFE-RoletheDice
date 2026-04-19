@@ -1,21 +1,28 @@
 package com.example.APIRollTheDice.WebSocket;
 
 import com.example.APIRollTheDice.Enum.WSMessageTypes;
+import com.example.APIRollTheDice.Enum.WSScopeEnum;
+import com.example.APIRollTheDice.Model.Obj.Chat.ChatChanel;
+import com.example.APIRollTheDice.Model.Obj.Chat.ChatMessage;
 import com.example.APIRollTheDice.Model.Obj.Game.Token.TokenPlaced;
+import com.example.APIRollTheDice.Model.Obj.User.User;
+import com.example.APIRollTheDice.Service.Chat.ChatService;
 import com.example.APIRollTheDice.Service.Game.Token.TokenService;
+import com.example.APIRollTheDice.Service.User.UserService;
 import com.example.APIRollTheDice.WebSocket.Object.GameRoom;
 import com.example.APIRollTheDice.WebSocket.Object.WSMessage;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
 import java.util.Arrays;
-import java.util.List;
 
+import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
-import org.springframework.web.socket.WebSocketMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -27,30 +34,65 @@ public class GameWebSocketHandler extends TextWebSocketHandler {
 
     private final Map<String, Long> sessionGameMap = new ConcurrentHashMap<>();
 
-    private final Map<String, Long> sessionPlayerMap = new ConcurrentHashMap<>();
-    private final TokenService tokenService  ;
+    private final Map<String, Long> sessionUserMap = new ConcurrentHashMap<>();
 
-    public GameWebSocketHandler(TokenService tokenService) {
+    private final TokenService tokenService  ;
+    private final UserService userService;
+    private final ChatService chatService;
+
+    public GameWebSocketHandler(TokenService tokenService, UserService userService, ChatService chatService) {
+        this.userService = userService;
         this.tokenService = tokenService;
+        this.chatService = chatService;
     }
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        Long gameId = getGameId(session);
-        Long playerId = getPlayerId(session);
 
-        sessionGameMap.put(session.getId(),gameId);
-        sessionPlayerMap.put(session.getId(),playerId);
+        Long gameId = getGameId(session);
+        Long userId = getUserId(session);
+
+        sessionGameMap.put(session.getId(), gameId);
+        sessionUserMap.put(session.getId(), userId);
 
         GameRoom room = rooms.computeIfAbsent(gameId, GameRoom::new);
         room.addPlayer(session);
 
         WSMessage wsMessage = new WSMessage();
         wsMessage.setType(WSMessageTypes.PLAYER_JOINED);
+        wsMessage.setScope(WSScopeEnum.GAME);
         wsMessage.setGameId(gameId);
-        wsMessage.setPlayerId(playerId);
+        wsMessage.setSenderUserId(userId);
 
-        sendToRoom(gameId,wsMessage);
+        User user = userService.getUserById(userId);
+        Map<String, Object> payload = new HashMap<>();
+        payload.put("username", user.getUsername());
+        payload.put("joinedAt", Instant.now());
+        wsMessage.setPayload(payload);
+
+        sendToRoom(gameId, wsMessage);
+    }
+
+    @Override
+    public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
+
+        Long gameId = sessionGameMap.remove(session.getId());
+        Long userId = sessionUserMap.remove(session.getId());
+
+        GameRoom room = rooms.get(gameId);
+        if (room != null) {
+            room.removePlayer(session);
+        }
+
+        WSMessage wsMessage = new WSMessage();
+        wsMessage.setType(WSMessageTypes.PLAYER_LEFT);
+        wsMessage.setScope(WSScopeEnum.GAME);
+        wsMessage.setGameId(gameId);
+        wsMessage.setSenderUserId(userId);
+
+        try {
+            sendToRoom(gameId, wsMessage);
+        } catch (Exception e) {}
     }
 
     @Override
@@ -58,52 +100,62 @@ public class GameWebSocketHandler extends TextWebSocketHandler {
 
         WSMessage msg = objectMapper.readValue(message.getPayload(), WSMessage.class);
 
-        switch (msg.getType()) {
-
-            case CHAT:
+        switch (msg.getScope()) {
+            case GAME :
+               break;
+            case CHAT :
                 handleChat(msg);
                 break;
-            case MOVE_TOKEN:
-                handleMoveToken(msg);
+            case AGENDA :
                 break;
-            case PLACE_TOKEN:
-                handlePlacedToken(msg);
+            case PRIVATE  :
                 break;
-            case REMOVE_TOKEN:
-                handleRemoveToken(msg);
+            case SYSTEM :
                 break;
-
-            default:
-                System.out.println("Type inconnu : " + msg.getType());
+            case NOTIFICATION :
+                break;
+            case TOKEN  :
+                handleToken(msg);
+                break;
         }
     }
 
     private void handleChat(WSMessage msg) throws Exception {
+         switch (msg.getType()) {
+            case CHAT_MESSAGE :
+                ChatMessage chatMessage = msg.getPayload().get("chatMessage") != null ? objectMapper.convertValue(msg.getPayload().get("chatMessage"), ChatMessage.class) : null;
+                chatMessage = chatService.CreateChatMessage(chatMessage);
+                msg.setPayload(Map.of("chatMessage", chatMessage));
+                sendToRoom(msg.getGameId(), msg);
+                break;
+            case CREATE_CHANNEL  :
+                ChatChanel chatChanel = msg.getPayload().get("chatChanel") != null ? objectMapper.convertValue(msg.getPayload().get("chatChanel"), ChatChanel.class) : null;
+                chatChanel = chatService.CreateChatChanelle(chatChanel);
+                msg.setPayload(Map.of("chatChanel", chatChanel));
+                 break;
+         }
+    }
+
+    private void handleToken(WSMessage msg) throws Exception {
+        TokenPlaced tokenPlaced = msg.getPayload().get("tokenPlaced") != null ? objectMapper.convertValue(msg.getPayload().get("tokenPlaced"), TokenPlaced.class) : null;
+        switch (msg.getType()) {
+            case TOKEN_MOVE :
+                tokenPlaced= tokenService.UpdateTokenPlaced(tokenPlaced);
+                msg.setPayload(Map.of("tokenPlaced", tokenPlaced));
+                break;
+            case TOKEN_PLACE :
+                tokenPlaced= tokenService.CreateTokenPlaced(tokenPlaced);
+                msg.setPayload(Map.of("tokenPlaced", tokenPlaced));
+                break;
+            case TOKEN_REMOVE :
+                tokenService.DeleteTokenPlaced(tokenPlaced.getId());
+
+                break;
+        }
         sendToRoom(msg.getGameId(), msg);
     }
 
-    private void handleMoveToken(WSMessage msg) throws Exception {
 
-        TokenPlaced tokenPlaced = objectMapper.convertValue(msg.getData(), TokenPlaced.class);
-        tokenPlaced= tokenService.UpdateTokenPlaced(tokenPlaced);
-        msg.setData(tokenPlaced);
-        sendToRoom(msg.getGameId(), msg);
-    }
-
-    private void handlePlacedToken(WSMessage msg) throws  Exception {
-        TokenPlaced tokenPlaced = objectMapper.convertValue(msg.getData(), TokenPlaced.class);
-        tokenPlaced= tokenService.CreateTokenPlaced(tokenPlaced);
-        msg.setData(tokenPlaced);
-        sendToRoom(msg.getGameId(), msg);
-    }
-
-    private  void handleRemoveToken(WSMessage msg) throws  Exception {
-        Long id = objectMapper.convertValue(msg.getData(), Long.class);
-
-        tokenService.DeleteTokenPlaced(id);
-
-        sendToRoom(msg.getGameId(), msg);
-    }
 
     private void sendToRoom(Long gameId, WSMessage msg) throws Exception {
         GameRoom room = rooms.get(gameId);
@@ -118,6 +170,9 @@ public class GameWebSocketHandler extends TextWebSocketHandler {
 
     private Long getPlayerId(WebSocketSession session) {
         return Long.parseLong(getQueryParam(session, "playerId"));
+    }
+    private Long getUserId(WebSocketSession session) {
+        return Long.parseLong(getQueryParam(session, "senderUserId"));
     }
 
     private String getQueryParam(WebSocketSession session, String key) {

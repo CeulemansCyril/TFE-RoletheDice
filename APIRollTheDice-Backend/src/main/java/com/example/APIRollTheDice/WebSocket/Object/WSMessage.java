@@ -1,28 +1,40 @@
 package com.example.APIRollTheDice.WebSocket.Object;
 
 import com.example.APIRollTheDice.Enum.WSMessageTypes;
-import com.example.APIRollTheDice.Model.Obj.Game.Token.TokenPlaced;
+import com.example.APIRollTheDice.Enum.WSScopeEnum;
+
+import java.util.Map;
 
 public class WSMessage {
 
     private WSMessageTypes type;
+    private WSScopeEnum scope;
+
     private Long gameId;
+    private Long channelId;
+
+    private Long senderUserId;
+    private Long targetUserId;
+
     private Long playerId;
 
     private String content;
 
-    private Object data;
-
-    public WSMessage(WSMessageTypes type, Long gameId, Long playerId, String content, Object data) {
-        this.type = type;
-        this.gameId = gameId;
-        this.playerId = playerId;
-        this.content = content;
-        this.data = data;
-
-    }
+    private Map<String, Object> payload;
 
     public WSMessage() {
+    }
+
+    public WSMessage(WSMessageTypes type, WSScopeEnum scope, Long gameId, Long channelId, Long senderUserId, Long targetUserId, Map<String, Object> payload, String content, Long playerId) {
+        this.type = type;
+        this.scope = scope;
+        this.gameId = gameId;
+        this.channelId = channelId;
+        this.senderUserId = senderUserId;
+        this.targetUserId = targetUserId;
+        this.payload = payload;
+        this.content = content;
+        this.playerId = playerId;
     }
 
     public WSMessageTypes getType() {
@@ -33,6 +45,14 @@ public class WSMessage {
         this.type = type;
     }
 
+    public WSScopeEnum getScope() {
+        return scope;
+    }
+
+    public void setScope(WSScopeEnum scope) {
+        this.scope = scope;
+    }
+
     public Long getGameId() {
         return gameId;
     }
@@ -41,12 +61,28 @@ public class WSMessage {
         this.gameId = gameId;
     }
 
-    public Long getPlayerId() {
-        return playerId;
+    public Long getChannelId() {
+        return channelId;
     }
 
-    public void setPlayerId(Long playerId) {
-        this.playerId = playerId;
+    public void setChannelId(Long channelId) {
+        this.channelId = channelId;
+    }
+
+    public Long getTargetUserId() {
+        return targetUserId;
+    }
+
+    public void setTargetUserId(Long targetUserId) {
+        this.targetUserId = targetUserId;
+    }
+
+    public Long getSenderUserId() {
+        return senderUserId;
+    }
+
+    public void setSenderUserId(Long senderUserId) {
+        this.senderUserId = senderUserId;
     }
 
     public String getContent() {
@@ -57,11 +93,19 @@ public class WSMessage {
         this.content = content;
     }
 
-    public Object getData() {
-        return data;
+    public Map<String, Object> getPayload() {
+        return payload;
     }
 
-    public void setData(Object data) {
-        this.data = data;
+    public void setPayload(Map<String, Object> payload) {
+        this.payload = payload;
+    }
+
+    public Long getPlayerId() {
+        return playerId;
+    }
+
+    public void setPlayerId(Long playerId) {
+        this.playerId = playerId;
     }
 }
