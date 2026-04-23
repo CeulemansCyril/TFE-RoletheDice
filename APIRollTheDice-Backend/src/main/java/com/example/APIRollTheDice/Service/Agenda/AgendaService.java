@@ -20,16 +20,18 @@ public class AgendaService {
     private final AgendaInterface agendaInterface;
     private final AgendaMapper agendaMapper;
     private final AgendaEventMapper agendaEventMapper;
+    private final AgendaReminderService agendaReminderService;
     private final UserRepository userRepository;
 
     public AgendaService(AgendaEventInterface agendaEventInterface, AgendaInterface agendaInterface, AgendaMapper agendaMapper,
-                         AgendaEventMapper agendaEventMapper,UserRepository userRepository
+                         AgendaEventMapper agendaEventMapper,UserRepository userRepository, AgendaReminderService agendaReminderService
     ) {
          this.agendaEventInterface = agendaEventInterface;
          this.agendaInterface = agendaInterface;
          this.agendaEventMapper =agendaEventMapper;
          this.agendaMapper=agendaMapper;
          this.userRepository =userRepository;
+            this.agendaReminderService = agendaReminderService;
     }
 
     public Agenda CreateAgenda(Agenda agenda) {
@@ -90,12 +92,15 @@ public class AgendaService {
 
 
     public AgendaEvent createAgendaEvent(AgendaEvent agendaEvent) {
-       return agendaEventInterface.save(agendaEvent);
+        AgendaEvent savedEvent = agendaEventInterface.save(agendaEvent);
+        agendaReminderService.scheduleNext();
+        return agendaEventInterface.save(savedEvent);
     }
 
     public void deleteAgendaEvent(Long id) {
         if (agendaEventInterface.existsById(id)) {
             agendaEventInterface.deleteById(id);
+            agendaReminderService.scheduleNext();
         } else {
             throw new NotFoundException("Agenda event not found");
         }
@@ -112,7 +117,7 @@ public class AgendaService {
         existing.setDescription(agendaEvent.getDescription());
         existing.setStartDate(agendaEvent.getStartDate());
         existing.setEndDate(agendaEvent.getEndDate());
-
+        agendaReminderService.scheduleNext();
         return agendaEventInterface.save(existing);
     }
 
@@ -125,12 +130,14 @@ public class AgendaService {
     public void deleteAgendaEventById(Long id) {
         if (agendaEventInterface.existsById(id)) {
             agendaEventInterface.deleteById(id);
+            agendaReminderService.scheduleNext();
         } else {
             throw new NotFoundException("Agenda event not found");
         }
     }
     public void DeleteAllAgendaEventsByAgendaId(Long agendaId) {
         agendaEventInterface.deleteAllByAgendaId_Id(agendaId);
+            agendaReminderService.scheduleNext();
     }
     public boolean AgendaEventExists(Long id) {
         return agendaEventInterface.existsById(id);

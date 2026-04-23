@@ -37,8 +37,8 @@ public class ChatService {
         return chatChanelInterface.save(chatChanel);
     }
 
-    public ChatChanel UpdateChatChanelle(Long id, ChatChanel chatChanel){
-        if(chatChanelInterface.existsById(id)){
+    public ChatChanel UpdateChatChanelle(ChatChanel chatChanel){
+        if(chatChanelInterface.existsById(chatChanel.getId())){
            return chatChanelInterface.save(chatChanel);
         }else{
            throw new NotFoundException("Chat channel not found");

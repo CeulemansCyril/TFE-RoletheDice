@@ -6,6 +6,5 @@ public enum WSScopeEnum {
     CHAT,
     PRIVATE,
     AGENDA,
-    SYSTEM,
     NOTIFICATION
 }

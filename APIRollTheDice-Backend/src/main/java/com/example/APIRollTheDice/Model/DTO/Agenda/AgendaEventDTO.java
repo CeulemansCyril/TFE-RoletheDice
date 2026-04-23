@@ -1,5 +1,7 @@
 package com.example.APIRollTheDice.Model.DTO.Agenda;
 
+import jakarta.persistence.Column;
+
 import java.time.LocalDateTime;
 
 public class AgendaEventDTO {
@@ -9,19 +11,27 @@ public class AgendaEventDTO {
     private String description;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
+    private LocalDateTime reminderTime;
 
+    private boolean reminderSent = false;
+
+    private Integer reminderMinutesBefore;
     private Long idCreator;
 
 
     public AgendaEventDTO() {
     }
-    public AgendaEventDTO(Long id, String title, String description, LocalDateTime startDate, LocalDateTime endDate,Long idCreator) {
+    public AgendaEventDTO(Long id, String title, String description, LocalDateTime startDate, LocalDateTime endDate,Long idCreator,
+                          LocalDateTime reminderTime, boolean reminderSent, Integer reminderMinutesBefore) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.startDate = startDate;
         this.endDate = endDate;
         this.idCreator=idCreator;
+        this.reminderTime = reminderTime;
+        this.reminderSent = reminderSent;
+        this.reminderMinutesBefore = reminderMinutesBefore;
 
     }
 
@@ -71,5 +81,29 @@ public class AgendaEventDTO {
 
     public void setIdCreator(Long idCreator) {
         this.idCreator = idCreator;
+    }
+
+    public LocalDateTime getReminderTime() {
+        return reminderTime;
+    }
+
+    public void setReminderTime(LocalDateTime reminderTime) {
+        this.reminderTime = reminderTime;
+    }
+
+    public boolean isReminderSent() {
+        return reminderSent;
+    }
+
+    public void setReminderSent(boolean reminderSent) {
+        this.reminderSent = reminderSent;
+    }
+
+    public Integer getReminderMinutesBefore() {
+        return reminderMinutesBefore;
+    }
+
+    public void setReminderMinutesBefore(Integer reminderMinutesBefore) {
+        this.reminderMinutesBefore = reminderMinutesBefore;
     }
 }

@@ -23,6 +23,12 @@ public class AgendaEvent {
     private LocalDateTime startDate;
     @Column(nullable = false)
     private LocalDateTime endDate;
+    @Column
+    private LocalDateTime reminderTime;
+    @Column
+    private boolean reminderSent = false;
+    @Column
+    private Integer reminderMinutesBefore;
 
     @ManyToOne
     @JoinColumn(name = "user_id",nullable = false)
@@ -37,7 +43,8 @@ public class AgendaEvent {
     public AgendaEvent() {
     }
 
-    public AgendaEvent(Long id, String title, String description, LocalDateTime startDate, LocalDateTime endDate,Agenda agenda,User creator) {
+    public AgendaEvent(Long id, String title, String description, LocalDateTime startDate, LocalDateTime endDate,Agenda agenda,User creator,
+                       LocalDateTime reminderTime, boolean reminderSent, Integer reminderMinutesBefore) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -45,6 +52,9 @@ public class AgendaEvent {
         this.endDate = endDate;
         this.agenda = agenda;
         this.creator =creator;
+        this.reminderTime = reminderTime;
+        this.reminderSent = reminderSent;
+        this.reminderMinutesBefore = reminderMinutesBefore;
 
     }
 
@@ -102,5 +112,29 @@ public class AgendaEvent {
 
     public void setAgenda(Agenda agenda) {
         this.agenda = agenda;
+    }
+
+    public boolean isReminderSent() {
+        return reminderSent;
+    }
+
+    public void setReminderSent(boolean reminderSent) {
+        this.reminderSent = reminderSent;
+    }
+
+    public Integer getReminderMinutesBefore() {
+        return reminderMinutesBefore;
+    }
+
+    public void setReminderMinutesBefore(Integer reminderMinutesBefore) {
+        this.reminderMinutesBefore = reminderMinutesBefore;
+    }
+
+    public LocalDateTime getReminderTime() {
+        return reminderTime;
+    }
+
+    public void setReminderTime(LocalDateTime reminderTime) {
+        this.reminderTime = reminderTime;
     }
 }

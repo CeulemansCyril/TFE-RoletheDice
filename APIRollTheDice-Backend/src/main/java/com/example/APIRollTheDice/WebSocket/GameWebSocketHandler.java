@@ -2,12 +2,18 @@ package com.example.APIRollTheDice.WebSocket;
 
 import com.example.APIRollTheDice.Enum.WSMessageTypes;
 import com.example.APIRollTheDice.Enum.WSScopeEnum;
+import com.example.APIRollTheDice.Model.Obj.Agenda.Agenda;
 import com.example.APIRollTheDice.Model.Obj.Chat.ChatChanel;
 import com.example.APIRollTheDice.Model.Obj.Chat.ChatMessage;
+import com.example.APIRollTheDice.Model.Obj.Game.Game;
 import com.example.APIRollTheDice.Model.Obj.Game.Token.TokenPlaced;
+import com.example.APIRollTheDice.Model.Obj.Message;
 import com.example.APIRollTheDice.Model.Obj.User.User;
+import com.example.APIRollTheDice.Service.Agenda.AgendaService;
 import com.example.APIRollTheDice.Service.Chat.ChatService;
+import com.example.APIRollTheDice.Service.Game.GameService;
 import com.example.APIRollTheDice.Service.Game.Token.TokenService;
+import com.example.APIRollTheDice.Service.MessageService;
 import com.example.APIRollTheDice.Service.User.UserService;
 import com.example.APIRollTheDice.WebSocket.Object.GameRoom;
 import com.example.APIRollTheDice.WebSocket.Object.WSMessage;
@@ -39,11 +45,18 @@ public class GameWebSocketHandler extends TextWebSocketHandler {
     private final TokenService tokenService  ;
     private final UserService userService;
     private final ChatService chatService;
+    private final GameService gameService;
+    private final AgendaService agendaService;
+    private final MessageService messageService;
 
-    public GameWebSocketHandler(TokenService tokenService, UserService userService, ChatService chatService) {
+    public GameWebSocketHandler(TokenService tokenService, UserService userService, ChatService chatService,
+                                GameService gameService, AgendaService agendaService, MessageService messageService) {
+        this.messageService = messageService;
+         this.agendaService = agendaService;
         this.userService = userService;
         this.tokenService = tokenService;
         this.chatService = chatService;
+        this.gameService = gameService;
     }
 
     @Override
@@ -102,17 +115,20 @@ public class GameWebSocketHandler extends TextWebSocketHandler {
 
         switch (msg.getScope()) {
             case GAME :
+                handleGame(msg);
                break;
             case CHAT :
                 handleChat(msg);
                 break;
             case AGENDA :
+                handleAgenda(msg);
                 break;
             case PRIVATE  :
+                handlePrivate(msg);
                 break;
-            case SYSTEM :
-                break;
+
             case NOTIFICATION :
+                handleNotification(msg);
                 break;
             case TOKEN  :
                 handleToken(msg);
@@ -121,38 +137,190 @@ public class GameWebSocketHandler extends TextWebSocketHandler {
     }
 
     private void handleChat(WSMessage msg) throws Exception {
-         switch (msg.getType()) {
-            case CHAT_MESSAGE :
-                ChatMessage chatMessage = msg.getPayload().get("chatMessage") != null ? objectMapper.convertValue(msg.getPayload().get("chatMessage"), ChatMessage.class) : null;
+
+        Map<String, Object> payload = msg.getPayload();
+        if (payload == null) return;
+
+        switch (msg.getType()) {
+
+            case CHAT_MESSAGE:
+
+                ChatMessage chatMessage = getFromPayload(msg, "chatMessage", ChatMessage.class);
+
+                if (chatMessage == null) return;
+
                 chatMessage = chatService.CreateChatMessage(chatMessage);
+
+                msg.setPayload(Map.of("chatMessage", chatMessage));
+
+                sendToRoom(msg.getGameId(), msg);
+                break;
+            case UPDATED_MESSAGE:
+                ChatMessage updatedMessage = getFromPayload(msg, "chatMessage", ChatMessage.class);
+
+                if(updatedMessage == null) return;
+
+                chatMessage = chatService.UpdateChatMessage(updatedMessage);
+
                 msg.setPayload(Map.of("chatMessage", chatMessage));
                 sendToRoom(msg.getGameId(), msg);
                 break;
-            case CREATE_CHANNEL  :
-                ChatChanel chatChanel = msg.getPayload().get("chatChanel") != null ? objectMapper.convertValue(msg.getPayload().get("chatChanel"), ChatChanel.class) : null;
+            case DELETED_MESSAGE:
+                ChatMessage deletedMessage = getFromPayload(msg, "chatMessage", ChatMessage.class);
+                if(deletedMessage == null) return;
+
+                chatService.DeleteChatMessage(deletedMessage.getId());
+
+                msg.setPayload(Map.of("chatMessage", deletedMessage));
+                sendToRoom(msg.getGameId(), msg);
+                break;
+
+            case CREATE_CHANNEL:
+
+                ChatChanel chatChanel = getFromPayload(msg, "chatChanel", ChatChanel.class);
+
+                if (chatChanel == null) return;
+
                 chatChanel = chatService.CreateChatChanelle(chatChanel);
+
                 msg.setPayload(Map.of("chatChanel", chatChanel));
-                 break;
-         }
+
+                sendToRoom(msg.getGameId(), msg);
+                break;
+            case UPDATE_CHANNEL:
+                ChatChanel updatedChanel = getFromPayload(msg, "chatChanel", ChatChanel.class);
+
+                if (updatedChanel == null) return;
+
+                chatChanel = chatService.UpdateChatChanelle(updatedChanel);
+
+                msg.setPayload(Map.of("chatChanel", chatChanel));
+
+                sendToRoom(msg.getGameId(), msg);
+                break;
+             case DELETE_CHANNEL:
+                ChatChanel deletedChanel = getFromPayload(msg, "chatChanel", ChatChanel.class);
+                if (deletedChanel == null) return;
+
+                chatService.DeleteChatChannel(deletedChanel.getId());
+
+                msg.setPayload(Map.of("chatChanel", deletedChanel));
+
+                sendToRoom(msg.getGameId(), msg);
+                break;
+        }
     }
 
     private void handleToken(WSMessage msg) throws Exception {
-        TokenPlaced tokenPlaced = msg.getPayload().get("tokenPlaced") != null ? objectMapper.convertValue(msg.getPayload().get("tokenPlaced"), TokenPlaced.class) : null;
+
+        Map<String, Object> payload = msg.getPayload();
+        if (payload == null) return;
+        TokenPlaced tokenPlaced = new TokenPlaced();
+
         switch (msg.getType()) {
-            case TOKEN_MOVE :
-                tokenPlaced= tokenService.UpdateTokenPlaced(tokenPlaced);
+
+            case TOKEN_MOVE:
+                 tokenPlaced = getFromPayload(msg, "tokenPlaced", TokenPlaced.class);
+                tokenPlaced = tokenService.UpdateTokenPlaced(tokenPlaced);
                 msg.setPayload(Map.of("tokenPlaced", tokenPlaced));
                 break;
-            case TOKEN_PLACE :
-                tokenPlaced= tokenService.CreateTokenPlaced(tokenPlaced);
+
+            case TOKEN_PLACE:
+                 tokenPlaced = getFromPayload(msg, "tokenPlaced", TokenPlaced.class);
+                tokenPlaced = tokenService.CreateTokenPlaced(tokenPlaced);
                 msg.setPayload(Map.of("tokenPlaced", tokenPlaced));
                 break;
-            case TOKEN_REMOVE :
-                tokenService.DeleteTokenPlaced(tokenPlaced.getId());
+
+            case TOKEN_REMOVE:
+
+                 Long idToken = getFromPayload(msg, "tokenId", Long.class);
+                tokenService.DeleteTokenPlaced(idToken);
+                msg.setPayload(Map.of("tokenId", idToken));
+                break;
+        }
+
+
+
+        sendToRoom(msg.getGameId(), msg);
+    }
+
+    private void handleGame(WSMessage msg) throws Exception {
+        switch(msg.getType()) {
+            case CREATED_GAME:
+                Game game = getFromPayload(msg, "game", Game.class);
+                if (game == null) return;
+                game = gameService.CreateGame(game);
+                msg.setPayload(Map.of("game", game));
+                sendToRoom(msg.getGameId(), msg);
+                break;
+            case DELETED_GAME  :
+                Long gameId = getFromPayload(msg, "gameId", Long.class);
+                if (gameId == null) return;
+                gameService.DeleteGame(gameId);
+                msg.setPayload(Map.of("gameId", gameId));
+                sendToRoom(msg.getGameId(), msg);
+                break;
+            case UPDATED_GAME  :
+                Game updatedGame = getFromPayload(msg, "game", Game.class);
+                if (updatedGame == null) return;
+                updatedGame = gameService.UpdateGame(updatedGame);
+                msg.setPayload(Map.of("game", updatedGame));
+                sendToRoom(msg.getGameId(), msg);
+                break;
+
+        }
+    }
+
+    private void handleAgenda(WSMessage msg) throws Exception {
+        switch (msg.getType()) {
+            case AGENDA_CREATE :
+                Agenda agenda = getFromPayload(msg, "agenda", Agenda.class);
+                if (agenda == null) return;
+                agenda = agendaService.CreateAgenda(agenda);
+                msg.setPayload(Map.of("agenda", agenda));
+                sendToRoom(msg.getGameId(), msg);
+                break;
+            case AGENDA_UPDATE  :
+                Agenda updatedAgenda = getFromPayload(msg, "agenda", Agenda.class);
+                if (updatedAgenda == null) return;
+                updatedAgenda = agendaService.UpdateAgenda(updatedAgenda);
+                msg.setPayload(Map.of("agenda", updatedAgenda));
+                sendToRoom(msg.getGameId(), msg);
+                break;
+            case AGENDA_DELETE  :
+                Long agendaId = getFromPayload(msg, "agendaId", Long.class);
+                if (agendaId == null) return;
+                agendaService.DeleteAgenda(agendaId);
+                msg.setPayload(Map.of("agendaId", agendaId));
+                sendToRoom(msg.getGameId(), msg);
+                break;
+            case AGENDA_REMINDER  :
+                break;
+        }
+    }
+
+    private void handlePrivate(WSMessage msg) throws Exception {
+        switch (msg.getType()) {
+            case PRIVATE_MESSAGE :
+                Long targetUserId = msg.getTargetUserId();
+                Long senderUserId = msg.getSenderUserId();
+                String content = msg.getContent();
+
+                if (targetUserId == null || senderUserId == null || content == null) return;
+
+                Message privateMessage = new Message();
+                privateMessage.setSender(senderUserId);
+                privateMessage.setTargetUserId(targetUserId);
 
                 break;
         }
-        sendToRoom(msg.getGameId(), msg);
+    }
+
+    private void handleNotification(WSMessage msg) throws Exception {
+        switch (msg.getType()) {
+            case NOTIFICATION :
+                break;
+        }
     }
 
 
@@ -162,6 +330,32 @@ public class GameWebSocketHandler extends TextWebSocketHandler {
         if (room == null) return;
 
         room.broadcast(objectMapper.writeValueAsString(msg));
+    }
+
+    public void OutsiderSendToUser(Long userId, WSMessage msg) throws Exception {
+        sendToUser(userId, msg);
+    }
+
+    private void sendToUser(Long userId, WSMessage msg) throws Exception {
+
+        String json = objectMapper.writeValueAsString(msg);
+
+        for (Map.Entry<String, Long> entry : sessionUserMap.entrySet()) {
+
+            if (entry.getValue().equals(userId)) {
+
+                String sessionId = entry.getKey();
+
+                for (GameRoom room : rooms.values()) {
+
+                    WebSocketSession session = room.getSession(sessionId);
+
+                    if (session != null && session.isOpen()) {
+                        session.sendMessage(new TextMessage(json));
+                    }
+                }
+            }
+        }
     }
 
     private Long getGameId(WebSocketSession session) {
@@ -186,5 +380,14 @@ public class GameWebSocketHandler extends TextWebSocketHandler {
                 .map(pair -> pair[1])
                 .findFirst()
                 .orElse(null);
+    }
+
+    private <T> T getFromPayload(WSMessage msg, String key, Class<T> clazz) {
+        if (msg.getPayload() == null) return null;
+
+        Object value = msg.getPayload().get(key);
+        if (value == null) return null;
+
+        return objectMapper.convertValue(value, clazz);
     }
 }

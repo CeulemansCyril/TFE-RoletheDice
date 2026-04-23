@@ -4,6 +4,9 @@ public enum WSMessageTypes {
     // GAME
     PLAYER_JOINED,
     PLAYER_LEFT,
+    CREATED_GAME,
+    DELETED_GAME,
+    UPDATED_GAME,
 
     // TOKEN
     TOKEN_MOVE,
@@ -12,10 +15,17 @@ public enum WSMessageTypes {
 
     // CHAT
     CHAT_MESSAGE,
+    UPDATED_MESSAGE,
+    DELETED_MESSAGE,
     CREATE_CHANNEL,
+    UPDATE_CHANNEL,
+    DELETE_CHANNEL,
 
     // PRIVATE
     PRIVATE_MESSAGE,
+    UPDATE_PRIVATE_MESSAGE,
+    DELETE_PRIVATE_MESSAGE,
+
 
     // AGENDA
     AGENDA_CREATE,
@@ -24,5 +34,6 @@ public enum WSMessageTypes {
     AGENDA_REMINDER,
 
     // SYSTEM / NOTIF
-    NOTIFICATION
+    NOTIFICATION,
+    CLEAR_NOTIFICATIONS,
 }
