@@ -73,6 +73,16 @@ public class ConversationService {
         return conversationInterface.save(newConversation);
     }
 
+    public Conversation UpdateLastRead(Long conversationId,Long userId,Long lastMessageId){
+        Conversation conversation = conversationInterface.findById(conversationId)
+                .orElseThrow(() -> new NotFoundException("Conversation not found for update"));
+
+
+
+
+        return conversationInterface.save(conversation);
+    }
+
     public boolean conversationExists(Long id) {
         return conversationInterface.existsById(id);
     }

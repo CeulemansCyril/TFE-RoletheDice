@@ -367,23 +367,13 @@ public class GameWebSocketHandler extends TextWebSocketHandler {
                     }
                     break;
                 case READ_PRIVATE_MESSAGE:
-                    Long messageId2 = getFromPayload(msg, "messageId", Long.class);
-                    if (messageId2 == null) return;
+                    Long conversationId = getFromPayload(msg, "conversationId", Long.class);
+                    Long lastMessageId = getFromPayload(msg, "lastMessageId", Long.class);
+                    Long userId = msg.getSenderUserId();
 
-                    Message existingMessage2 = messageService.getMessageById(messageId2);
+                    if (conversationId == null || lastMessageId == null) return;
 
-                    if (!existingMessage2.getConversation().getParticipants().stream().anyMatch(user -> user.getId().equals(msg.getSenderUserId()))) {
-                        return;
-                    }
-
-                    existingMessage2.setRead(true);
-                    Message readMessage = messageService.updateMessage(existingMessage2);
-
-                    msg.setPayload(Map.of("message", readMessage));
-
-                    for (User participant : readMessage.getConversation().getParticipants()) {
-                        sendToUser(participant.getId(), msg);
-                    }
+                    Conversation conversation2 = conversationService.getConversationById(conversationId);
                     break;
         }
     }
