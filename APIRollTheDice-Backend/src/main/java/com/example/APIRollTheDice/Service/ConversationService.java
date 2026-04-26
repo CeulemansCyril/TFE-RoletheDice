@@ -61,6 +61,18 @@ public class ConversationService {
         }
     }
 
+    public Conversation findOrCreateConversation(Long senderId, Long recipientId) {
+        List<Conversation> conversations = conversationInterface.findAllByParticipantsId(senderId);
+        for (Conversation conversation : conversations) {
+            if (conversation.getParticipants().stream().anyMatch(user -> user.getId().equals(recipientId))) {
+                return conversation;
+            }
+        }
+        Conversation newConversation = new Conversation();
+        newConversation.setParticipants(List.of(userRepository.findById(senderId).orElseThrow(() -> new NotFoundException("Sender not found")), userRepository.findById(recipientId).orElseThrow(() -> new NotFoundException("Recipient not found"))));
+        return conversationInterface.save(newConversation);
+    }
+
     public boolean conversationExists(Long id) {
         return conversationInterface.existsById(id);
     }

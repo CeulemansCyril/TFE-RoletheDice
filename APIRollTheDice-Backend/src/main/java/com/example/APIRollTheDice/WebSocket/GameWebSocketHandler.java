@@ -5,12 +5,14 @@ import com.example.APIRollTheDice.Enum.WSScopeEnum;
 import com.example.APIRollTheDice.Model.Obj.Agenda.Agenda;
 import com.example.APIRollTheDice.Model.Obj.Chat.ChatChanel;
 import com.example.APIRollTheDice.Model.Obj.Chat.ChatMessage;
+import com.example.APIRollTheDice.Model.Obj.Conversation;
 import com.example.APIRollTheDice.Model.Obj.Game.Game;
 import com.example.APIRollTheDice.Model.Obj.Game.Token.TokenPlaced;
 import com.example.APIRollTheDice.Model.Obj.Message;
 import com.example.APIRollTheDice.Model.Obj.User.User;
 import com.example.APIRollTheDice.Service.Agenda.AgendaService;
 import com.example.APIRollTheDice.Service.Chat.ChatService;
+import com.example.APIRollTheDice.Service.ConversationService;
 import com.example.APIRollTheDice.Service.Game.GameService;
 import com.example.APIRollTheDice.Service.Game.Token.TokenService;
 import com.example.APIRollTheDice.Service.MessageService;
@@ -21,6 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 
 import org.springframework.web.socket.CloseStatus;
@@ -48,9 +51,11 @@ public class GameWebSocketHandler extends TextWebSocketHandler {
     private final GameService gameService;
     private final AgendaService agendaService;
     private final MessageService messageService;
+    private final ConversationService conversationService;
 
     public GameWebSocketHandler(TokenService tokenService, UserService userService, ChatService chatService,
-                                GameService gameService, AgendaService agendaService, MessageService messageService) {
+                                GameService gameService, AgendaService agendaService, MessageService messageService, ConversationService conversationService) {
+        this.conversationService = conversationService;
         this.messageService = messageService;
          this.agendaService = agendaService;
         this.userService = userService;
@@ -305,14 +310,81 @@ public class GameWebSocketHandler extends TextWebSocketHandler {
                 Long targetUserId = msg.getTargetUserId();
                 Long senderUserId = msg.getSenderUserId();
                 String content = msg.getContent();
-
-                if (targetUserId == null || senderUserId == null || content == null) return;
-
+                Conversation conversation = conversationService.findOrCreateConversation(senderUserId, targetUserId);
                 Message privateMessage = new Message();
-                privateMessage.setSender(senderUserId);
-                privateMessage.setTargetUserId(targetUserId);
+                privateMessage.setContent(content);
+                privateMessage.setSender(userService.getUserById(senderUserId));
+                privateMessage.setSentAt(LocalDateTime.now());
+                privateMessage.setConversation(conversation);
+                privateMessage.setModified(false);
+                privateMessage.setRead(false);
+                privateMessage = messageService.createMessage(privateMessage);
 
+                for(User participant : conversation.getParticipants()) {
+                    sendToUser(participant.getId(), msg);
+                }
                 break;
+                case UPDATE_PRIVATE_MESSAGE:
+                    Long messageId = getFromPayload(msg, "messageId", Long.class);
+                    String newContent = getFromPayload(msg, "content", String.class);
+
+                    if (messageId == null || newContent == null) return;
+
+                    Message existingMessage = messageService.getMessageById(messageId);
+
+                    if (!existingMessage.getSender().getId().equals(msg.getSenderUserId())) {
+                        return;
+                    }
+                    existingMessage.setContent(newContent);
+                    existingMessage.setModified(true);
+
+                    Message updatedMessage = messageService.updateMessage(existingMessage);
+
+                    msg.setPayload(Map.of("message", updatedMessage));
+
+                    for (User participant : updatedMessage.getConversation().getParticipants()) {
+                        sendToUser(participant.getId(), msg);
+                    }
+                    break;
+                case DELETE_PRIVATE_MESSAGE:
+                    Long messageId1 = getFromPayload(msg, "messageId", Long.class);
+                    if (messageId1 == null) return;
+
+                    Message existingMessage1 = messageService.getMessageById(messageId1);
+
+                    if (!existingMessage1.getSender().getId().equals(msg.getSenderUserId())) {
+                        return;
+                    }
+
+                    Conversation conversation1 = existingMessage1.getConversation();
+
+                    messageService.deleteMessage(messageId1);
+
+                    msg.setPayload(Map.of("messageId", messageId1));
+
+                    for (User participant : conversation1.getParticipants()) {
+                        sendToUser(participant.getId(), msg);
+                    }
+                    break;
+                case READ_PRIVATE_MESSAGE:
+                    Long messageId2 = getFromPayload(msg, "messageId", Long.class);
+                    if (messageId2 == null) return;
+
+                    Message existingMessage2 = messageService.getMessageById(messageId2);
+
+                    if (!existingMessage2.getConversation().getParticipants().stream().anyMatch(user -> user.getId().equals(msg.getSenderUserId()))) {
+                        return;
+                    }
+
+                    existingMessage2.setRead(true);
+                    Message readMessage = messageService.updateMessage(existingMessage2);
+
+                    msg.setPayload(Map.of("message", readMessage));
+
+                    for (User participant : readMessage.getConversation().getParticipants()) {
+                        sendToUser(participant.getId(), msg);
+                    }
+                    break;
         }
     }
 

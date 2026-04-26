@@ -1,11 +1,13 @@
 package com.example.APIRollTheDice.Model.DTO;
 
+import com.example.APIRollTheDice.Model.Obj.User.User;
+
 import java.time.LocalDateTime;
 
 public class MessageDTO {
     private Long id;
     private String content;
-    private String sender;
+    private Long sender;
     private LocalDateTime sentAt;
     private boolean isRead;
     private boolean isModified;
@@ -17,7 +19,7 @@ public class MessageDTO {
     public MessageDTO() {
     }
 
-    public MessageDTO(long id, String content, String sender, LocalDateTime sentAt, boolean isRead, boolean isModified, String fileURL, Long idConversation) {
+    public MessageDTO(long id, String content, Long sender, LocalDateTime sentAt, boolean isRead, boolean isModified, String fileURL, Long idConversation) {
         this.id = id;
         this.content = content;
         this.sender = sender;
@@ -45,11 +47,11 @@ public class MessageDTO {
         this.content = content;
     }
 
-    public String getSender() {
+    public Long getSender() {
         return sender;
     }
 
-    public void setSender(String sender) {
+    public void setSender(Long sender) {
         this.sender = sender;
     }
 

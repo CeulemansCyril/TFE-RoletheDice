@@ -1,5 +1,6 @@
 package com.example.APIRollTheDice.Model.Obj;
 
+import com.example.APIRollTheDice.Model.Obj.User.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
@@ -13,8 +14,9 @@ public class Message {
     private Long id;
     @Column(nullable = false)
     private String content;
-    @Column(nullable = false)
-    private String sender;
+    @ManyToOne
+    @JoinColumn(name = "sender_id", nullable = false)
+    private User sender;
     @Column(nullable = false)
     private LocalDateTime sentAt;
     @Column(nullable = false)
@@ -33,7 +35,7 @@ public class Message {
     public Message() {
 
     }
-    public Message(long id,String content, String sender, LocalDateTime sentAt, boolean isRead, boolean isModified, String fileURL, Conversation conversation) {
+    public Message(long id,String content, User sender, LocalDateTime sentAt, boolean isRead, boolean isModified, String fileURL, Conversation conversation) {
         this.id = id;
         this.content = content;
         this.sender = sender;
@@ -60,11 +62,11 @@ public class Message {
         this.content = content;
     }
 
-    public String getSender() {
+    public User getSender() {
         return sender;
     }
 
-    public void setSender(String sender) {
+    public void setSender(User sender) {
         this.sender = sender;
     }
 

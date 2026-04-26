@@ -3,6 +3,7 @@ package com.example.APIRollTheDice.Service;
 import com.example.APIRollTheDice.Exception.NotFoundException;
 import com.example.APIRollTheDice.Interface.ConversationInterface;
 import com.example.APIRollTheDice.Interface.MessageInterface;
+import com.example.APIRollTheDice.Interface.User.UserRepository;
 import com.example.APIRollTheDice.Mapper.MessageMapper;
 import com.example.APIRollTheDice.Model.DTO.MessageDTO;
 import com.example.APIRollTheDice.Model.Obj.Message;
@@ -17,8 +18,10 @@ public class MessageService {
     private final MessageMapper messageMapper;
 
     private final ConversationInterface conversationInterface;
+    private final UserRepository userRepository;
 
-    public MessageService(MessageInterface messageInterface, MessageMapper messageMapper, ConversationInterface conversationInterface) {
+    public MessageService(MessageInterface messageInterface, MessageMapper messageMapper, ConversationInterface conversationInterface, UserRepository userRepository) {
+        this.userRepository = userRepository;
         this.conversationInterface = conversationInterface;
         this.messageMapper = messageMapper;
         this.messageInterface = messageInterface;
@@ -69,6 +72,9 @@ public class MessageService {
         Message message = messageMapper.toEntity(dto);
         if (dto.getIdConversation() != null) {
             message.setConversation(conversationInterface.findById(dto.getIdConversation()).orElseThrow(() -> new NotFoundException("Conversation not found")));
+        }
+        if(dto.getSender() != null) {
+          message.setSender(userRepository.findById(dto.getSender()).orElseThrow(() -> new NotFoundException("User not found")));
         }
         return message;
     }
