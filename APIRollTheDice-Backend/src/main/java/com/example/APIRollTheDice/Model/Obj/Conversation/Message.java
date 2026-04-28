@@ -1,4 +1,4 @@
-package com.example.APIRollTheDice.Model.Obj;
+package com.example.APIRollTheDice.Model.Obj.Conversation;
 
 import com.example.APIRollTheDice.Model.Obj.User.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -31,11 +31,11 @@ public class Message {
     private String fileURL;
 
 
-
     public Message() {
 
     }
-    public Message(long id,String content, User sender, LocalDateTime sentAt, boolean isRead, boolean isModified, String fileURL, Conversation conversation) {
+
+    public Message(long id, String content, User sender, LocalDateTime sentAt, boolean isRead, boolean isModified, String fileURL, Conversation conversation) {
         this.id = id;
         this.content = content;
         this.sender = sender;

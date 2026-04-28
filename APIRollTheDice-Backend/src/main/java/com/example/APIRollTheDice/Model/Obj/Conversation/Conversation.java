@@ -1,4 +1,4 @@
-package com.example.APIRollTheDice.Model.Obj;
+package com.example.APIRollTheDice.Model.Obj.Conversation;
 
 import com.example.APIRollTheDice.Model.Obj.User.User;
 import jakarta.persistence.*;
@@ -28,9 +28,6 @@ public class Conversation {
 
     public Conversation() {
     }
-
-
-
 
 
     public Long getId() {
@@ -65,11 +62,5 @@ public class Conversation {
         this.messages = messages;
     }
 
-    public void addMessage(Message message) {
-        this.messages.add(message);
-    }
 
-    public void removeMessage(Message message) {
-        this.messages.remove(message);
-    }
 }

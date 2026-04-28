@@ -3,7 +3,7 @@ package com.example.APIRollTheDice.Mapper.User;
 import com.example.APIRollTheDice.Model.DTO.UserDTo.UserDTO;
 import com.example.APIRollTheDice.Model.DTO.UserDTo.UserIdentifantData;
 import com.example.APIRollTheDice.Model.Obj.Agenda.AgendaEvent;
-import com.example.APIRollTheDice.Model.Obj.Conversation;
+import com.example.APIRollTheDice.Model.Obj.Conversation.Conversation;
 import com.example.APIRollTheDice.Model.Obj.Game.Game;
 import com.example.APIRollTheDice.Model.Obj.Game.Player;
 import com.example.APIRollTheDice.Model.Obj.User.User;

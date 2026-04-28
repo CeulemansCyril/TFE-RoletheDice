@@ -1,6 +1,4 @@
-package com.example.APIRollTheDice.Model.DTO;
-
-import com.example.APIRollTheDice.Model.Obj.User.User;
+package com.example.APIRollTheDice.Model.DTO.ConversationDTO;
 
 import java.time.LocalDateTime;
 

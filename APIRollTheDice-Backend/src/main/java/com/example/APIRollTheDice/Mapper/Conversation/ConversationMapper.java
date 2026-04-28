@@ -1,8 +1,8 @@
-package com.example.APIRollTheDice.Mapper;
+package com.example.APIRollTheDice.Mapper.Conversation;
 
-import com.example.APIRollTheDice.Model.DTO.ConversationDTO;
-import com.example.APIRollTheDice.Model.Obj.Conversation;
-import com.example.APIRollTheDice.Model.Obj.Message;
+import com.example.APIRollTheDice.Model.DTO.ConversationDTO.ConversationDTO;
+import com.example.APIRollTheDice.Model.Obj.Conversation.Conversation;
+import com.example.APIRollTheDice.Model.Obj.Conversation.Message;
 import com.example.APIRollTheDice.Model.Obj.User.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

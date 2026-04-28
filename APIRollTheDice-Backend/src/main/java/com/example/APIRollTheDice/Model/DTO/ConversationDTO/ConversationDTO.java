@@ -1,4 +1,4 @@
-package com.example.APIRollTheDice.Model.DTO;
+package com.example.APIRollTheDice.Model.DTO.ConversationDTO;
 
 
 import java.time.LocalDateTime;

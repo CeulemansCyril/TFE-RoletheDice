@@ -1,12 +1,12 @@
 package com.example.APIRollTheDice.Service;
 
 import com.example.APIRollTheDice.Exception.NotFoundException;
-import com.example.APIRollTheDice.Interface.ConversationInterface;
-import com.example.APIRollTheDice.Interface.MessageInterface;
+import com.example.APIRollTheDice.Interface.ConversationInterface.ConversationInterface;
+import com.example.APIRollTheDice.Interface.ConversationInterface.MessageInterface;
 import com.example.APIRollTheDice.Interface.User.UserRepository;
-import com.example.APIRollTheDice.Mapper.MessageMapper;
-import com.example.APIRollTheDice.Model.DTO.MessageDTO;
-import com.example.APIRollTheDice.Model.Obj.Message;
+import com.example.APIRollTheDice.Mapper.Conversation.MessageMapper;
+import com.example.APIRollTheDice.Model.DTO.ConversationDTO.MessageDTO;
+import com.example.APIRollTheDice.Model.Obj.Conversation.Message;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

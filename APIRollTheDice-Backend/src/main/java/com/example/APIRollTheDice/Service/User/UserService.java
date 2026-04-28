@@ -2,7 +2,7 @@ package com.example.APIRollTheDice.Service.User;
 
 import com.example.APIRollTheDice.Enum.RoleUser;
 import com.example.APIRollTheDice.Exception.NotFoundException;
-import com.example.APIRollTheDice.Interface.ConversationInterface;
+import com.example.APIRollTheDice.Interface.ConversationInterface.ConversationInterface;
 import com.example.APIRollTheDice.Interface.GameInterface.GameInterface;
 import com.example.APIRollTheDice.Interface.GameInterface.PlayerInterface;
 import com.example.APIRollTheDice.Interface.User.UserCreationContentInterface;
@@ -10,7 +10,6 @@ import com.example.APIRollTheDice.Interface.User.UserRepository;
 import com.example.APIRollTheDice.Mapper.User.UserMapper;
 import com.example.APIRollTheDice.Model.DTO.UserDTo.UserDTO;
 import com.example.APIRollTheDice.Model.DTO.UserDTo.UserIdentifantData;
-import com.example.APIRollTheDice.Model.Obj.Agenda.AgendaEvent;
 import com.example.APIRollTheDice.Model.Obj.User.User;
 import com.example.APIRollTheDice.Service.Agenda.AgendaService;
 import org.springframework.stereotype.Service;

@@ -1,7 +1,7 @@
-package com.example.APIRollTheDice.Interface;
+package com.example.APIRollTheDice.Interface.ConversationInterface;
 
 
-import com.example.APIRollTheDice.Model.Obj.Conversation;
+import com.example.APIRollTheDice.Model.Obj.Conversation.Conversation;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

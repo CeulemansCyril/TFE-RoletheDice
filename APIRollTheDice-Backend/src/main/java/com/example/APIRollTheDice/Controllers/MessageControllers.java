@@ -1,7 +1,7 @@
 package com.example.APIRollTheDice.Controllers;
 
-import com.example.APIRollTheDice.Model.DTO.MessageDTO;
-import com.example.APIRollTheDice.Model.Obj.Message;
+import com.example.APIRollTheDice.Model.DTO.ConversationDTO.MessageDTO;
+import com.example.APIRollTheDice.Model.Obj.Conversation.Message;
 import com.example.APIRollTheDice.Service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

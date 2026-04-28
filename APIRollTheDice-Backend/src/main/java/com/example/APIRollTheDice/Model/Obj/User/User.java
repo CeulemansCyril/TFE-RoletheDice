@@ -3,7 +3,7 @@ package com.example.APIRollTheDice.Model.Obj.User;
 import com.example.APIRollTheDice.Enum.RoleUser;
 import com.example.APIRollTheDice.Exception.UserFriendException;
 import com.example.APIRollTheDice.Model.Obj.Agenda.AgendaEvent;
-import com.example.APIRollTheDice.Model.Obj.Conversation;
+import com.example.APIRollTheDice.Model.Obj.Conversation.Conversation;
 import com.example.APIRollTheDice.Model.Obj.Game.Game;
 import com.example.APIRollTheDice.Model.Obj.Game.Player;
 import com.fasterxml.jackson.annotation.JsonIgnore;
