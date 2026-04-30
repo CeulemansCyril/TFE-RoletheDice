@@ -1,7 +1,7 @@
-package com.example.APIRollTheDice.WebSocket.Object;
+package com.example.APIRollTheDice.WebSocket.DTO;
 
-import com.example.APIRollTheDice.Enum.WSMessageTypes;
-import com.example.APIRollTheDice.Enum.WSScopeEnum;
+import com.example.APIRollTheDice.WebSocket.Enum.WSMessageTypes;
+import com.example.APIRollTheDice.WebSocket.Enum.WSScopeEnum;
 
 import java.util.Map;
 

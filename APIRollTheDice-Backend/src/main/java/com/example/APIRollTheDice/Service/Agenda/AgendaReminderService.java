@@ -1,14 +1,13 @@
 package com.example.APIRollTheDice.Service.Agenda;
 
-import com.example.APIRollTheDice.Enum.WSMessageTypes;
-import com.example.APIRollTheDice.Enum.WSScopeEnum;
+import com.example.APIRollTheDice.WebSocket.Enum.WSMessageTypes;
+import com.example.APIRollTheDice.WebSocket.Enum.WSScopeEnum;
 import com.example.APIRollTheDice.Interface.AgendaInterface.AgendaEventInterface;
 import com.example.APIRollTheDice.Model.Obj.Agenda.AgendaEvent;
-import com.example.APIRollTheDice.Model.Obj.Notification;
 import com.example.APIRollTheDice.Model.Obj.User.User;
 import com.example.APIRollTheDice.Service.NotificationService;
 import com.example.APIRollTheDice.WebSocket.GameWebSocketHandler;
-import com.example.APIRollTheDice.WebSocket.Object.WSMessage;
+import com.example.APIRollTheDice.WebSocket.DTO.WSMessage;
 import jakarta.annotation.PostConstruct;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.scheduling.TaskScheduler;
@@ -16,8 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.awt.print.Pageable;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
 

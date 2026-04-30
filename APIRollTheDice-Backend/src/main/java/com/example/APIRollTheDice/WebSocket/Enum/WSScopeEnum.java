@@ -1,4 +1,4 @@
-package com.example.APIRollTheDice.Enum;
+package com.example.APIRollTheDice.WebSocket.Enum;
 
 public enum WSScopeEnum {
     GAME,
