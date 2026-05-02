@@ -19,7 +19,7 @@ public interface LootTableMapper {
 
     LootElement toElementEntity(LootElementDTO dto);
 
-    @Mapping(target = "id", ignore = true)
+
     @Mapping(target = "gameBundle", ignore = true)
     LootTable toEntity(LootTableDTO dto);
 }

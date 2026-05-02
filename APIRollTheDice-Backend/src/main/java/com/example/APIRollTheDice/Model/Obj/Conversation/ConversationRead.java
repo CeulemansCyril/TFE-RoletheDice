@@ -17,7 +17,7 @@ import java.util.Date;
 public class ConversationRead {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
     @ManyToOne(optional = false)
     @JoinColumn(name = "conversation_id")
     private Conversation conversation;

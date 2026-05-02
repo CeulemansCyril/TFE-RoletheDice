@@ -27,7 +27,8 @@ public class LootElement {
     public LootElement() {
     }
 
-    public LootElement(LootType type, int minAmount, int maxAmount, int weight, double dropChance,  Long dropObject,Value value) {
+    public LootElement(LootType type, int minAmount, int maxAmount, int weight, double dropChance,  Long dropObject,Value value ) {
+
         Type = type;
         MinAmount = minAmount;
         MaxAmount = maxAmount;
@@ -94,4 +95,5 @@ public class LootElement {
     public void setValue(Value value) {
         this.value = value;
     }
+
 }

@@ -5,6 +5,7 @@ import com.example.APIRollTheDice.Model.Obj.Game.Money.Value;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class LootElementDTO {
+
     @JsonProperty("Type")
     private LootType type;
     @JsonProperty("MinAmount")
@@ -25,7 +26,8 @@ public class LootElementDTO {
     public LootElementDTO() {
     }
 
-    public LootElementDTO(LootType type, int minAmount, int maxAmount, int weight, double dropChance, Long idDropObject, Long idDropMoney, Value value) {
+    public LootElementDTO(LootType type, int minAmount, int maxAmount, int weight, double dropChance, Long idDropObject, Long idDropMoney, Value value ) {
+
         this.type = type;
         this.minAmount = minAmount;
         this.maxAmount = maxAmount;
@@ -99,4 +101,6 @@ public class LootElementDTO {
     public void setValue(Value value) {
         this.value = value;
     }
+
+
 }

@@ -42,7 +42,9 @@ public class LootTableControllers {
 
     @PutMapping("/UpdateLootTables")
     public ResponseEntity<LootTableDTO> UpdateLootTables(@RequestBody LootTableDTO lootTableDTO){
-        LootTable lootTable = lootTableService.UpdateLooTable(lootTableService.LootTableDTOToEntity(lootTableDTO));
+        System.out.println("Received LootTableDTO for update: " + lootTableDTO.getId());
+        LootTable lootTable = lootTableService.LootTableDTOToEntity(lootTableDTO);
+        lootTable=   lootTableService.UpdateLooTable(lootTable);
         return ResponseEntity.ok(lootTableService.LootTableToDTO(lootTable));
     }
 
@@ -78,6 +80,8 @@ public class LootTableControllers {
             return ResponseEntity.notFound().build();
         }
     }
+
+
 
 
 

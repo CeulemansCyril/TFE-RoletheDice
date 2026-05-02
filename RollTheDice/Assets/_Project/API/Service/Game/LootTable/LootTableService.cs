@@ -17,11 +17,12 @@ namespace Assets._Project.API.Service.Game.LootTable
 
         public Awaitable<LootTableDTO> CreateLootTable(LootTableDTO lootTable, long idUser)
         {
-                        return CreateAsync("/CreateLootTables/" + idUser, lootTable);
+           return CreateAsync("/CreateLootTables/" + idUser, lootTable);
         }
         
         public Awaitable<LootTableDTO> UpdateLootTable(LootTableDTO lootTable)
         {
+             
             return UpdateAsync("/UpdateLootTables ", lootTable);
         }
 
@@ -39,7 +40,7 @@ namespace Assets._Project.API.Service.Game.LootTable
             return DeleteAsync("/DeleteLootTables/" + id);
         }
 
-    
+        
 
         public LootTables LootTableDTOToLootTable(LootTableDTO lootTableDTO)
         {

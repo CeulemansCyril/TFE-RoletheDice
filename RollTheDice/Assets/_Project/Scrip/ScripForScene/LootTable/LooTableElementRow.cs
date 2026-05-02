@@ -41,9 +41,13 @@ namespace Assets._Project.Scrip.ScripForScene.LootTable
         private TemplateService templateService;
         private CustomObjectDTO[] customObjects;
 
-        public void Init(LootElementDTO loot)
+        private long id = -1;
+
+        public void Init(LootElementDTO loot, long id)
         {
             LootElement = loot;
+            this.id = id;
+            Debug.Log("loot element id drop object: " + LootElement.IdDropObject);
             templateService = new TemplateService();
 
             MinAmount.EndRename +=     () => EndRenameBasicValue(MinAmount); 
@@ -184,7 +188,10 @@ namespace Assets._Project.Scrip.ScripForScene.LootTable
             OnRowClicked?.Invoke(this);
         }
 
-   
+        public long GetId()
+        {
+            return id;
+        }
 
         public void SetSelected(bool selected)
         {

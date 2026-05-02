@@ -1,5 +1,7 @@
 package com.example.APIRollTheDice.WebSocket;
 
+import com.example.APIRollTheDice.WebSocket.Core.WSSender;
+import com.example.APIRollTheDice.WebSocket.Core.WSSessionRegistry;
 import com.example.APIRollTheDice.WebSocket.Enum.WSMessageTypes;
 import com.example.APIRollTheDice.WebSocket.Enum.WSScopeEnum;
 import com.example.APIRollTheDice.Model.Obj.Agenda.Agenda;
@@ -38,12 +40,9 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class GameWebSocketHandler extends TextWebSocketHandler {
     private final ObjectMapper objectMapper = new ObjectMapper();
+    private final WSSessionRegistry registry;
+    private final WSSender sender;
 
-    private final Map<Long, GameRoom> rooms = new ConcurrentHashMap<>();
-
-    private final Map<String, Long> sessionGameMap = new ConcurrentHashMap<>();
-
-    private final Map<String, Long> sessionUserMap = new ConcurrentHashMap<>();
 
 
     private final UserService userService;
@@ -54,7 +53,9 @@ public class GameWebSocketHandler extends TextWebSocketHandler {
     private final PrivateMessageWSService privateMessageWSService;
     private final TokenWSService tokenWSService;
 
-    public GameWebSocketHandler(UserService userService, GameWSService gameWSService, AgendaWSService agendaWSService, ChatWSService chatWSService, NotificationWSService notificationWSService, PrivateMessageWSService privateMessageWSService, TokenWSService tokenWSService) {
+    public GameWebSocketHandler(UserService userService, GameWSService gameWSService, AgendaWSService agendaWSService, ChatWSService chatWSService,
+                                NotificationWSService notificationWSService, PrivateMessageWSService privateMessageWSService,
+                                TokenWSService tokenWSService, WSSessionRegistry registry, WSSender sender) {
         this.userService = userService;
         this.gameWSService = gameWSService;
         this.agendaWSService = agendaWSService;
@@ -62,6 +63,8 @@ public class GameWebSocketHandler extends TextWebSocketHandler {
         this.notificationWSService = notificationWSService;
         this.privateMessageWSService = privateMessageWSService;
         this.tokenWSService = tokenWSService;
+        this.registry = registry;
+        this.sender = sender;
     }
 
 
@@ -72,12 +75,7 @@ public class GameWebSocketHandler extends TextWebSocketHandler {
 
         Long gameId = getGameId(session);
         Long userId = getUserId(session);
-
-        sessionGameMap.put(session.getId(), gameId);
-        sessionUserMap.put(session.getId(), userId);
-
-        GameRoom room = rooms.computeIfAbsent(gameId, GameRoom::new);
-        room.addPlayer(session);
+        registry.registerSession(session, gameId, userId);
 
         WSMessage wsMessage = new WSMessage();
         wsMessage.setType(WSMessageTypes.PLAYER_JOINED);
@@ -91,19 +89,16 @@ public class GameWebSocketHandler extends TextWebSocketHandler {
         payload.put("joinedAt", Instant.now());
         wsMessage.setPayload(payload);
 
-        sendToRoom(gameId, wsMessage);
+        sender.sendToRoom(gameId, wsMessage);
     }
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
 
-        Long gameId = sessionGameMap.remove(session.getId());
-        Long userId = sessionUserMap.remove(session.getId());
+        Long gameId = getGameId(session);
+        Long userId = getUserId(session);
 
-        GameRoom room = rooms.get(gameId);
-        if (room != null) {
-            room.removePlayer(session);
-        }
+        registry.removeSession(session);
 
         WSMessage wsMessage = new WSMessage();
         wsMessage.setType(WSMessageTypes.PLAYER_LEFT);
@@ -112,9 +107,8 @@ public class GameWebSocketHandler extends TextWebSocketHandler {
         wsMessage.setSenderUserId(userId);
 
         try {
-            sendToRoom(gameId, wsMessage);
-        } catch (Exception e) {
-        }
+            sender.sendToRoom(gameId, wsMessage);
+        } catch (Exception e) {}
     }
 
     @Override
@@ -144,42 +138,6 @@ public class GameWebSocketHandler extends TextWebSocketHandler {
         }
     }
     
-    public void OutsiderSendToRoom(Long gameId, WSMessage msg) throws Exception {
-        sendToRoom(gameId, msg);
-    }
-
-    private void sendToRoom(Long gameId, WSMessage msg) throws Exception {
-        GameRoom room = rooms.get(gameId);
-        if (room == null) return;
-
-        room.broadcast(objectMapper.writeValueAsString(msg));
-    }
-
-    public void OutsiderSendToUser(Long userId, WSMessage msg) throws Exception {
-        sendToUser(userId, msg);
-    }
-
-    private void sendToUser(Long userId, WSMessage msg) throws Exception {
-
-        String json = objectMapper.writeValueAsString(msg);
-
-        for (Map.Entry<String, Long> entry : sessionUserMap.entrySet()) {
-
-            if (entry.getValue().equals(userId)) {
-
-                String sessionId = entry.getKey();
-
-                for (GameRoom room : rooms.values()) {
-
-                    WebSocketSession session = room.getSession(sessionId);
-
-                    if (session != null && session.isOpen()) {
-                        session.sendMessage(new TextMessage(json));
-                    }
-                }
-            }
-        }
-    }
 
     private Long getGameId(WebSocketSession session) {
         return Long.parseLong(getQueryParam(session, "gameId"));

@@ -24,8 +24,9 @@ namespace Assets._Project.Scrip.ScripForScene.LootTable
         public void Init(LootTables lootTable)
 		{
 			this.lootTable = lootTable;
+ 
 
-			label.SetText(lootTable.Name);
+            label.SetText(lootTable.Name);
 			label.SetClickable(false);
 
 			label.EndRename += () => OnEndEdit();

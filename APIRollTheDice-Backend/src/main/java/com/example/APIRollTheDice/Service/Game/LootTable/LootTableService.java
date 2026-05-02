@@ -17,12 +17,14 @@ public class LootTableService {
     private final LootTableMapper lootTableMapper;
     private final LootTableInterface lootTableInterface;
 
+
     private final GameBundleInterface gameBundleInterface;
 
     public LootTableService(LootTableMapper lootTableMapper, LootTableInterface lootTableInterface,GameBundleInterface gameBundleInterface) {
         this.lootTableMapper = lootTableMapper;
         this.lootTableInterface = lootTableInterface;
         this.gameBundleInterface =gameBundleInterface;
+
     }
 
     public LootTable CreateLootTable(LootTable lootTable){
@@ -30,10 +32,13 @@ public class LootTableService {
     }
 
     public LootTable UpdateLooTable(LootTable lootTable){
+
         LootTable existing = lootTableInterface.findById(lootTable.getId()).orElseThrow(() ->  new  NotFoundException("LootTable not found"));
 
         existing.setName(lootTable.getName());
         existing.setLootElements(lootTable.getLootElements());
+
+
 
         return lootTableInterface.save(existing);
     }
@@ -50,6 +55,7 @@ public class LootTableService {
     public List<LootTable> GetAllLootTablesByGameBundleId(Long idGameBundle){
         return lootTableInterface.findAllByGameBundle_id(idGameBundle);
     }
+
 
 
 

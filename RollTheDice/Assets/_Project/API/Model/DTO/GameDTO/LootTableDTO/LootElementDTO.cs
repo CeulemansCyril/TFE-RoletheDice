@@ -6,20 +6,22 @@ namespace Assets._Project.API.Model.DTO.GameDTO.LootTableDTO
 {
     public class LootElementDTO
     {
-          public LootType Type { get; set; }
+        public long Id { get; set; }
+        public LootType Type { get; set; }
         public int MinAmount { get; set; }
         public int MaxAmount { get; set; }
         public int Weight { get; set; }
         public double DropChance { get; set; }
 
-        public long IdDropObject { get; set; }
-        public long IdDropMoney { get; set; }
+        public long? IdDropObject { get; set; }
+        public long? IdDropMoney { get; set; }
 
-        public Value Value{ get; set; }
+        public Value? Value{ get; set; }
 
         public LootElementDTO(){}
-        public LootElementDTO(LootType type, int minAmount, int maxAmount, int weight, double dropChance, long idDropObject, long idDropMoney, Value value)
+        public LootElementDTO(LootType type, int minAmount, int maxAmount, int weight, double dropChance, long idDropObject, long idDropMoney, Value value, long id)
         {
+            Id = id;
             Type = type;
             MinAmount = minAmount;
             MaxAmount = maxAmount;

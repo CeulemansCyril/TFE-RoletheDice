@@ -1,5 +1,6 @@
 package com.example.APIRollTheDice.Service.Agenda;
 
+import com.example.APIRollTheDice.WebSocket.Core.WSSender;
 import com.example.APIRollTheDice.WebSocket.Enum.WSMessageTypes;
 import com.example.APIRollTheDice.WebSocket.Enum.WSScopeEnum;
 import com.example.APIRollTheDice.Interface.AgendaInterface.AgendaEventInterface;
@@ -9,11 +10,14 @@ import com.example.APIRollTheDice.Service.NotificationService;
 import com.example.APIRollTheDice.WebSocket.GameWebSocketHandler;
 import com.example.APIRollTheDice.WebSocket.DTO.WSMessage;
 import jakarta.annotation.PostConstruct;
+
+import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Pageable;
+
 import java.sql.Timestamp;
 import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
@@ -22,7 +26,7 @@ import java.util.concurrent.ScheduledFuture;
 public class AgendaReminderService {
 
     private final AgendaEventInterface repo;
-    private final GameWebSocketHandler gameWebSocketHandler;
+    private final WSSender wsSender;
     private final NotificationService notificationService;
     private final TaskScheduler scheduler;
 
@@ -30,12 +34,12 @@ public class AgendaReminderService {
 
     public AgendaReminderService(
             AgendaEventInterface repo,
-            GameWebSocketHandler gameWebSocketHandler,
+            WSSender wsSender,
             NotificationService notificationService,
             TaskScheduler scheduler
     ) {
         this.repo = repo;
-        this.gameWebSocketHandler = gameWebSocketHandler;
+        this.wsSender=wsSender;
         this.notificationService = notificationService;
         this.scheduler = scheduler;
     }
@@ -54,7 +58,7 @@ public class AgendaReminderService {
             currentTask.cancel(false);
         }
 
-        AgendaEvent next = repo.findNextReminder((Pageable) PageRequest.of(0, 1))
+        AgendaEvent next = repo.findNextReminder(PageRequest.of(0,1))
                 .stream()
                 .findFirst()
                 .orElse(null);
@@ -97,10 +101,10 @@ public class AgendaReminderService {
                 "message", "Rappel : " + event.getTitle()
         ));
 
-        gameWebSocketHandler.OutsiderSendToUser(event.getCreator().getId(), msg);
+        wsSender.sendToUser(event.getCreator().getId(), msg);
  
         for (User user : event.getAgenda().getParticipants()) {
-            gameWebSocketHandler.OutsiderSendToUser(user.getId(), msg);
+            wsSender.sendToUser(user.getId(), msg);
         }
 
 

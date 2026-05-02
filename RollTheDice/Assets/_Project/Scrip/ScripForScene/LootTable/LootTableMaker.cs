@@ -4,6 +4,7 @@ using Assets._Project.API.Service.Game.LootTable;
 using Assets._Project.Localization;
 using Assets._Project.Scrip.ScripForScene.Bundle;
 using Assets._Project.Scrip.ScripForScene.Login;
+using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
@@ -68,7 +69,7 @@ namespace Assets._Project.Scrip.ScripForScene.LootTable
         {
             foreach (LootTables loot in lootTable)
             {
-                GameObject row = table.AddRow(lootTableRowPrefab.gameObject);
+                GameObject row = Instantiate(lootTableRowPrefab.gameObject, listLootTable);
                 LootTableRow item = row.GetComponent<LootTableRow>();
                 item.Init(loot);
                 item.click += OnClickedRow;
@@ -98,11 +99,13 @@ namespace Assets._Project.Scrip.ScripForScene.LootTable
 
         private void LoadList(LootElementDTO[] list)
         {
+            long count = 0;
             foreach (LootElementDTO loot in list)
             {
                 GameObject row = table.AddRow(rowPrefab.gameObject);
                 LooTableElementRow item = row.GetComponent<LooTableElementRow>();
-                item.Init(loot);
+                item.Init(loot, count);
+                count++;
                 item.OnRowClicked += OnElementRowClicked;
             }
         }
@@ -111,7 +114,8 @@ namespace Assets._Project.Scrip.ScripForScene.LootTable
         {
             GameObject row = table.AddRow(rowPrefab.gameObject);
             LooTableElementRow item = row.GetComponent<LooTableElementRow>();
-            item.Init(new LootElementDTO());
+            long count = table.GetRows<LooTableElementRow>().Length +1;
+            item.Init(new LootElementDTO(),count);
             item.OnRowClicked += OnElementRowClicked;
         }
 
@@ -129,8 +133,10 @@ namespace Assets._Project.Scrip.ScripForScene.LootTable
         private void OnDeleteRow()
         {
             if (selectedRow == null) return;
-
+            LootElementDTO lootElementDTO = selectedRow.GetLootElement();
+            currentLootTable.LootElements = currentLootTable.LootElements.Where(e => e != lootElementDTO).ToArray();
             Destroy(selectedRow.gameObject);
+            lootTableService.UpdateLootTable(lootTableService.LootTableToLootTableDTO(currentLootTable));
             selectedRow = null;
         }
 
@@ -153,6 +159,9 @@ namespace Assets._Project.Scrip.ScripForScene.LootTable
         {
             if (selectedLootTableRow != null)
             {
+                LootElementDTO lootElementDTO = selectedRow.GetLootElement();
+                long lootTableId = selectedRow.GetId();
+                currentLootTable.LootElements[lootTableId] = lootElementDTO;  
                 selectedLootTableRow.SetSelected(false);
             }
 
@@ -163,7 +172,7 @@ namespace Assets._Project.Scrip.ScripForScene.LootTable
         private void OnDeleteLootTableRow()
         {
             if (selectedLootTableRow == null) return;
-
+            lootTableService.DeleteLootTable(selectedLootTableRow.GetLootTable().Id);
             Destroy(selectedLootTableRow.gameObject);
             selectedLootTableRow = null;
         }
@@ -183,6 +192,7 @@ namespace Assets._Project.Scrip.ScripForScene.LootTable
             }
 
             LootTableDTO lootTable = new LootTableDTO();
+            
             lootTable = lootTableService.LootTableToLootTableDTO(currentLootTable);
 
             if (currentLootTable.Id <= 0)

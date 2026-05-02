@@ -8,8 +8,8 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface ConversationReadMapper {
 
-    @Mapping(source = "conversation",target = "conversationId")
-    @Mapping(source = "user",target = "userId")
+    @Mapping(source = "conversation.id",target = "conversationId")
+    @Mapping(source = "user.id",target = "userId")
     ConversationReadDTO toDTO(ConversationRead conversationRead);
 
     @Mapping(target = "conversation", ignore = true)
